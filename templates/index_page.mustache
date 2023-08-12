@@ -23,13 +23,6 @@
         height: 50vh;
         width: 40%;
     ">
-            {{#array}}
-                <li> 
-                    {{name}}
-                </li>
-            {{/array}}
-            hey
-
         <h3>
             Web Services
         </h3>
@@ -41,6 +34,7 @@
             padding: 0;
             list-style-type: none;
         ">
+        {{#array}}
                 <li id="" style="
                     cursor: pointer; 
                     font-weight: 700; 
@@ -49,8 +43,9 @@
                     flex-direction: row;
                 ">
                     <!-- Access the 'name' key of the current element -->
-                    placeholder_web_service
+                    {{name}}
                 </li>
+        {{/array}}
         </ul>
     </div>
     {{! <h3  style="

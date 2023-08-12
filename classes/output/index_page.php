@@ -36,7 +36,7 @@ class index_page implements \renderable, \templatable
     $webservicesRecords = $DB->get_records('external_functions', array(), '', 'name, classname, methodname');
 
     $array = [];
-    foreach ($webservicesObject as $key => $value) {
+    foreach ($webservicesRecords as $key => $value) {
       $temp = new \stdClass();
       $temp->name = $key;
       $array[] = $temp;
