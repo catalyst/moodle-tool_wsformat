@@ -28,13 +28,18 @@ $templatable = new \tool_api_test\output\index_page($numbersAsString);
 $output = $PAGE->get_renderer('tool_api_test');
 echo $output->render($templatable);
 
+$columns = ['name', 'classname', 'methodname'];
+$webservicesObject = $DB->get_records('external_functions', array(), '', 'name, classname, methodname');
+$array = [];
+foreach ($webservicesObject as $key => $value) {
+  $array[] = $key;
+}
 
-// $webservicesObject = $DB->get_records('external_functions', array(), 'name');
-// $count = $DB->count_records('external_functions', array());
-// echo $count;
-// echo '<pre>';
-// print_r($webservicesObject);
-// echo '</pre>';
+$count = $DB->count_records('external_functions', array());
+echo $count;
+echo '<pre>';
+print_r($array);
+echo '</pre>';
 
 
 
