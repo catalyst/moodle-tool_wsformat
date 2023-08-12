@@ -48,7 +48,7 @@
         {{/array}}
         </ul>
     </div>
-    {{! <h3  style="
+    <h3  style="
         display: flex;
         flex-direction: column;
         width: 60%;
@@ -56,9 +56,9 @@
         gap: 1rem;
     ">
         Select a web service
-    </h3> }}
+    </h3>
     <div  style="
-        display: flex;
+        display: none;
         flex-direction: column;
         width: 60%;
         padding-left: 2rem;
@@ -98,11 +98,11 @@
         ">
             <code id="curl" style="color: black;">
             <pre style="font-size: 14px">
-curl 'https://moodle.example.com/webservice/rest/server.php' \ 
-    -d 'wstoken=...' \ 
-    -d 'wsfunction=block_accessreview_get_module_data' \ 
-    -d 'moodlewsrestformat=json' \ 
-    -d 'courseid=...'
+                curl 'https://moodle.example.com/webservice/rest/server.php' \ 
+                    -d 'wstoken=...' \ 
+                    -d 'wsfunction=block_accessreview_get_module_data' \ 
+                    -d 'moodlewsrestformat=json' \ 
+                    -d 'courseid=...'
             </pre>
             </code>
             <button style="
