@@ -35,7 +35,7 @@
             list-style-type: none;
         ">
         {{#array}}
-                <li id="" style="
+                <li data-name="{{name}}" id="" style="
                     cursor: pointer; 
                     font-weight: 700; 
                     color: #0f6cbf; 
@@ -128,5 +128,17 @@
 
 
 {{#js}}
-console.log('test print')
+const webserviceListItems = document.querySelectorAll('li[data-name]')
+
+    webserviceListItems.forEach(function(webserviceItem) { // "div" is the arbitrary name given for each element
+        
+        // Runs anytime the div is clicked
+        webserviceItem.addEventListener('click', function(event) {
+            var nameAttr = webserviceItem.getAttribute("data-name");
+
+            console.log(nameAttr)
+            })
+            })
+
+console.log(webserviceListItems)
 {{/js}}
