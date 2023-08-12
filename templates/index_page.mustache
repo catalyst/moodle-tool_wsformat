@@ -48,7 +48,9 @@
         {{/array}}
         </ul>
     </div>
-    <h3  style="
+    <h3  
+    id="no-selection-panel"
+    style="
         display: flex;
         flex-direction: column;
         width: 60%;
@@ -57,7 +59,7 @@
     ">
         Select a web service
     </h3>
-    <div  style="
+    <div id="selection-panel"  style="
         display: none;
         flex-direction: column;
         width: 60%;
@@ -123,3 +125,8 @@
         </div>
     </div>
 </div>
+
+
+{{#js}}
+console.log('test print')
+{{/js}}
