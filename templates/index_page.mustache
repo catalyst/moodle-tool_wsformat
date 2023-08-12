@@ -1,0 +1,123 @@
+
+{{!
+    @template tool_api_test/mytemplate 
+
+    Admin search input for page header.
+
+    Example context (json):
+    {
+        "action": "http://moodle.local/admin/search.php",
+        "query": "themedesigner"
+    }
+}}
+{{! Get string from template }}
+<h2>{{#str}} pluginname, tool_api_test {{/str}}</h2>
+<p>{{#str}} plugindescription, tool_api_test {{/str}}</p>
+<div style="width: 100%; display: flex;flex-direction: row; margin-bottom: 15rem; margin-top: 2rem;">
+    <div style="
+        display: flex;
+        flex-direction: column;
+        border-right: 1px solid #e3e3e4;
+        overflow-y: hidden;
+        overflow-x: hidden;
+        height: 50vh;
+        width: 40%;
+    ">
+        <h3>
+            Web Services
+        </h3>
+        <ul style="
+            display: flex;
+            flex-direction: column;
+            overflow-y: scroll;
+       
+            padding: 0;
+            list-style-type: none;
+        ">
+                <li id="" style="
+                    cursor: pointer; 
+                    font-weight: 700; 
+                    color: #0f6cbf; 
+                    display: flex; 
+                    flex-direction: row;
+                ">
+                    <!-- Access the 'name' key of the current element -->
+                    placeholder_web_service
+                </li>
+        </ul>
+    </div>
+    {{! <h3  style="
+        display: flex;
+        flex-direction: column;
+        width: 60%;
+        padding-left: 2rem;
+        gap: 1rem;
+    ">
+        Select a web service
+    </h3> }}
+    <div  style="
+        display: flex;
+        flex-direction: column;
+        width: 60%;
+        padding-left: 2rem;
+        gap: 1rem;
+    ">
+        <div style="color: #116dc0;">
+           block_accessreview_get_module_data 
+        </div>
+        <h3>
+           Gets error data for course modules.
+        </h3>
+        <div style="
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 1rem;
+        ">
+            <h4>Request</h4>
+            <button style="border: none;
+            width:fit-content;
+            margin: 0;
+            padding: 0.25rem 0.5rem 0.25rem 0.5rem;
+            border-radius: 0.5rem;
+            background-color: transparent;
+            border: 1px solid #f2f3f5">
+                curl
+            </button>
+        </div>
+        <div style="
+            background-color: #f7f7f7;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: scroll;
+            width: 100%;
+            color: red;
+            position: relative;
+        ">
+            <code id="curl" style="color: black;">
+            <pre style="font-size: 14px">
+curl 'https://moodle.example.com/webservice/rest/server.php' \ 
+    -d 'wstoken=...' \ 
+    -d 'wsfunction=block_accessreview_get_module_data' \ 
+    -d 'moodlewsrestformat=json' \ 
+    -d 'courseid=...'
+            </pre>
+            </code>
+            <button style="
+                position: absolute;
+                right: 1rem;
+                top: 1rem;
+                border: none;
+                width:fit-content;
+                margin: 0;
+                padding: 0.25rem 0.5rem 0.25rem 0.5rem;
+                border-radius: 0.5rem;
+                background-color: #106cbf;
+                color: white;
+                border: 1px solid #f2f3f5" onclick="copyFunction()"
+            >
+                Copy
+            </button>
+        </div>
+    </div>
+</div>

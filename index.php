@@ -1,7 +1,6 @@
 <?php
 
-  use core_external\external_api;
-
+use core_external\external_api;
 
 require('../../../config.php');
 
@@ -19,20 +18,23 @@ echo $OUTPUT->header();
 // echo get_string('plugindescription', 'tool_api_test');
 echo $OUTPUT->box_start();
 
-// Prepare the data (context) for the template
-$template_data = new stdClass(); // Create new object
 
-// Load the template and render it, passing it $template_data
-// See templates/mytemplate.mustache
-echo $OUTPUT->render_from_template('tool_api_test/mytemplate', $template_data);
+// Create
+$numbers = range(1, 10);
+$numbersAsString = array_map('strval', $numbers);
+
+$templatable = new \tool_api_test\output\index_page($numbersAsString);
+
+$output = $PAGE->get_renderer('tool_api_test');
+echo $output->render($templatable);
 
 
-$webservicesObject = $DB->get_records('external_functions', array(), 'name');
-$count = $DB->count_records('external_functions', array());
-echo $count;
-echo '<pre>';
-print_r($webservicesObject);
-echo '</pre>';
+// $webservicesObject = $DB->get_records('external_functions', array(), 'name');
+// $count = $DB->count_records('external_functions', array());
+// echo $count;
+// echo '<pre>';
+// print_r($webservicesObject);
+// echo '</pre>';
 
 
 
