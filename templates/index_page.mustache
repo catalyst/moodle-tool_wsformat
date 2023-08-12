@@ -128,17 +128,21 @@
 
 
 {{#js}}
-const webserviceListItems = document.querySelectorAll('li[data-name]')
+const webserviceListItems = document.querySelectorAll('li[data-name]');
+const noSelectionPanel = document.querySelector('#no-selection-panel')
 
-    webserviceListItems.forEach(function(webserviceItem) { // "div" is the arbitrary name given for each element
-        
-        // Runs anytime the div is clicked
-        webserviceItem.addEventListener('click', function(event) {
-            var nameAttr = webserviceItem.getAttribute("data-name");
+webserviceListItems.forEach(function(webserviceItem) { 
 
-            console.log(nameAttr)
-            })
-            })
+    webserviceItem.addEventListener('click', function(event) {
+        const nameAttr = webserviceItem.getAttribute("data-name");
+        console.log(nameAttr)
+
+        if (noSelectionPanel) {
+            noSelectionPanel.remove();
+        }
+
+    })
+})
 
 console.log(webserviceListItems)
 {{/js}}
