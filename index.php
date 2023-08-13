@@ -24,24 +24,19 @@ $numbers = range(1, 10);
 $numbersAsString = array_map('strval', $numbers);
 
 $templatable = new \tool_api_test\output\index_page($numbersAsString);
+$PAGE->requires->js_call_amd('tool_api_test/test', 'init');
 
 $output = $PAGE->get_renderer('tool_api_test');
 echo $output->render($templatable);
 
-// $webservicesObject = $DB->get_records('external_functions', array(), '', 'name, classname, methodname');
-//
-// $array = [];
-// foreach ($webservicesObject as $key => $value) {
-//   $temp = new \stdClass();
-//   $temp->name = $key;
-//   $array[] = $temp;
-// }
+$columns = ['name', 'classname', 'methodname'];
+$webservicesObject = $DB->get_records('external_functions', array(), '', 'name, classname, methodname');
 
-// $count = $DB->count_records('external_functions', array());
-// echo $count;
-// echo '<pre>';
-// print_r($array);
-// echo '</pre>';
+$count = $DB->count_records('external_functions', array());
+echo $count;
+echo '<pre>';
+print_r($webservicesObject);
+echo '</pre>';
 
 
 
