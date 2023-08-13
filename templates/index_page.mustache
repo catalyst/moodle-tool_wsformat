@@ -60,10 +60,10 @@
             <div id="ws-title" style="color: #116dc0;">
                block_accessreview_get_module_data 
             </div>
-            <h3>
+            <h3 id="ws-description">
                Gets error data for course modules.
             </h3>
-            <div style="
+            <div id="ws-details" style="
                 display: flex;
                 flex-direction: row;
                 align-items: center;
@@ -71,12 +71,13 @@
             ">
                 <h4>Request</h4>
                 <button style="border: none;
-                width:fit-content;
-                margin: 0;
-                padding: 0.25rem 0.5rem 0.25rem 0.5rem;
-                border-radius: 0.5rem;
-                background-color: transparent;
-                border: 1px solid #f2f3f5">
+                        width:fit-content;
+                        margin: 0;
+                        padding: 0.25rem 0.5rem 0.25rem 0.5rem;
+                        border-radius: 0.5rem;
+                        background-color: transparent;
+                        border: 1px solid #f2f3f5"
+                >
                     curl
                 </button>
             </div>
@@ -117,26 +118,3 @@
         </div>
     </div>
 </div>
-
-
-{{#js}}
-const webserviceListItems = document.querySelectorAll('li[data-name]');
-const placeholderText = document.querySelector('#placeholder-text')
-const wsDescriptionPanel = document.querySelector('#ws-panel')
-
-webserviceListItems.forEach(function(webserviceItem) { 
-
-    webserviceItem.addEventListener('click', function(event) {
-        const nameAttr = webserviceItem.getAttribute("data-name");
-        console.log(nameAttr)
-
-        if (placeholderText) {
-            placeholderText.remove();
-        }
-        wsDescriptionPanel.style.display = "flex";
-
-    })
-})
-
-console.log(webserviceListItems)
-{{/js}}
