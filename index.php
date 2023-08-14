@@ -16,7 +16,6 @@ $PAGE->set_heading($SITE->fullname);
 echo $OUTPUT->header();
 // echo $OUTPUT->heading(get_string('pluginname', 'tool_api_test'));
 // echo get_string('plugindescription', 'tool_api_test');
-echo $OUTPUT->box_start();
 
 
 // Create
@@ -37,12 +36,5 @@ echo $count;
 echo '<pre>';
 print_r($webservicesObject);
 echo '</pre>';
-
-
-
-
-
-echo $OUTPUT->box_end();
-
 
 echo $OUTPUT->footer();
