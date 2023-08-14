@@ -14,11 +14,7 @@ $PAGE->set_title(get_string('pluginname', 'tool_api_test'));
 $PAGE->set_heading($SITE->fullname);
 
 echo $OUTPUT->header();
-// echo $OUTPUT->heading(get_string('pluginname', 'tool_api_test'));
-// echo get_string('plugindescription', 'tool_api_test');
 
-
-// Create
 $numbers = range(1, 10);
 $numbersAsString = array_map('strval', $numbers);
 
