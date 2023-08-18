@@ -1,7 +1,6 @@
 export const init = () => {
-    window.alert("IT WORKSsssshhhhhkl");
+    // window.alert("IT WORKSsssshhhhhkl");
 };
-
 
 const webserviceListItems = document.querySelectorAll('li[data-name]');
 const placeholderText = document.querySelector('#placeholder-text');
