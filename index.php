@@ -14,33 +14,57 @@ $PAGE->set_title(get_string('pluginname', 'tool_api_test'));
 $PAGE->set_heading($SITE->fullname);
 
 echo $OUTPUT->header();
-// echo $OUTPUT->heading(get_string('pluginname', 'tool_api_test'));
-// echo get_string('plugindescription', 'tool_api_test');
-echo $OUTPUT->box_start();
 
-
-// Create
 $numbers = range(1, 10);
 $numbersAsString = array_map('strval', $numbers);
 
 $templatable = new \tool_api_test\output\index_page($numbersAsString);
+$PAGE->requires->js_call_amd('tool_api_test/test', 'init');
 
 $output = $PAGE->get_renderer('tool_api_test');
 echo $output->render($templatable);
 
+// $columns = ['name', 'classname', 'methodname'];
+// $webservicesObject = $DB->get_records('external_functions', array(), '', 'name, classname, methodname');
 
-// $webservicesObject = $DB->get_records('external_functions', array(), 'name');
 // $count = $DB->count_records('external_functions', array());
 // echo $count;
 // echo '<pre>';
 // print_r($webservicesObject);
 // echo '</pre>';
 
+// $webservicesRecords = $DB->get_records('external_functions', array(), '', 'name');
+//
+//
+$webservicesObject = $DB->get_records('external_functions', array(), 'name');
+$count = $DB->count_records('external_functions', array());
+// Create array called functiondescs
+$functiondescs = array();
+
+foreach ($webservicesObject as $key => $webservice) {
+
+    // Objects are key => value pairs
+    // Here we state that for each key in $webservicesObject, give us the key and value as variables
+    /* $webservice example: {
+            "id":"584",
+            "name":"auth_email_get_signup_settings",
+            "classname":"auth_email_external",
+            "methodname":"get_signup_settings",
+            "classpath":null,
+            "component":"auth_email",
+            "capabilities":"",
+            "services":null}
+    */
 
 
+    // sites/moodle/lib/external/classes/external_api.php
+    $functiondescs[] = external_api::external_function_info($webservice);
+}
 
 
-echo $OUTPUT->box_end();
+echo '<pre>';
+print_r($functiondescs);
+echo '</pre>';
 
 
 echo $OUTPUT->footer();
