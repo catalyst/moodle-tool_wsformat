@@ -15,6 +15,12 @@ $PAGE->set_heading($SITE->fullname);
 
 echo $OUTPUT->header();
 
+
+use tool_api_test\form\autocomplete_form;
+
+$form = new \tool_api_test\form\autocomplete_form();
+$form->display();
+
 $numbers = range(1, 10);
 $numbersAsString = array_map('strval', $numbers);
 
@@ -37,6 +43,7 @@ echo $output->render($templatable);
 //
 //
 $webservicesObject = $DB->get_records('external_functions', array(), 'name');
+// foreach ()
 $count = $DB->count_records('external_functions', array());
 // Create array called functiondescs
 $functiondescs = array();
@@ -58,7 +65,8 @@ foreach ($webservicesObject as $key => $webservice) {
 
 
     // sites/moodle/lib/external/classes/external_api.php
-    $functiondescs[] = external_api::external_function_info($webservice);
+    // $functiondescs[] = external_api::external_function_info($webservice);
+    $functiondescs[] = $webservice->name;
 }
 
 
