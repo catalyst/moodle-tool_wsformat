@@ -36,7 +36,7 @@ Example context (json):
             padding: 0;
             list-style-type: none;
         ">
-            {{#array}}
+            {{#formdata}}
             <li data-name="{{name}}" id="" style="
                     cursor: pointer; 
                     font-weight: 700; 
@@ -47,7 +47,7 @@ Example context (json):
                 <!-- Access the 'name' key of the current element -->
                 {{name}}
             </li>
-            {{/array}}
+            {{/formdata}}
         </ul>
     </div>
     <div id="selection-panel" style="

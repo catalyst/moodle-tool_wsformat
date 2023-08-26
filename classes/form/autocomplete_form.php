@@ -40,7 +40,7 @@ class autocomplete_form extends moodleform
                 $response->status = '200 OK';
             }
         ));
-        $mform->addElement('submit', 'submit', 'Save');
+        $mform->addElement('submit', 'submit', 'Update Selection');
 
         // if ($mform->is_submitted()){
 
