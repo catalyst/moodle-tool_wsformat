@@ -15,6 +15,10 @@ class renderer extends plugin_renderer_base
     {
         $data = $index_page->export_for_template($this);
         return parent::render_from_template('tool_api_test/index_page', $data);
+    }
 
+    protected function render_plugin_description(\tool_api_test\output\plugin_description $plugin_description)
+    {
+        return parent::render_from_template('tool_api_test/plugin_description', new \stdClass);
     }
 }

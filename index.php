@@ -15,12 +15,16 @@ $PAGE->set_heading($SITE->fullname);
 
 echo $OUTPUT->header();
 
+$templ = new \tool_api_test\output\plugin_description();
+
+$output = $PAGE->get_renderer('tool_api_test');
+echo $output->render($templ);
 
 use tool_api_test\form\autocomplete_form;
 
-$mform = new autocomplete_form();
-// $mform = new autocomplete_form(new moodle_url('/admin/tool/api_test/test.php'));
+$mform = new autocomplete_form(); // Place moodle_url as argument to redirect on submit: new moodle_url('/admin/tool/api_test/test.php')
 $mform->display();
+
 // echo '<pre>';
 // print_r($_REQUEST['webservice_form']);
 // echo '</pre>';
@@ -47,9 +51,9 @@ $numbers = range(1, 10);
 $numbersAsString = array_map('strval', $numbers);
 
 $templatable = new \tool_api_test\output\index_page($formarray);
+$templ = new \tool_api_test\output\plugin_description();
 $PAGE->requires->js_call_amd('tool_api_test/test', 'init');
 
-$output = $PAGE->get_renderer('tool_api_test');
 echo $output->render($templatable);
 
 // $columns = ['name', 'classname', 'methodname'];
