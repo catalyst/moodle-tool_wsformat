@@ -92,9 +92,9 @@ foreach ($webservicesObject as $key => $webservice) {
 }
 
 
-echo '<pre>';
-print_r($functiondescs);
-echo '</pre>';
+// echo '<pre>';
+// print_r($functiondescs);
+// echo '</pre>';
 
 
 echo $OUTPUT->footer();
