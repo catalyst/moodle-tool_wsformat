@@ -52,7 +52,11 @@ class index_page implements \renderable, \templatable
     // echo '</pre>';
     $data = new \stdClass();
     $data->array = $array;
-    $data->formdata = $filteredRecords;
+    if (!empty($filteredRecords)) {
+
+      $data->formdata = $filteredRecords;
+      $data->items_selected = true;
+    }
     return $data;
   }
 }

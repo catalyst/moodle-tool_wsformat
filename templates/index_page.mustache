@@ -10,11 +10,9 @@ Example context (json):
 }
 }}
 {{! Get string from template }}
+{{#items_selected}}
 <h2>{{#str}} pluginname, tool_api_test {{/str}}</h2>
 <p>{{#str}} plugindescription, tool_api_test {{/str}}</p>
-{{#formdata}}
-<div>{{name}}</div>
-{{/formdata}}
 <div style="width: 100%; display: flex;flex-direction: row; margin-bottom: 15rem; margin-top: 2rem;">
     <div style="
         display: flex;
@@ -118,3 +116,5 @@ Example context (json):
         </div>
     </div>
 </div>
+
+{{/items_selected}}
