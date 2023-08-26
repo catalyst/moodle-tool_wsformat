@@ -25,11 +25,13 @@ class autocomplete_form extends moodleform
             $webserviceNames[] = $webservice->name;
         }
         // Documentation: https://docs.moodle.org/dev/lib/formslib.php_Form_Definition#autocomplete
-        $mform->addElement('autocomplete', 'webservice_form', 'Webservice:', $webserviceNames, array(
+        $mform->addElement('autocomplete', 'webservice_form', 'Webservices:', $webserviceNames, array(
             'minchars' => 1,
+            'noselectionstring' => 'No webservices selected',
             'multiple' => true,
             'matchcontains' => true,
             'showprogress' => true,
+            'placeholder' => 'Search webservices...',
             'source' => function ($request, $response) use ($DB) {
                 $webfunctions = $DB->get_record_sql('SELECT classname FROM mdl_external_functions WHERE classname LIKE ?', array('%' . $request . '%'));
                 $options = [];
