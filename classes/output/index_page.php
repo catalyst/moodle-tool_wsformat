@@ -34,6 +34,8 @@ class index_page implements \renderable, \templatable
     global $DB;
 
     $webservicesRecords = $DB->get_records('external_functions', array(), '', 'name, classname, methodname');
+    $filteredRecords = []; // Array to store the filtered records
+
 
     $array = [];
     foreach ($webservicesRecords as $key => $value) {
@@ -41,8 +43,16 @@ class index_page implements \renderable, \templatable
       $temp->name = $key;
       $array[] = $temp;
     }
+
+    foreach ($this->numbers as $index) {
+      $filteredRecords[] = $array[$index];
+    }
+    // echo '<pre>';
+    // print_r($array);
+    // echo '</pre>';
     $data = new \stdClass();
     $data->array = $array;
+    $data->formdata = $filteredRecords;
     return $data;
   }
 }

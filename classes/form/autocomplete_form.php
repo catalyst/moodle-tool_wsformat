@@ -16,7 +16,7 @@ class autocomplete_form extends moodleform
         $mform = $this->_form;
 
 
-        $webservicesObject = $DB->get_records('external_functions', array(), 'name');
+        $webservicesObject = $DB->get_records('external_functions', array(), '');
 
         $webserviceNames = array();
 
@@ -25,7 +25,7 @@ class autocomplete_form extends moodleform
             $webserviceNames[] = $webservice->name;
         }
         // Documentation: https://docs.moodle.org/dev/lib/formslib.php_Form_Definition#autocomplete
-        $mform->addElement('autocomplete', 'ws', 'Webservice:', $webserviceNames, array(
+        $mform->addElement('autocomplete', 'webservice_form', 'Webservice:', $webserviceNames, array(
             'minchars' => 1,
             'multiple' => true,
             'matchcontains' => true,
@@ -40,5 +40,10 @@ class autocomplete_form extends moodleform
                 $response->status = '200 OK';
             }
         ));
+        $mform->addElement('submit', 'submit', 'Save');
+
+        // if ($mform->is_submitted()){
+
+        // }
     }
 }

@@ -1,18 +1,20 @@
-
 {{!
-    @template tool_api_test/mytemplate 
+@template tool_api_test/mytemplate
 
-    Admin search input for page header.
+Admin search input for page header.
 
-    Example context (json):
-    {
-        "action": "http://moodle.local/admin/search.php",
-        "query": "themedesigner"
-    }
+Example context (json):
+{
+"action": "http://moodle.local/admin/search.php",
+"query": "themedesigner"
+}
 }}
 {{! Get string from template }}
 <h2>{{#str}} pluginname, tool_api_test {{/str}}</h2>
 <p>{{#str}} plugindescription, tool_api_test {{/str}}</p>
+{{#formdata}}
+<div>{{name}}</div>
+{{/formdata}}
 <div style="width: 100%; display: flex;flex-direction: row; margin-bottom: 15rem; margin-top: 2rem;">
     <div style="
         display: flex;
@@ -34,21 +36,21 @@
             padding: 0;
             list-style-type: none;
         ">
-        {{#array}}
-                <li data-name="{{name}}" id="" style="
+            {{#array}}
+            <li data-name="{{name}}" id="" style="
                     cursor: pointer; 
                     font-weight: 700; 
                     color: #0f6cbf; 
                     display: flex; 
                     flex-direction: row;
                 ">
-                    <!-- Access the 'name' key of the current element -->
-                    {{name}}
-                </li>
-        {{/array}}
+                <!-- Access the 'name' key of the current element -->
+                {{name}}
+            </li>
+            {{/array}}
         </ul>
     </div>
-    <div id="selection-panel"  style="
+    <div id="selection-panel" style="
         width: 60%;
         padding-left: 2rem;
         gap: 1rem;
@@ -58,10 +60,10 @@
         </h3>
         <div id="ws-panel" style="display: none; flex-direction: column;">
             <div id="ws-title" style="color: #116dc0;">
-               block_accessreview_get_module_data 
+                block_accessreview_get_module_data
             </div>
             <h3 id="ws-description">
-               Gets error data for course modules.
+                Gets error data for course modules.
             </h3>
             <div id="ws-details" style="
                 display: flex;
@@ -76,8 +78,7 @@
                         padding: 0.25rem 0.5rem 0.25rem 0.5rem;
                         border-radius: 0.5rem;
                         background-color: transparent;
-                        border: 1px solid #f2f3f5"
-                >
+                        border: 1px solid #f2f3f5">
                     curl
                 </button>
             </div>
@@ -110,8 +111,7 @@
                     border-radius: 0.5rem;
                     background-color: #106cbf;
                     color: white;
-                    border: 1px solid #f2f3f5" onclick="copyFunction()"
-                >
+                    border: 1px solid #f2f3f5" onclick="copyFunction()">
                     Copy
                 </button>
             </div>

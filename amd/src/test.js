@@ -10,6 +10,10 @@ export const init = () => {
 const webserviceListItems = document.querySelectorAll('li[data-name]');
 const placeholderText = document.querySelector('#placeholder-text');
 const wsDescriptionPanel = document.querySelector('#ws-panel');
+setTimeout(() => {
+    const selection = document.querySelector('.form-autocomplete-selection')
+    // selection.style.display = 'none';
+}, 5000);
 
 webserviceListItems.forEach(function (webserviceItem) {
 
