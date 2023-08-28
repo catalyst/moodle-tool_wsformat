@@ -11,52 +11,43 @@ defined('MOODLE_INTERNAL') || die();
  */
 class index_page implements \renderable, \templatable
 {
-  /**
-   * pagedata
-   */
-  protected $numbers = array();
+  protected $selectedWebserviceIndices = array(); // Indicies (0, 1, ...) from external_functions table of selected webservices from autocomplete form
 
-
-  public function __construct($numbers)
+  public function __construct($indicies)
   {
-    $this->numbers = $numbers;
+    $this->selectedWebserviceIndices = $indicies;
   }
 
   /**
-   * Exports the data.
+   * Exports the data for the index_page.mustache template
    *
    * @param \renderer_base $output
    * @return \stdClass
    */
-  public function export_for_template(\renderer_base $output)
+  public function export_for_template(\renderer_base $output): stdClass
   {
-    global $PAGE;
     global $DB;
 
-    $webservicesRecords = $DB->get_records('external_functions', array(), '', 'name, classname, methodname');
+    // Return empty object if no selected webservices
+    if (empty($this->selectedWebserviceIndices)) {
+      return new stdClass();
+    }
+
+    // get_records returns an object array where key for each object is the name of the webservice.  
+    // Use array_values to change key to the index of each object so that we can filter based on $selectedWebserviceIndices
+    $webservicesRecords = array_values($DB->get_records('external_functions', array(), '', 'name'));
+
     $filteredRecords = []; // Array to store the filtered records
-
-
-    $array = [];
-    foreach ($webservicesRecords as $key => $value) {
-      $temp = new \stdClass();
-      $temp->name = $key;
-      $array[] = $temp;
+    foreach ($this->selectedWebserviceIndices as $index) {
+      $filteredRecords[] = $webservicesRecords[$index];
     }
 
-    foreach ($this->numbers as $index) {
-      $filteredRecords[] = $array[$index];
-    }
-    // echo '<pre>';
-    // print_r($array);
-    // echo '</pre>';
-    $data = new \stdClass();
-    $data->array = $array;
-    if (!empty($filteredRecords)) {
+    // $data object will be passed to index_page template and useable as mustache tags
+    $data = new stdClass();
+    $data->formdata = $filteredRecords;
+    $data->items_selected = true;
+    $data->test = json_encode($filteredRecords);
 
-      $data->formdata = $filteredRecords;
-      $data->items_selected = true;
-    }
     return $data;
   }
 }

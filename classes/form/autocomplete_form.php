@@ -13,9 +13,26 @@ class autocomplete_form extends moodleform
     {
         global $DB;
 
+        $webserviceNames = $this->getWebserviceNameArray();
+
         $mform = $this->_form;
 
+        $options = [
+            'minchars' => 2, // 
+            'noselectionstring' => 'No webservices selected',
+            'multiple' => true,
+            'placeholder' => 'Search webservices...',
+        ];
 
+        // Documentation: https://docs.moodle.org/dev/lib/formslib.php_Form_Definition#autocomplete
+        $mform->addElement('autocomplete', 'webservice_form', 'Webservices:', $webserviceNames, $options); // (type of form, name of form, title shown when rendered, array of results, options array)
+
+        $mform->addElement('submit', 'submit', 'Update Selection'); // Will submit the form and cause a rerender of the page if no redirect
+    }
+
+    public function getWebserviceNameArray(): array
+    {
+        global $DB;
         $webservicesObject = $DB->get_records('external_functions', array(), '');
 
         $webserviceNames = array();
@@ -24,28 +41,7 @@ class autocomplete_form extends moodleform
         foreach ($webservicesObject as $key => $webservice) {
             $webserviceNames[] = $webservice->name;
         }
-        // Documentation: https://docs.moodle.org/dev/lib/formslib.php_Form_Definition#autocomplete
-        $mform->addElement('autocomplete', 'webservice_form', 'Webservices:', $webserviceNames, array(
-            'minchars' => 1,
-            'noselectionstring' => 'No webservices selected',
-            'multiple' => true,
-            'matchcontains' => true,
-            'showprogress' => true,
-            'placeholder' => 'Search webservices...',
-            'source' => function ($request, $response) use ($DB) {
-                $webfunctions = $DB->get_record_sql('SELECT classname FROM mdl_external_functions WHERE classname LIKE ?', array('%' . $request . '%'));
-                $options = [];
-                foreach ($webfunctions as $ws) {
-                    $options[] = $ws->classname;
-                }
-                $response->content = $options;
-                $response->status = '200 OK';
-            }
-        ));
-        $mform->addElement('submit', 'submit', 'Update Selection');
 
-        // if ($mform->is_submitted()){
-
-        // }
+        return $webserviceNames;
     }
 }
