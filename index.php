@@ -1,4 +1,27 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * Setup inital plugin page
+ *
+ * @package          tool_api_test
+ * @copyright        2023 Djarran Cotleanu
+ * @author           Djarran Cotleanu
+ * @license          http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
 use core_external\external_api;
 
@@ -17,67 +40,44 @@ echo $OUTPUT->header();
 
 $output = $PAGE->get_renderer('tool_api_test');
 
-$plugin_description_template = new \tool_api_test\output\plugin_description();
-echo $output->render($plugin_description_template);
+$plugindescriptiontemplate = new \tool_api_test\output\plugin_description();
+echo $output->render($plugindescriptiontemplate);
 
 use tool_api_test\form\autocomplete_form;
 
-$mform = new autocomplete_form(); // Place moodle_url as argument to redirect on submit: new moodle_url('/admin/tool/api_test/test.php')
+$mform = new autocomplete_form();
 $mform->display();
 
-$formarray = []; // array will be passed into mustache template
+$formarray = [];
 
-if ($mform->is_cancelled()) {
-} else if ($data = $mform->get_data()) {
-
-    // Populate formarray with selected form web services
+if ($data = $mform->get_data()) {
+    // Populate formarray with selected form web services.
     foreach ($data->webservice_form as $key => $value) {
         $formarray[] = (string) $value;
     }
-} else {
-    // Code runs when form is shown first time or if validation fails.
 }
 
-$selected_section_template = new \tool_api_test\output\index_page($formarray);
-$PAGE->requires->js_call_amd('tool_api_test/test', 'init'); // initialise and call javascript file on the page
+$selectedsectiontemplate = new \tool_api_test\output\index_page($formarray);
+$PAGE->requires->js_call_amd('tool_api_test/test', 'init');
 
-echo $output->render($selected_section_template);
+echo $output->render($selectedsectiontemplate);
 
-// Function prints webservice function info including parameters and response objects. Used to aid development only
-function printWebservices()
-{
+// Function prints webservice function info including parameters and response objects. Used to aid development only.
+function print_webservices() {
 
     global $DB;
-    $webservicesObject = $DB->get_records('external_functions', array(), 'name');
+    $webservicesobject = $DB->get_records('external_functions', array(), 'name');
 
-    // Create array called functiondescs
     $functiondescs = array();
+    foreach ($webservicesobject as $key => $webservice) {
 
-    foreach ($webservicesObject as $key => $webservice) {
-
-        // Objects are key => value pairs
-        // Here we state that for each key in $webservicesObject, give us the key and value as variables
-        /* $webservice example: {
-            "id":"584",
-            "name":"auth_email_get_signup_settings",
-            "classname":"auth_email_external",
-            "methodname":"get_signup_settings",
-            "classpath":null,
-            "component":"auth_email",
-            "capabilities":"",
-            "services":null}
-    */
-
-        // sites/moodle/lib/external/classes/external_api.php
+        // Documentation: sites/moodle/lib/external/classes/external_api.php.
         $functiondescs[] = external_api::external_function_info($webservice);
-        // $functiondescs[] = $webservice->name;
     }
 
-    echo '<pre>';
-    print_r($functiondescs);
-    echo '</pre>';
+    return $functiondescs;
 }
 
-// printWebservices();
+print_webservices();
 
 echo $OUTPUT->footer();

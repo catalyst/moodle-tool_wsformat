@@ -1,53 +1,73 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * Admin tool presets plugin to load some settings.
+ *
+ * @package          tool_api_test
+ * @copyright        2023 Djarran Cotleanu
+ * @author           Djarran Cotleanu
+ * @license          http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
 namespace tool_api_test\output;
 
 use stdClass;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Shows tool_analytics models list.
  */
-class index_page implements \renderable, \templatable
-{
-  protected $selectedWebserviceIndices = array(); // Indicies (0, 1, ...) from external_functions table of selected webservices from autocomplete form
+class index_page implements \renderable, \templatable {
+    protected $selectedwebserviceindices = array();
 
-  public function __construct($indicies)
-  {
-    $this->selectedWebserviceIndices = $indicies;
-  }
-
-  /**
-   * Exports the data for the index_page.mustache template
-   *
-   * @param \renderer_base $output
-   * @return \stdClass
-   */
-  public function export_for_template(\renderer_base $output): stdClass
-  {
-    global $DB;
-
-    // Return empty object if no selected webservices
-    if (empty($this->selectedWebserviceIndices)) {
-      return new stdClass();
+    public function __construct($indicies) {
+        $this->selectedwebserviceindices = $indicies;
     }
 
-    // get_records returns an object array where key for each object is the name of the webservice.  
-    // Use array_values to change key to the index of each object so that we can filter based on $selectedWebserviceIndices
-    $webservicesRecords = array_values($DB->get_records('external_functions', array(), '', 'name'));
+    /**
+     * Exports the data for the index_page.mustache template
+     *
+     * @param \renderer_base $output
+     * @return \stdClass
+     */
+    public function export_for_template(\renderer_base $output): stdClass {
+        global $DB;
 
-    $filteredRecords = []; // Array to store the filtered records
-    foreach ($this->selectedWebserviceIndices as $index) {
-      $filteredRecords[] = $webservicesRecords[$index];
+        // Return empty object if no selected webservices.
+        if (empty($this->selectedwebserviceindices)) {
+            return new stdClass();
+        }
+
+        // Get_records returns an object array where key for each object is the name of the webservice.
+        // Use array_values to change key to the index of each object so that we can filter based on $selectedWebserviceIndices.
+        $webservicesrecords = array_values($DB->get_records('external_functions', array(), '', 'name'));
+
+        $filteredrecords = [];
+        foreach ($this->selectedwebserviceindices as $index) {
+            $webservicename = $webservicesrecords[$index]->name;
+            $object = new stdClass();
+            $object->name = $webservicename;
+            $filteredrecords[] = $object;
+        }
+
+        $data = new stdClass();
+        $data->formdata = $filteredrecords;
+        $data->items_selected = true;
+        $data->test = json_encode($filteredrecords);
+
+        return $data;
     }
-
-    // $data object will be passed to index_page template and useable as mustache tags
-    $data = new stdClass();
-    $data->formdata = $filteredRecords;
-    $data->items_selected = true;
-    $data->test = json_encode($filteredRecords);
-
-    return $data;
-  }
 }
