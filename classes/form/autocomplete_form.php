@@ -27,8 +27,19 @@ namespace tool_wsformat\form;
 
 use moodleform;
 
+/**
+ * Form for selecting web services to format.
+ *
+ * @package   tool_wsformat
+ * @copyright 2023 Djarran Cotleanu
+ * @author    Djarran Cotleanu
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class autocomplete_form extends moodleform {
 
+    /**
+     * Define an autocomplete element for browsing webservices and a submit button.
+     */
     public function definition() {
         global $DB;
 
@@ -49,6 +60,9 @@ class autocomplete_form extends moodleform {
         $mform->addElement('submit', 'submit', 'Update Selection');
     }
 
+    /**
+     * Get web service names from database.
+     */
     public function get_webservice_name_array(): array {
         global $DB;
         $webservicesobject = $DB->get_records('external_functions', array(), '');

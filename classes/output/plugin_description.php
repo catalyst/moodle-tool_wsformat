@@ -27,13 +27,19 @@ namespace tool_wsformat\output;
 
 
 /**
- * Shows tool_analytics models list.
+ * Class for processing data for plugin_description template.
  */
 class plugin_description implements \renderable, \templatable {
 
+    /**
+     * Constructor function.
+     */
     public function __construct() {
     }
 
+    /**
+     * Exports the data for the plugin_description.mustache template
+     */
     public function export_for_template(\renderer_base $output) {
     }
 }

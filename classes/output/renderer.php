@@ -31,11 +31,17 @@ use plugin_renderer_base;
  * Renderer class.
  */
 class renderer extends plugin_renderer_base {
+    /**
+     * Render index_page mustache template.
+     */
     protected function render_index_page(\tool_wsformat\output\index_page $indexpage) {
         $data = $indexpage->export_for_template($this);
         return parent::render_from_template('tool_wsformat/index_page', $data);
     }
 
+    /**
+     * Render plugin_description mustache template.
+     */
     protected function render_plugin_description(\tool_wsformat\output\plugin_description $plugindescription) {
         return parent::render_from_template('tool_wsformat/plugin_description', new \stdClass);
     }

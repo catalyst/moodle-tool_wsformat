@@ -62,7 +62,9 @@ $PAGE->requires->js_call_amd('tool_wsformat/test', 'init');
 
 echo $output->render($selectedsectiontemplate);
 
-// Function prints webservice function info including parameters and response objects. Used to aid development only.
+/**
+ * Function prints webservice function info including parameters and response objects. Used to aid development only.
+ */
 function print_webservices() {
 
     global $DB;

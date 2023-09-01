@@ -28,11 +28,14 @@ namespace tool_wsformat\output;
 use stdClass;
 
 /**
- * Shows tool_analytics models list.
+ * Class for processing data for index_page template.
  */
 class index_page implements \renderable, \templatable {
     protected $selectedwebserviceindices = array();
 
+    /**
+     * Constructor function - assign instance variable.
+     */
     public function __construct($indicies) {
         $this->selectedwebserviceindices = $indicies;
     }
