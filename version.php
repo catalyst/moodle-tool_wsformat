@@ -17,13 +17,14 @@
 /**
  * Setup version
  *
- * @package          tool_api_test
+ * @package          tool_wsformat
  * @copyright        2023 Djarran Cotleanu
  * @author           Djarran Cotleanu
  * @license          http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->version   = 2023042100;
 $plugin->requires  = 2022111800;
-$plugin->component = 'tool_api_test';
+$plugin->component = 'tool_wsformat';

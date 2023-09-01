@@ -17,7 +17,7 @@
 /**
  * Setup inital plugin page
  *
- * @package          tool_api_test
+ * @package          tool_wsformat
  * @copyright        2023 Djarran Cotleanu
  * @author           Djarran Cotleanu
  * @license          http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -32,18 +32,18 @@ require_capability('moodle/site:config', context_system::instance());
 
 
 $PAGE->set_context(context_system::instance());
-$PAGE->set_url('/admin/tool/api_test/index.php');
-$PAGE->set_title(get_string('pluginname', 'tool_api_test'));
+$PAGE->set_url('/admin/tool/wsformat/index.php');
+$PAGE->set_title(get_string('pluginname', 'tool_wsformat'));
 $PAGE->set_heading($SITE->fullname);
 
 echo $OUTPUT->header();
 
-$output = $PAGE->get_renderer('tool_api_test');
+$output = $PAGE->get_renderer('tool_wsformat');
 
-$plugindescriptiontemplate = new \tool_api_test\output\plugin_description();
+$plugindescriptiontemplate = new \tool_wsformat\output\plugin_description();
 echo $output->render($plugindescriptiontemplate);
 
-use tool_api_test\form\autocomplete_form;
+use tool_wsformat\form\autocomplete_form;
 
 $mform = new autocomplete_form();
 $mform->display();
@@ -57,8 +57,8 @@ if ($data = $mform->get_data()) {
     }
 }
 
-$selectedsectiontemplate = new \tool_api_test\output\index_page($formarray);
-$PAGE->requires->js_call_amd('tool_api_test/test', 'init');
+$selectedsectiontemplate = new \tool_wsformat\output\index_page($formarray);
+$PAGE->requires->js_call_amd('tool_wsformat/test', 'init');
 
 echo $output->render($selectedsectiontemplate);
 

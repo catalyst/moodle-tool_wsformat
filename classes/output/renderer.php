@@ -17,13 +17,13 @@
 /**
  * Implement renderable class
  *
- * @package          tool_api_test
+ * @package          tool_wsformat
  * @copyright        2023 Djarran Cotleanu
  * @author           Djarran Cotleanu
  * @license          http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace tool_api_test\output;
+namespace tool_wsformat\output;
 
 use plugin_renderer_base;
 
@@ -31,12 +31,12 @@ use plugin_renderer_base;
  * Renderer class.
  */
 class renderer extends plugin_renderer_base {
-    protected function render_index_page(\tool_api_test\output\index_page $indexpage) {
+    protected function render_index_page(\tool_wsformat\output\index_page $indexpage) {
         $data = $indexpage->export_for_template($this);
-        return parent::render_from_template('tool_api_test/index_page', $data);
+        return parent::render_from_template('tool_wsformat/index_page', $data);
     }
 
-    protected function render_plugin_description(\tool_api_test\output\plugin_description $plugindescription) {
-        return parent::render_from_template('tool_api_test/plugin_description', new \stdClass);
+    protected function render_plugin_description(\tool_wsformat\output\plugin_description $plugindescription) {
+        return parent::render_from_template('tool_wsformat/plugin_description', new \stdClass);
     }
 }

@@ -17,7 +17,7 @@
 /**
  * Setup inital plugin page
  *
- * @package          tool_api_test
+ * @package          tool_wsformat
  * @copyright        2023 Djarran Cotleanu
  * @author           Djarran Cotleanu
  * @license          http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -26,6 +26,6 @@
 defined('MOODLE_INTERNAL') || die();
 
 if ($hassiteconfig) {
-    $url = $CFG->wwwroot . '/' . $CFG->admin . '/tool/api_test/index.php';
-    $ADMIN->add('development', new admin_externalpage('toolapi_test', 'API Test', $url));
+    $url = $CFG->wwwroot . '/' . $CFG->admin . '/tool/wsformat/index.php';
+    $ADMIN->add('development', new admin_externalpage('toolwsformat', 'Format Webservices', $url));
 }

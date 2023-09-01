@@ -17,7 +17,7 @@
 /**
  * Language strings
  *
- * @package          tool_api_test
+ * @package          tool_wsformat
  * @copyright        2023 Djarran Cotleanu
  * @author           Djarran Cotleanu
  * @license          http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
