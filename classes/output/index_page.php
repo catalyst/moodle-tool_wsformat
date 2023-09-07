@@ -18,13 +18,14 @@
  * Admin tool presets plugin to load some settings.
  *
  * @package          tool_wsformat
- * @copyright        2023 Djarran Cotleanu
- * @author           Djarran Cotleanu
+ * @copyright        2023 Djarran Cotleanu, Jacqueline Mail
+ * @author           Djarran Cotleanu, Jacqueline Mail
  * @license          http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace tool_wsformat\output;
 
+use core_external\external_api;
 use stdClass;
 
 /**
@@ -58,22 +59,28 @@ class index_page implements \renderable, \templatable {
         // Use array_values to change key to the index of each object so that we can filter based on $selectedWebserviceIndices.
         $webservicesrecords = array_values($DB->get_records('external_functions', array(), ''));
 
-        echo '<pre>';
-        echo print_r($webservicesrecords);
-        echo '</pre>';
+        // echo '<pre>';
+        // echo print_r($webservicesrecords);
+        // echo '</pre>';
         $filteredrecords = [];
         foreach ($this->selectedwebserviceindices as $index) {
-            $webservicename = $webservicesrecords[$index]->name;
-            //$functiondesc = $webservicesrecords[$index]->;
+            //Mine:
+            $webservice = $webservicesrecords[$index];
+            $webserviceproperties = external_api::external_function_info($webservice);
             $object = new stdClass();
-            $object->name = $webservicename;
-            $object->description = $functiondesc;
+            $object->name = $webserviceproperties->name;
+            $object->description = $webserviceproperties->description;
             $filteredrecords[] = $object;
         }
 
-        // echo '<pre>';
-        // echo print_r($filteredrecords);
-        // echo '</pre>';
+        echo '<pre>';
+
+        //Check what properties the selected webservice has 
+        //echo print_r($webserviceproperties); //note that 1 = ture and 0 = false
+        //Check what our filtered records has
+        echo print_r($filteredrecords);
+       
+        echo '</pre>';
 
         $data = new stdClass();
         $data->formdata = $filteredrecords;
