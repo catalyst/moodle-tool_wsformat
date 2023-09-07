@@ -48,20 +48,7 @@ Example context (json):
                     <!-- Access the 'name' key of the current element -->
                     {{name}}
                 </li>
-                {{! Not shown }}
-                <li data-desc="{{descriptions}}" id="" style="
-                    cursor: pointer; 
-                    font-weight: 700; 
-                    color: #0f6cbf; 
-                    display: none; 
-                    flex-direction: row;
-                ">
-                    <!-- Access the 'description' key of the current element -->
-                    {{descriptions}}
-                </li>
-
                 {{/formdata}}
-
             </ul>
             {{! <button type="button" class="btn btn-primary" style="width:fit-content">Export All</button> }}
             <a href="download.php?data-json={{test}}" class="btn btn-primary" style="width:fit-content">Export All</a>
@@ -76,70 +63,6 @@ Example context (json):
                 Select a web service to view details
             </h3>
             <div id="ws-panel" style="display: none; flex-direction: column;">
-
-                {{! For each selected webservices }}
-                {{! {{#formdata}} 
-                {{! <div id="ws-title" style="color: #116dc0;">
-                    Replace the name
-                </div>
-                <h3 id="ws-description">
-                    Replace the decription
-                </h3>
-                <div id="ws-details" style="
-                    display: flex;
-                    flex-direction: row;
-                    align-items: center;
-                    gap: 1rem;
-                    ">
-                    <h4>Request</h4>
-                    <button style="border: none;
-                        width:fit-content;
-                        margin: 0;
-                        padding: 0.25rem 0.5rem 0.25rem 0.5rem;
-                        border-radius: 0.5rem;
-                        background-color: transparent;
-                        border: 1px solid #f2f3f5">
-                        curl
-                    </button>
-                    <div style="
-                    background-color: #f7f7f7;
-                    padding: 1rem;
-                    border-radius: 0.5rem;
-                    overflow-x: scroll;
-                    width: 100%;
-                    color: red;
-                    position: relative;
-                    ">
-                        <code id="curl" style="color: black;">
-                            <pre style="font-size: 14px">
-                                curl 'https://moodle.example.com/webservice/rest/server.php' \ 
-                                    -d 'wstoken=...' \ 
-                                    -d 'wsfunction=block_accessreview_get_module_data' \ 
-                                    -d 'moodlewsrestformat=json' \ 
-                                    -d 'courseid=...'
-                            </pre>
-                        </code>
-                        <button style="
-                        position: absolute;
-                        right: 1rem;
-                        top: 1rem;
-                        border: none;
-                        width:fit-content;
-                        margin: 0;
-                        padding: 0.25rem 0.5rem 0.25rem 0.5rem;
-                        border-radius: 0.5rem;
-                        background-color: #106cbf;
-                        color: white;
-                        border: 1px solid #f2f3f5" onclick="copyFunction()">
-                            Copy
-                        </button>
-                    </div>
-                </div>
-            </div>
-            {{/formdata}}  
-            
-
-
                 <div id="ws-title" style="color: #116dc0;">
                     {{! Replace the name }}
                 </div>
@@ -147,6 +70,8 @@ Example context (json):
                 
                     <h3 id="ws-description">
                         {{! Replace the descriptions }}
+                        {{formdata.0.descriptions}}
+                        
                     </h3>
                 
                 
