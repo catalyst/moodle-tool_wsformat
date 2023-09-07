@@ -56,15 +56,24 @@ class index_page implements \renderable, \templatable {
 
         // Get_records returns an object array where key for each object is the name of the webservice.
         // Use array_values to change key to the index of each object so that we can filter based on $selectedWebserviceIndices.
-        $webservicesrecords = array_values($DB->get_records('external_functions', array(), '', 'name'));
+        $webservicesrecords = array_values($DB->get_records('external_functions', array(), ''));
 
+        echo '<pre>';
+        echo print_r($webservicesrecords);
+        echo '</pre>';
         $filteredrecords = [];
         foreach ($this->selectedwebserviceindices as $index) {
             $webservicename = $webservicesrecords[$index]->name;
+            //$functiondesc = $webservicesrecords[$index]->;
             $object = new stdClass();
             $object->name = $webservicename;
+            $object->description = $functiondesc;
             $filteredrecords[] = $object;
         }
+
+        // echo '<pre>';
+        // echo print_r($filteredrecords);
+        // echo '</pre>';
 
         $data = new stdClass();
         $data->formdata = $filteredrecords;
