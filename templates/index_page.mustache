@@ -25,7 +25,7 @@ Example context (json):
         overflow-x: hidden;
         height: 50vh;
         width: 40%;
-    ">
+        ">
             <h3>
                 Selected Web Services
             </h3>
@@ -36,7 +36,7 @@ Example context (json):
        
             padding: 0;
             list-style-type: none;
-        ">
+             ">
                 {{#formdata}}
                 <li data-name="{{name}}" id="" style="
                     cursor: pointer; 
@@ -53,20 +53,85 @@ Example context (json):
             {{! <button type="button" class="btn btn-primary" style="width:fit-content">Export All</button> }}
             <a href="download.php?data-json={{test}}" class="btn btn-primary" style="width:fit-content">Export All</a>
         </div>
+
         <div id="selection-panel" style="
         width: 60%;
         padding-left: 2rem;
         gap: 1rem;
-    ">
+        ">
             <h3 id="placeholder-text">
                 Select a web service to view details
             </h3>
             <div id="ws-panel" style="display: none; flex-direction: column;">
-                <div id="ws-title" style="color: #116dc0;">
-                    block_accessreview_get_module_data
+
+                {{! For each selected webservices }}
+                {{! {{#formdata}} 
+                {{! <div id="ws-title" style="color: #116dc0;">
+                    Replace the name
                 </div>
                 <h3 id="ws-description">
-                    Gets error data for course modules.
+                    Replace the decription
+                </h3>
+                <div id="ws-details" style="
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    gap: 1rem;
+                    ">
+                    <h4>Request</h4>
+                    <button style="border: none;
+                        width:fit-content;
+                        margin: 0;
+                        padding: 0.25rem 0.5rem 0.25rem 0.5rem;
+                        border-radius: 0.5rem;
+                        background-color: transparent;
+                        border: 1px solid #f2f3f5">
+                        curl
+                    </button>
+                    <div style="
+                    background-color: #f7f7f7;
+                    padding: 1rem;
+                    border-radius: 0.5rem;
+                    overflow-x: scroll;
+                    width: 100%;
+                    color: red;
+                    position: relative;
+                    ">
+                        <code id="curl" style="color: black;">
+                            <pre style="font-size: 14px">
+                                curl 'https://moodle.example.com/webservice/rest/server.php' \ 
+                                    -d 'wstoken=...' \ 
+                                    -d 'wsfunction=block_accessreview_get_module_data' \ 
+                                    -d 'moodlewsrestformat=json' \ 
+                                    -d 'courseid=...'
+                            </pre>
+                        </code>
+                        <button style="
+                        position: absolute;
+                        right: 1rem;
+                        top: 1rem;
+                        border: none;
+                        width:fit-content;
+                        margin: 0;
+                        padding: 0.25rem 0.5rem 0.25rem 0.5rem;
+                        border-radius: 0.5rem;
+                        background-color: #106cbf;
+                        color: white;
+                        border: 1px solid #f2f3f5" onclick="copyFunction()">
+                            Copy
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {{/formdata}}  
+            
+
+
+                <div id="ws-title" style="color: #116dc0;">
+                    Replace the name
+                </div>
+                <h3 id="ws-description">
+                    Replace the description
                 </h3>
                 <div id="ws-details" style="
                 display: flex;
@@ -120,6 +185,6 @@ Example context (json):
                 </div>
             </div>
         </div>
-    </div>
+    </div> 
 </div>
 {{/items_selected}}
