@@ -64,23 +64,52 @@ class index_page implements \renderable, \templatable {
         // echo '</pre>';
         $filteredrecords = [];
         foreach ($this->selectedwebserviceindices as $index) {
-            //Mine:
+            //Mine (new version):
             $webservice = $webservicesrecords[$index];
             $webserviceproperties = external_api::external_function_info($webservice);
             $object = new stdClass();
             $object->name = $webserviceproperties->name;
             $object->description = $webserviceproperties->description;
+
+            ///DOESN'T WORK FOR ARRAY PARAMS
+            //gets an array of all the required params
+            $paramObjectArray = $webserviceproperties -> parameters_desc -> keys;
+            $params = array_keys($paramObjectArray);//gets the keys of the array
+
+            for ($i = 0; $i <= sizeof($paramObjectArray); $i++){
+                echo '<pre>';
+                echo print_r($params.value());
+                echo '</pre>';
+            }
+
+
+            echo '<pre>';
+            //Check what param object array looks like
+            //echo print_r($paramObjectArray);
+            //Check what param looks like
+            echo print_r($params);
+            echo '</pre>';
+
+            $baseURL = "{{BASE_URL}}";
+            $curlString = `curl "${baseURL}/webservice/rest/server.php?wstoken=...&wsfunction=...&moodlewsrestformat=json"`
+    
+            
+
+            //$paramproperties = external_api::external_function_parameters($webservice);
+            //the above returns call to undefined method core_external\exeternal_api::external_function_parameters()
             $filteredrecords[] = $object;
         }
 
-        echo '<pre>';
-
-        //Check what properties the selected webservice has 
-        //echo print_r($webserviceproperties); //note that 1 = ture and 0 = false
-        //Check what our filtered records has
-        echo print_r($filteredrecords);
+        // echo '<pre>';
+        // //Check what our filtered records has
+        // echo print_r($filteredrecords);
+        // //Check what properties the selected webservice has 
+        // echo print_r($webserviceproperties); //note that 1 = ture and 0 = false
+        
+        // echo print_r("\n");
+        
        
-        echo '</pre>';
+        // echo '</pre>';
 
         $data = new stdClass();
         $data->formdata = $filteredrecords;
