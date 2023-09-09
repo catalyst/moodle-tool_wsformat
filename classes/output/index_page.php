@@ -26,7 +26,12 @@
 namespace tool_wsformat\output;
 
 use core_external\external_api;
+use core_webservice_renderer;
 use stdClass;
+
+use core_external\external_multiple_structure;
+use core_external\external_single_structure;
+
 
 /**
  * Class for processing data for index_page template.
@@ -71,50 +76,120 @@ class index_page implements \renderable, \templatable {
             $object->name = $webserviceproperties->name;
             $object->description = $webserviceproperties->description;
 
-            ///DOESN'T WORK FOR ARRAY PARAMS
-            //gets an array of all the required params
+            //getting the params
             $paramObjectArray = $webserviceproperties -> parameters_desc -> keys;
-            $params = array_keys($paramObjectArray);//gets the keys of the array
 
-            for ($i = 0; $i <= sizeof($paramObjectArray); $i++){
+            //echo '<pre>';
+            //Check what param object array looks like
+            //echo print_r($paramObjectArray);
+
+            //Using the code from renderer.php
+            $paramsArray = [];
+
+            foreach($paramObjectArray as $paramname => $paramdesc) {
+                // $checkArray = [];
+                $filteredParams = $this->rest_param_description_html($paramdesc, $paramname);
+                // echo '<pre>';
+                // echo strval($filteredParams);
+                // echo '</pre>';
+
+                //turn listed params into it's seperate elements in the array
+                $formatted = explode(PHP_EOL, $filteredParams);
+                //remove the last empty element in the array
+                array_pop($formatted);
+
+                // for ($i = 0; $i <= count($formatted) - 1; $i++){
+                //     echo '<pre>';
+                //     echo count($formatted);
+                //     echo "\n$i: $formatted[$i]";
+                //     echo '</pre>';   
+                // }
+
+                for ($i = 0; $i <= count($formatted) - 1; $i++){
+                    array_push($paramsArray, $formatted[$i]);
+                }
+            }
+
+            for($i = 0; $i < sizeOf($paramsArray); $i++){
                 echo '<pre>';
-                echo print_r($params.value());
+                echo "$i: $paramsArray[$i]";
                 echo '</pre>';
             }
 
-
-            echo '<pre>';
-            //Check what param object array looks like
-            //echo print_r($paramObjectArray);
-            //Check what param looks like
-            echo print_r($params);
-            echo '</pre>';
-
+            //Creating the curl 
             $baseURL = "{{BASE_URL}}";
-            $curlString = `curl "${baseURL}/webservice/rest/server.php?wstoken=...&wsfunction=...&moodlewsrestformat=json"`
-    
-            
+            $wsToken = "{{WS_TOKEN}}";
+            $functionName= $object -> name;
+            // echo '<pre>';
+            // echo $functionName;
+            // echo '</pre>';
 
-            //$paramproperties = external_api::external_function_parameters($webservice);
-            //the above returns call to undefined method core_external\exeternal_api::external_function_parameters()
+            //$curlString = `curl "${baseURL}/webservice/rest/server.php?wstoken=${wsToken}&wsfunction=${functionName}&moodlewsrestformat=json"`;
+            $curlString = "curl" . " " . $baseURL . "/webservice/rest/server.php?wstoken=" . $wsToken . "&wsfunction=" . $functionName . "&moodlewsrestformat=json";
+            // echo '<pre>';
+            // echo $curlString;
+            // echo '</pre>';
+
+            //Add params into curlString
+            foreach($paramsArray as $params){
+                $curlString = $curlString . "&" . $params;
+            }
+
+            $object -> curl = $curlString;
+
             $filteredrecords[] = $object;
         }
 
-        // echo '<pre>';
-        // //Check what our filtered records has
-        // echo print_r($filteredrecords);
-        // //Check what properties the selected webservice has 
-        // echo print_r($webserviceproperties); //note that 1 = ture and 0 = false
-        
-        // echo print_r("\n");
-        
-       
-        // echo '</pre>';
+        echo '<pre>';
+        echo print_r($filteredrecords);
+        echo '</pre>';
+
 
         $data = new stdClass();
         $data->formdata = $filteredrecords;
         $data->items_selected = true;
         $data->test = json_encode($filteredrecords);
         return $data;
+    }
+
+    //Taken from renderer.php
+    public function rest_param_description_html($paramdescription, $paramstring) {
+        $brakeline = <<<EOF
+
+
+EOF;
+        // description object is a list
+        if ($paramdescription instanceof external_multiple_structure) {
+            $paramstring = $paramstring . '[0]';
+            $return = $this->rest_param_description_html($paramdescription->content, $paramstring);
+            return $return;
+        } else if ($paramdescription instanceof external_single_structure) {
+            // description object is an object
+            $singlestructuredesc = "";
+            $initialparamstring = $paramstring;
+            foreach ($paramdescription->keys as $attributname => $attribut) {
+                $paramstring = $initialparamstring . '[' . $attributname . ']';
+                $singlestructuredesc .= $this->rest_param_description_html(
+                                $paramdescription->keys[$attributname], $paramstring);
+            }
+            return $singlestructuredesc;
+        } else { 
+            // description object is a primary type (string, integer)
+            $paramstring = $paramstring . '=';
+           
+            switch ($paramdescription->type) {
+                case PARAM_BOOL: // 0 or 1 only for now
+                case PARAM_INT:
+                    $type = '{{INT}}';
+                    break;
+                case PARAM_FLOAT;
+                    $type = '{{DOUBLE}}';
+                    break;
+                default:
+                    $type = '{{STRING}}';
+            }
+          return $paramstring . $type . $brakeline;
+
+        }
     }
 }
