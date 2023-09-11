@@ -110,11 +110,11 @@ class index_page implements \renderable, \templatable {
                 }
             }
 
-            for($i = 0; $i < sizeOf($paramsArray); $i++){
-                echo '<pre>';
-                echo "$i: $paramsArray[$i]";
-                echo '</pre>';
-            }
+            // for($i = 0; $i < sizeOf($paramsArray); $i++){
+            //     echo '<pre>';
+            //     echo "$i: $paramsArray[$i]";
+            //     echo '</pre>';
+            // }
 
             //Creating the curl 
             $baseURL = "{{BASE_URL}}";
@@ -140,9 +140,9 @@ class index_page implements \renderable, \templatable {
             $filteredrecords[] = $object;
         }
 
-        echo '<pre>';
-        echo print_r($filteredrecords);
-        echo '</pre>';
+        // echo '<pre>';
+        // echo print_r($filteredrecords);
+        // echo '</pre>';
 
 
         $data = new stdClass();
