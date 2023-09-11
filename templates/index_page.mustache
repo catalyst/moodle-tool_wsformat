@@ -38,7 +38,7 @@ Example context (json):
             list-style-type: none;
              ">
                 {{#formdata}}
-                <li data-name="{{name}}" id="" style="
+                <li data-name="{{name}}" data-desc="{{description}}" data-curl="{{curl}}" id="" style="
                     cursor: pointer; 
                     font-weight: 700; 
                     color: #0f6cbf; 
@@ -64,23 +64,17 @@ Example context (json):
             </h3>
             <div id="ws-panel" style="display: none; flex-direction: column;">
                 <div id="ws-title" style="color: #116dc0;">
-                    {{! Replace the name }}
+                    {{! Replace the name -- done}}
                 </div>
-
-                
                     <h3 id="ws-description">
-                        {{! Replace the descriptions }}
-                        {{formdata.0.description}}
-                        
+                        {{! Replace the descriptions }}  
                     </h3>
-                
-                
                 <div id="ws-details" style="
                 display: flex;
                 flex-direction: row;
                 align-items: center;
                 gap: 1rem;
-            ">
+                ">
                     <h4>Request</h4>
                     <button style="border: none;
                         width:fit-content;
@@ -100,15 +94,15 @@ Example context (json):
                 width: 100%;
                 color: red;
                 position: relative;
-            ">
-                    <code id="curl" style="color: black;">
-                <pre style="font-size: 14px">
-                    curl 'https://moodle.example.com/webservice/rest/server.php' \ 
+                ">
+                <code id="ws-curl" style="color: black; font-size:14px">
+                {{! <pre style="font-size: 14px"> }}
+                    {{! curl 'https://moodle.example.com/webservice/rest/server.php' \ 
                         -d 'wstoken=...' \ 
                         -d 'wsfunction=block_accessreview_get_module_data' \ 
                         -d 'moodlewsrestformat=json' \ 
-                        -d 'courseid=...'
-                </pre>
+                        -d 'courseid=...' }} 
+                {{! </pre> }}
                 </code>
                     <button style="
                     position: absolute;
