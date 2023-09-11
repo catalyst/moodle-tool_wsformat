@@ -24,12 +24,9 @@ webserviceListItems.forEach(function (webserviceItem) {
 
         wsDescriptionPanel.style.display = "flex";
 
-
         panelTitle.innerHTML= name;
         panelDesc.innerHTML = description;
         panelCurl.innerHTML = curl;
-
-
 
     });
 });
