@@ -120,6 +120,7 @@ class index_page implements \renderable, \templatable {
             $baseURL = "{{BASE_URL}}";
             $wsToken = "{{WS_TOKEN}}";
             $functionName= $object -> name;
+            $functionDesc= $object -> description;
             // echo '<pre>';
             // echo $functionName;
             // echo '</pre>';
@@ -138,12 +139,48 @@ class index_page implements \renderable, \templatable {
             $object -> curl = $curlString;
 
             $filteredrecords[] = $object;
+
+            $postmanURL = $baseURL . "/webservice/rest/server.php?wstoken=" . $wsToken . "&wsfunction=" . $functionName . "&moodlewsrestformat=json" . $params;
+            $collection = [
+                'info' => [
+                    'name' => 'My Collection',
+                    'description' => 'Postman Collection',
+                    'schema' => 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json',
+                ],
+                'item' => [
+                    [
+                        'name' => $functionName,
+                        'request' => [
+                            'method' => 'POST',
+                            'header' => [],
+                            'url' => [
+                                'raw' => $postmanURL,
+                                'host' => [$baseURL],
+                                'path' => ['webservice', 'rest', 'server.php'],
+                                'query' => [
+                                    [
+                                        'key' => 'moodlewsrestformat',
+                                        'value' => 'json',
+                                    ],
+                                    [
+                                        'key' => 'Content-Type',
+                                        'value' => 'application/json',
+                                    ],
+                                ],
+                            ],
+                        ],
+                        'description' => $functionDesc
+                    ],
+                    'response' => [],
+                ],
+            ];
+
+            $postmancol = json_encode($collection, JSON_PRETTY_PRINT);
+            $collectionJson = str_replace('\\/', '/', $postmancol);
+            $object -> postman = $collectionJson;
+            // echo '<pre>' . $collectionJson . '</pre>';
+        
         }
-
-        // echo '<pre>';
-        // echo print_r($filteredrecords);
-        // echo '</pre>';
-
 
         $data = new stdClass();
         $data->formdata = $filteredrecords;
@@ -151,6 +188,8 @@ class index_page implements \renderable, \templatable {
         $data->test = json_encode($filteredrecords);
         return $data;
     }
+
+        
 
     //Taken from renderer.php
     public function rest_param_description_html($paramdescription, $paramstring) {

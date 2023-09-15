@@ -38,7 +38,7 @@ Example context (json):
             list-style-type: none;
              ">
                 {{#formdata}}
-                <li data-name="{{name}}" data-desc="{{description}}" data-curl="{{curl}}" id="" style="
+                <li data-name="{{name}}" data-desc="{{description}}" data-curl="{{curl}}" data-postman="{{postman}} id="" style="
                     cursor: pointer; 
                     font-weight: 700; 
                     color: #0f6cbf; 
@@ -76,7 +76,7 @@ Example context (json):
                 gap: 1rem;
                 ">
                     <h4>Request</h4>
-                    <button style="border: none;
+                    <button id="curlBTN" style="border: none;
                         width:fit-content;
                         margin: 0;
                         padding: 0.25rem 0.5rem 0.25rem 0.5rem;
@@ -84,6 +84,15 @@ Example context (json):
                         background-color: transparent;
                         border: 1px solid #f2f3f5">
                         curl
+                    </button>
+                    <button id ="postmanBTN" style="border: none;
+                        width:fit-content;
+                        margin: 0;
+                        padding: 0.25rem 0.5rem 0.25rem 0.5rem;
+                        border-radius: 0.5rem;
+                        background-color: transparent;
+                        border: 1px solid #f2f3f5">
+                        postman
                     </button>
                 </div>
                 <div style="
@@ -95,6 +104,7 @@ Example context (json):
                 color: red;
                 position: relative;
                 ">
+                
                 <code id="ws-curl" style="color: black; font-size:14px">
                     {{! Replace the curl }}  
                     {{! <pre style="font-size: 14px"> }}
@@ -105,6 +115,9 @@ Example context (json):
                             -d 'courseid=...' }} 
                     {{! </pre> }}
                 </code>
+                
+                </code>
+                
                     <button style="
                     position: absolute;
                     right: 1rem;
@@ -119,6 +132,8 @@ Example context (json):
                     border: 1px solid #f2f3f5" onclick="copyFunction()">
                         Copy
                     </button>
+                    
+                    
                 </div>
             </div>
         </div>

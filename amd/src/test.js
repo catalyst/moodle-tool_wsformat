@@ -9,6 +9,7 @@ const wsDescriptionPanel = document.querySelector('#ws-panel');
 let panelTitle = document.getElementById('ws-title');
 let panelDesc = document.getElementById('ws-description');
 let panelCurl = document.getElementById('ws-curl');
+let panelPostman = document.getElementById('postman');
 
 webserviceListItems.forEach(function (webserviceItem) {
 
@@ -16,7 +17,8 @@ webserviceListItems.forEach(function (webserviceItem) {
         e.preventDefault();
         const name = webserviceItem.getAttribute("data-name");
         const description = webserviceItem.getAttribute("data-desc");
-        const curl = webserviceItem.getAttribute("data-curl");
+        // const curl = webserviceItem.getAttribute("data-curl");
+        // const postman = webserviceItem.getAttribute("data-postman");
      
         if (placeholderText) {
             placeholderText.remove();
@@ -26,7 +28,23 @@ webserviceListItems.forEach(function (webserviceItem) {
 
         panelTitle.innerHTML= name;
         panelDesc.innerHTML = description;
-        panelCurl.innerHTML = curl;
+        // panelCurl.innerHTML = curl;
+        document.getElementById("curlBTN").addEventListener('click', (e) => {
+            e.preventDefault();
+            const name = webserviceItem.getAttribute("data-name");
+            const description = webserviceItem.getAttribute("data-desc");
+            const curl = webserviceItem.getAttribute("data-curl");
+            panelCurl.innerHTML = curl;
+        });
+        document.getElementById("postmanBTN").addEventListener('click', (e) => {
+            e.preventDefault();
+            const name = webserviceItem.getAttribute("data-name");
+            const description = webserviceItem.getAttribute("data-desc");
+            const postman = webserviceItem.getAttribute("data-postman");
+            panelCurl.innerHTML = postman;
+        });
 
     });
+    
+    
 });
