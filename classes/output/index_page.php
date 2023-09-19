@@ -31,6 +31,12 @@ use stdClass;
  * Class for processing data for index_page template.
  */
 class index_page implements \renderable, \templatable {
+
+    /**
+     * Stores the selected webservice indices.
+     *
+     * @var array
+     */
     protected $selectedwebserviceindices = array();
 
     /**
