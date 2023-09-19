@@ -75,6 +75,7 @@ class index_page implements \renderable, \templatable {
         // echo print_r($webservicesrecords);
         // echo '</pre>';
         $filteredrecords = [];
+        $curl_urls = [];
         foreach ($this->selectedwebserviceindices as $index) {
             //Mine (new version):
             $webservice = $webservicesrecords[$index];
@@ -141,25 +142,25 @@ class index_page implements \renderable, \templatable {
             foreach($paramsArray as $params){
                 $curlString = $curlString . "&" . $params;
             }
+            $curlStringForUrl = str_replace('&', '%26', $curlString);
 
             $object -> curl = $curlString;
 
             $filteredrecords[] = $object;
+            $curl_urls[] = $curlStringForUrl;
         }
 
         $data = (object) [
             'formdata' => $filteredrecords,
             'items_selected' => true,
+            'download' => json_encode($filteredrecords),
+            'urls' => json_encode($curl_urls)
         ];
         return $data;
     }
 
     //Taken from renderer.php
     public function rest_param_description_html($paramdescription, $paramstring) {
-        $brakeline = <<<EOF
-
-
-EOF;
         // description object is a list
         if ($paramdescription instanceof external_multiple_structure) {
             $paramstring = $paramstring . '[0]';
@@ -190,8 +191,9 @@ EOF;
                 default:
                     $type = '{{STRING}}';
             }
-          return $paramstring . $type . $brakeline;
+          return $paramstring . $type;
 
         }
     }
 }
+
