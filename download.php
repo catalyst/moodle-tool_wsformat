@@ -37,8 +37,8 @@ $unserializedjson = json_decode($serializedjson, false);
 $prettyprintsingle = json_encode($unserializedjson[0], JSON_PRETTY_PRINT);
 $prettyprintall = json_encode($unserializedjson, JSON_PRETTY_PRINT);
 
-header('Content-Disposition: attachment; filename=file.json');
-header('Content-Type: application/json');
+header('Content-Disposition: attachment; filename=curl.txt');
+header('Content-Type: application/plain');
 
 // echo $prettyprintall;
 
