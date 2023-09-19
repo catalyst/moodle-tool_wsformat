@@ -32,7 +32,9 @@ use plugin_renderer_base;
  */
 class renderer extends plugin_renderer_base {
     /**
-     * Render index_page mustache template.
+     * Renders index_page mustache template.
+     * @param \tool_wsformat\output\index_page $index_page The index_page renderable object.
+     * @return string|boolean
      */
     protected function render_index_page(\tool_wsformat\output\index_page $indexpage) {
         $data = $indexpage->export_for_template($this);
