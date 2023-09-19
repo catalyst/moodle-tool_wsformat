@@ -35,8 +35,9 @@ class index_page implements \renderable, \templatable {
 
     /**
      * Constructor function - assign instance variable.
+     * @param array $indicies
      */
-    public function __construct($indicies) {
+    public function __construct(array $indicies) {
         $this->selectedwebserviceindices = $indicies;
     }
 
