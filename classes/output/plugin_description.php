@@ -25,7 +25,6 @@
 
 namespace tool_wsformat\output;
 
-
 /**
  * Class for processing data for plugin_description template.
  */

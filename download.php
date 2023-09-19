@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Language strings
+ * Exports either a json or txt file with exported webservices
  *
  * @package          tool_wsformat
  * @copyright        2023 Djarran Cotleanu
