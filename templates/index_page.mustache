@@ -14,109 +14,53 @@ Example context (json):
 {{! <h2>Please select a webservice</h2> }}
 {{/items_selected}}
 {{#items_selected}}
-<div
-    style="width: 100%; display: flex;flex-direction: column; margin-bottom: 15rem; margin-top: 2rem; padding-bottom: 2rem; border-top: 1px solid #f2f3f5;">
-    <div style="padding-top: 2rem; display: flex;flex-direction: row;">
-        <div style="
-        display: flex;
-        flex-direction: column;
-        border-right: 1px solid #e3e3e4;
-        overflow-y: hidden;
-        overflow-x: hidden;
-        height: 50vh;
-        width: 40%;
-        ">
+<div class="page-container">
+    <div class="columns-container">
+        <div class="selected-webservices-column">
             <h3>
                 Selected Web Services
             </h3>
-            <ul style="
-            display: flex;
-            flex-direction: column;
-            overflow-y: scroll;
-       
-            padding: 0;
-            list-style-type: none;
-             ">
+            <ul class="selected-webservices-list">
                 {{#formdata}}
-                <li data-name="{{name}}" data-desc="{{description}}" data-curl="{{curl}}" id="" style="
-                    cursor: pointer; 
-                    font-weight: 700; 
-                    color: #0f6cbf; 
-                    display: flex; 
-                    flex-direction: row;
-                ">
+                <li class="selected-webservices-list-item" data-name="{{name}}" data-desc="{{description}}" data-curl="{{curl}}">
                     <!-- Access the 'name' key of the current element -->
                     {{name}}
                 </li>
                 {{/formdata}}
             </ul>
             {{! <button type="button" class="btn btn-primary" style="width:fit-content">Export All</button> }}
-            <a href="download.php?data-json={{test}}" class="btn btn-primary" style="width:fit-content">Export All</a>
+            <a href="download.php?data-json={{test}}" class="btn btn-primary export-all-button">Export All</a>
         </div>
 
-        <div id="selection-panel" style="
-        width: 60%;
-        padding-left: 2rem;
-        gap: 1rem;
-        ">
+        <div id="selection-panel" class="details-column">
             <h3 id="placeholder-text">
                 Select a web service to view details
             </h3>
-            <div id="ws-panel" style="display: none; flex-direction: column;">
-                <div id="ws-title" style="color: #116dc0;">
+            <div class="details-content" id="ws-panel">
+                <div class="details-title" id="ws-title">
                     {{! Replace the name -- done}}
                 </div>
-                    <h3 id="ws-description">
-                        {{! Replace the descriptions }}  
-                    </h3>
-                <div id="ws-details" style="
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-                gap: 1rem;
-                ">
+                <h3 id="ws-description">
+                    {{! Replace the descriptions }}  
+                </h3>
+                <div class="details-request-container" id="ws-details">
                     <h4>Request</h4>
-                    <button style="border: none;
-                        width:fit-content;
-                        margin: 0;
-                        padding: 0.25rem 0.5rem 0.25rem 0.5rem;
-                        border-radius: 0.5rem;
-                        background-color: transparent;
-                        border: 1px solid #f2f3f5">
+                    <button class="details-curl-button">
                         curl
                     </button>
                 </div>
-                <div style="
-                background-color: #f7f7f7;
-                padding: 1rem;
-                border-radius: 0.5rem;
-                overflow-x: scroll;
-                width: 100%;
-                color: red;
-                position: relative;
-                ">
-                <code id="ws-curl" style="color: black; font-size:14px">
-                    {{! Replace the curl }}  
-                    {{! <pre style="font-size: 14px"> }}
-                        {{! curl 'https://moodle.example.com/webservice/rest/server.php' \ 
-                            -d 'wstoken=...' \ 
-                            -d 'wsfunction=block_accessreview_get_module_data' \ 
-                            -d 'moodlewsrestformat=json' \ 
-                            -d 'courseid=...' }} 
-                    {{! </pre> }}
-                </code>
-                    <button style="
-                    position: absolute;
-                    right: 1rem;
-                    top: 1rem;
-                    border: none;
-                    width:fit-content;
-                    margin: 0;
-                    padding: 0.25rem 0.5rem 0.25rem 0.5rem;
-                    border-radius: 0.5rem;
-                    background-color: #106cbf;
-                    color: white;
-                    border: 1px solid #f2f3f5" onclick="copyFunction()">
+                <div class="code-container">
+                    <code class="code-text" id="ws-curl">
+                        {{! Replace the curl }}  
+                        {{! <pre style="font-size: 14px"> }}
+                            {{! curl 'https://moodle.example.com/webservice/rest/server.php' \ 
+                                -d 'wstoken=...' \ 
+                                -d 'wsfunction=block_accessreview_get_module_data' \ 
+                                -d 'moodlewsrestformat=json' \ 
+                                -d 'courseid=...' }} 
+                        {{! </pre> }}
+                    </code>
+                    <button class="copy-button" onclick="copyFunction()">
                         Copy
                     </button>
                 </div>
