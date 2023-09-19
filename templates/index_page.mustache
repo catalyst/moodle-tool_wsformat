@@ -50,7 +50,17 @@ Example context (json):
                 </li>
                 {{/formdata}}
             </ul>
+            <div class="export-container">
             <a href="download.php?data-json={{urls}}" class="btn btn-primary" style="width:fit-content">Export All</a>
+        <select id="{{id}}u" name="{{name}}[u]" class="form-control custom-select" {{#readonly}}disabled{{/readonly}}>
+                <option value="curl" selected="">cURL</option>
+                <option value="postman" >Postman</option>
+        </select>
+        <div class="form-defaultinfo text-muted">
+            Default: cURL
+        </div>
+            </div>
+
         </div>
 
         <div id="selection-panel" style="
