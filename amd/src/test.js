@@ -21,7 +21,7 @@ const setUpCopyFunctionality = () => {
         copyButton.addEventListener('click', copyCurlContent);
     }
 };
-
+ 
 function copyCurlContent() {
     console.log("Helloooo this is Zachie");
     const textToCopy = document.getElementById('ws-curl').textContent.trim();
