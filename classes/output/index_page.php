@@ -66,10 +66,10 @@ class index_page implements \renderable, \templatable {
             $filteredrecords[] = $object;
         }
 
-        $data = new stdClass();
-        $data->formdata = $filteredrecords;
-        $data->items_selected = true;
-        $data->test = json_encode($filteredrecords);
+        $data = (object) [
+            'formdata' => $filteredrecords,
+            'items_selected' => true,
+        ];
 
         return $data;
     }
