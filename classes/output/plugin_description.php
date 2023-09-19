@@ -38,7 +38,10 @@ class plugin_description implements \renderable, \templatable {
     }
 
     /**
-     * Exports the data for the plugin_description.mustache template
+     * Exports the data for the index_page.mustache template
+     *
+     * @param \renderer_base $output
+     * @return void
      */
     public function export_for_template(\renderer_base $output) {
     }
