@@ -18,14 +18,20 @@
  * Admin tool presets plugin to load some settings.
  *
  * @package          tool_wsformat
- * @copyright        2023 Djarran Cotleanu
- * @author           Djarran Cotleanu
+ * @copyright        2023 Djarran Cotleanu, Jacqueline Mail
+ * @author           Djarran Cotleanu, Jacqueline Mail
  * @license          http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace tool_wsformat\output;
 
+use core_external\external_api;
+use core_webservice_renderer;
 use stdClass;
+
+use core_external\external_multiple_structure;
+use core_external\external_single_structure;
+
 
 /**
  * Class for processing data for index_page template.
@@ -63,13 +69,81 @@ class index_page implements \renderable, \templatable {
 
         // Get_records returns an object array where key for each object is the name of the webservice.
         // Use array_values to change key to the index of each object so that we can filter based on $selectedWebserviceIndices.
-        $webservicesrecords = array_values($DB->get_records('external_functions', array(), '', 'name'));
+        $webservicesrecords = array_values($DB->get_records('external_functions', array(), ''));
 
+        // echo '<pre>';
+        // echo print_r($webservicesrecords);
+        // echo '</pre>';
         $filteredrecords = [];
         foreach ($this->selectedwebserviceindices as $index) {
-            $webservicename = $webservicesrecords[$index]->name;
+            //Mine (new version):
+            $webservice = $webservicesrecords[$index];
+            $webserviceproperties = external_api::external_function_info($webservice);
             $object = new stdClass();
-            $object->name = $webservicename;
+            $object->name = $webserviceproperties->name;
+            $object->description = $webserviceproperties->description;
+
+            //getting the params
+            $paramObjectArray = $webserviceproperties -> parameters_desc -> keys;
+
+            //echo '<pre>';
+            //Check what param object array looks like
+            //echo print_r($paramObjectArray);
+
+            //Using the code from renderer.php
+            $paramsArray = [];
+
+            foreach($paramObjectArray as $paramname => $paramdesc) {
+                // $checkArray = [];
+                $filteredParams = $this->rest_param_description_html($paramdesc, $paramname);
+                // echo '<pre>';
+                // echo strval($filteredParams);
+                // echo '</pre>';
+
+                //turn listed params into it's seperate elements in the array
+                $formatted = explode(PHP_EOL, $filteredParams);
+                //remove the last empty element in the array
+                array_pop($formatted);
+
+                // for ($i = 0; $i <= count($formatted) - 1; $i++){
+                //     echo '<pre>';
+                //     echo count($formatted);
+                //     echo "\n$i: $formatted[$i]";
+                //     echo '</pre>';   
+                // }
+
+                for ($i = 0; $i <= count($formatted) - 1; $i++){
+                    array_push($paramsArray, $formatted[$i]);
+                }
+            }
+
+            // for($i = 0; $i < sizeOf($paramsArray); $i++){
+            //     echo '<pre>';
+            //     echo "$i: $paramsArray[$i]";
+            //     echo '</pre>';
+            // }
+
+            //Creating the curl 
+            $baseURL = "{{BASE_URL}}";
+            $wsToken = "{{WS_TOKEN}}";
+            $functionName= $object -> name;
+            // echo '<pre>';
+            // echo $functionName;
+            // echo '</pre>';
+
+            //$curlString = `curl "${baseURL}/webservice/rest/server.php?wstoken=${wsToken}&wsfunction=${functionName}&moodlewsrestformat=json"`;
+            $curlString = "curl" . " " . $baseURL . "/webservice/rest/server.php?wstoken=" . $wsToken . "&wsfunction=" . $functionName . "&moodlewsrestformat=json";
+            // echo '<pre>';
+            // echo $curlString;
+            // echo '</pre>';
+
+            //Add params into curlString
+            foreach($paramsArray as $params){
+                $curlString = $curlString . "&" . $params;
+            }
+
+            $object -> curl = $curlString;
+
             $filteredrecords[] = $object;
         }
 
@@ -77,7 +151,47 @@ class index_page implements \renderable, \templatable {
             'formdata' => $filteredrecords,
             'items_selected' => true,
         ];
-
         return $data;
+    }
+
+    //Taken from renderer.php
+    public function rest_param_description_html($paramdescription, $paramstring) {
+        $brakeline = <<<EOF
+
+
+EOF;
+        // description object is a list
+        if ($paramdescription instanceof external_multiple_structure) {
+            $paramstring = $paramstring . '[0]';
+            $return = $this->rest_param_description_html($paramdescription->content, $paramstring);
+            return $return;
+        } else if ($paramdescription instanceof external_single_structure) {
+            // description object is an object
+            $singlestructuredesc = "";
+            $initialparamstring = $paramstring;
+            foreach ($paramdescription->keys as $attributname => $attribut) {
+                $paramstring = $initialparamstring . '[' . $attributname . ']';
+                $singlestructuredesc .= $this->rest_param_description_html(
+                                $paramdescription->keys[$attributname], $paramstring);
+            }
+            return $singlestructuredesc;
+        } else { 
+            // description object is a primary type (string, integer)
+            $paramstring = $paramstring . '=';
+           
+            switch ($paramdescription->type) {
+                case PARAM_BOOL: // 0 or 1 only for now
+                case PARAM_INT:
+                    $type = '{{INT}}';
+                    break;
+                case PARAM_FLOAT;
+                    $type = '{{DOUBLE}}';
+                    break;
+                default:
+                    $type = '{{STRING}}';
+            }
+          return $paramstring . $type . $brakeline;
+
+        }
     }
 }
