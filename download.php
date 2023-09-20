@@ -29,9 +29,6 @@ require('../../../config.php');
 $hostaddress = $CFG->wwwroot;
 require_login();
 
-header('Content-Disposition: attachment; filename=curl.txt');
-header('Content-Type: application/plain');
-
 define('EXPORT_CURL', 'curl');
 define('EXPORT_POSTMAN', 'postman');
 
