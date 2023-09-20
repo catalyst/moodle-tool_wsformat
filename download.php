@@ -27,6 +27,7 @@ require('../../../config.php');
 require_login();
 
 $serializedjson = required_param('data-json', PARAM_TEXT);
+$serializedexporttype = required_param('export-type', PARAM_TEXT);
 $unserializedjson = json_decode($serializedjson, false);
 
 
@@ -41,7 +42,7 @@ header('Content-Disposition: attachment; filename=curl.txt');
 header('Content-Type: application/plain');
 
 // echo $prettyprintall;
-
+echo $serializedexporttype . "\n" . "\n";
 foreach($unserializedjson as $webservice) {
     echo $webservice . "\n" . "\n";
 }
