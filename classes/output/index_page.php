@@ -249,6 +249,12 @@ class index_page implements \renderable, \templatable {
                     echo 'Type: bool';
                     echo '</h3>';
                     break;
+                case PARAM_TEXT:
+                    $type = '{{TEXT}}';
+                    echo '<h3>';
+                    echo 'Type: text';
+                    echo '</h3>';
+                    break;
                 case PARAM_ALPHA:
                     $type = '{{ALPHA}}';
                     echo '<h3>';
