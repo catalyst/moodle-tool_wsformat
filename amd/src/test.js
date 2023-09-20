@@ -1,5 +1,6 @@
 export const init = () => {
     setUpCopyFunctionality();
+    
 };
 
 
@@ -13,25 +14,31 @@ let panelDesc = document.getElementById('ws-description');
 let panelCurl = document.getElementById('ws-curl');
 
 
-const setUpCopyFunctionality = () => {
+ const setUpCopyFunctionality = () => {
     const copyButton = document.querySelector('button[onclick="copyCurlContent()"]');
-
+    
     if (copyButton) {
         copyButton.removeAttribute('onclick');  
         copyButton.addEventListener('click', copyCurlContent);
     }
-};
- 
+}; 
+
+function testClick() {
+    console.log('Button was clicked');
+}
 function copyCurlContent() {
-    console.log("Helloooo this is Zachie");
-    const textToCopy = document.getElementById('ws-curl').textContent.trim();
-    const textarea = document.createElement('textarea');
-    textarea.value = textToCopy;
-    document.body.appendChild(textarea);
-    textarea.select();
-    document.execCommand('copy');
-    document.body.removeChild(textarea);
-    alert('Content copied to clipboard!');
+    console.log("Test");
+    alert("It worked");
+    let curlContent = document.getElementById(data-curl).textContent;
+
+    let textArea = document.createElement("textarea");
+    textArea.value = curlContent;
+    document.body.appendChild(textArea);
+    textArea.select();
+
+    document.execCommand("copy");
+    document.body.removeChild(textArea);
+    alert("It worked");
 }
 webserviceListItems.forEach(function (webserviceItem) {
 
