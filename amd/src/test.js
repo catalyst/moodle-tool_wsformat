@@ -1,8 +1,8 @@
 import Ajax, { call as fetchMany } from 'core/ajax';
+import * as Toast from 'core/toast';
 
 export const init = () => {
     setUpCopyFunctionality();
-
 };
 
 
@@ -17,18 +17,28 @@ const webserviceListItems = document.querySelectorAll('li[data-name]');
 const placeholderText = document.querySelector('#placeholder-text');
 const wsDescriptionPanel = document.querySelector('#ws-panel');
 
-
 let panelTitle = document.getElementById('ws-title');
 let panelDesc = document.getElementById('ws-description');
 let panelCurl = document.getElementById('ws-curl');
-
 
 const curlCopyButton = document.querySelector('#curl-copy-button');
 curlCopyButton.addEventListener('click', copyCurlContent)
 
 function copyCurlContent() {
     let curlContent = document.getElementById('ws-curl').innerText;
-    navigator.clipboard.writeText(curlContent);
+    // Source: https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText#examples.
+    navigator.clipboard.writeText(curlContent)
+        .then(() => {
+            // From the official Moodle Component Library:https://componentlibrary.moodle.com/admin/tool/componentlibrary/docspage.php/moodle/javascript/toast/ 
+            Toast.add('cURL successfully copied to clipboard', {
+                type: 'success'
+            })
+        })
+        .catch(() => {
+            Toast.add('cURL unable to be copied to clipboard', {
+                type: 'danger'
+            })
+        })
 }
 
 webserviceListItems.forEach(function (webserviceItem) {
