@@ -32,7 +32,9 @@ use plugin_renderer_base;
  */
 class renderer extends plugin_renderer_base {
     /**
-     * Render index_page mustache template.
+     * Renders index_page mustache template.
+     * @param \tool_wsformat\output\index_page $indexpage The index_page renderable object.
+     * @return string|boolean
      */
     protected function render_index_page(\tool_wsformat\output\index_page $indexpage) {
         $data = $indexpage->export_for_template($this);
@@ -40,7 +42,9 @@ class renderer extends plugin_renderer_base {
     }
 
     /**
-     * Render plugin_description mustache template.
+     * Renders the plugin_description mustache template.
+     * @param \tool_wsformat\output\plugin_description $plugindescription The plugin description object.
+     * @return string|boolean
      */
     protected function render_plugin_description(\tool_wsformat\output\plugin_description $plugindescription) {
         return parent::render_from_template('tool_wsformat/plugin_description', new \stdClass);

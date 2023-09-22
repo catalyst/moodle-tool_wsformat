@@ -23,8 +23,6 @@
  * @license          http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['pluginname'] = 'API Test';
-$string['myadmintool'] = 'API Test';
+$string['pluginname'] = 'Format Webservices';
 $string['plugindescription'] = 'This plugin displays all web services available within Moodle and the respective formatted requests to help developers better understand the communication between their Moodle site and external applications or services';
-$string['fdsf'] = 'This is a f.';
 

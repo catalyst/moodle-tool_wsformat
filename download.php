@@ -23,15 +23,23 @@
  * @license          http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use tool_wsformat\export_webservices;
+
 require('../../../config.php');
+$hostaddress = $CFG->wwwroot;
 require_login();
 
+define('EXPORT_CURL', 'curl');
+define('EXPORT_POSTMAN', 'postman');
+
 $serializedjson = required_param('data-json', PARAM_TEXT);
-$unserializedjson = json_decode($serializedjson, true);
+$exporttype = required_param('export-type', PARAM_TEXT);
 
-$prettyprintsingle = json_encode($unserializedjson[0], JSON_PRETTY_PRINT);
-$prettyprintall = json_encode($unserializedjson, JSON_PRETTY_PRINT);
+$export = new export_webservices($exporttype, $hostaddress, $serializedjson);
 
-header('Content-Disposition: attachment; filename=file.json');
-header('Content-Type: application/json');
-echo $prettyprintall;
+switch ($exporttype) {
+    case EXPORT_CURL:
+        $export->export_as_curl();
+    case EXPORT_POSTMAN:
+        $export->export_as_postman();
+}

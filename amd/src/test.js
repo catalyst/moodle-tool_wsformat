@@ -1,8 +1,16 @@
+import Ajax, { call as fetchMany } from 'core/ajax';
+
 export const init = () => {
     setUpCopyFunctionality();
 
 };
 
+
+export const testFetch = () => {
+    fetchMany([{
+
+    }])
+}
 
 //console.log("Helloooo this is Jackie");
 const webserviceListItems = document.querySelectorAll('li[data-name]');
@@ -42,4 +50,14 @@ webserviceListItems.forEach(function (webserviceItem) {
         panelCurl.innerHTML = curl;
 
     });
+});
+
+const selectElement = document.getElementById('export-type');
+const exportButton = document.getElementById('export-button-id');
+const initalHref = exportButton.href;
+
+selectElement.addEventListener('change', (event) => {
+    const exportType = event.target.value;
+    exportButton.href = `${initalHref}&export-type=${exportType}`;
+    console.log(exportButton.href)
 });
