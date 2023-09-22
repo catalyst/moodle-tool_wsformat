@@ -95,56 +95,25 @@ class index_page implements \renderable, \templatable {
             $paramsArray = [];
 
             foreach ($paramObjectArray as $paramname => $paramdesc) {
-                // $checkArray = [];
-                $filteredParams = $this->rest_param_description_html($paramdesc, $paramname);
-                // print_r($filteredParams);
-                // echo '<pre>';
-                // echo strval($filteredParams);
-                // echo '</pre>';
 
-                // echo '<pre>';
-                // print_r($filteredParams);
-                // echo '</pre>';
-                //turn listed params into it's seperate elements in the array
+                $filteredParams = $this->rest_param_description_html($paramdesc, $paramname);
+
                 $formatted = explode(PHP_EOL, $filteredParams);
-                //remove the last empty element in the array
+
                 array_pop($formatted);
-                // echo '<pre>';
-                // print_r($formatted);
-                // echo '</pre>';
-                // print_r($formatted);
-                // for ($i = 0; $i <= count($formatted) - 1; $i++){
-                //     echo '<pre>';
-                //     echo count($formatted);
-                //     echo "\n$i: $formatted[$i]";
-                //     echo '</pre>';   
-                // }
 
                 for ($i = 0; $i <= count($formatted) - 1; $i++) {
                     array_push($paramsArray, $formatted[$i]);
                 }
             }
 
-            // for($i = 0; $i < sizeOf($paramsArray); $i++){
-            //     echo '<pre>';
-            //     echo "$i: $paramsArray[$i]";
-            //     echo '</pre>';
-            // }
-
             //Creating the curl 
             $baseURL = "{{BASE_URL}}";
             $wsToken = "{{WS_TOKEN}}";
             $functionName = $object->name;
-            // echo '<pre>';
-            // echo $functionName;
-            // echo '</pre>';
 
-            //$curlString = `curl "${baseURL}/webservice/rest/server.php?wstoken=${wsToken}&wsfunction=${functionName}&moodlewsrestformat=json"`;
             $curlString = "curl" . " " . $baseURL . "/webservice/rest/server.php?wstoken=" . $wsToken . "&wsfunction=" . $functionName . "&moodlewsrestformat=json";
-            // echo '<pre>';
-            // echo $curlString;
-            // echo '</pre>';
-            // print_r($paramsArray);
+
             //Add params into curlString
             foreach ($paramsArray as $params) {
                 $curlString = $curlString . "&" . $params;
@@ -175,49 +144,16 @@ class index_page implements \renderable, \templatable {
 
         // description object is a list
         if ($paramdescription instanceof external_multiple_structure) {
-            echo '<h1>';
-            echo 'Instance: List';
-            echo '</h1>';
             $paramstring = $paramstring . '[0]';
-            echo '<pre>';
-            echo '$paramdescription->content';
-            echo '<br>';
-            print_r($paramdescription->content);
-            echo '</pre>';
-            echo '<br>';
-            echo '$paramstring';
-            echo '<br>';
-            echo $paramstring;
-            echo '<br>';
-            echo $this->rest_param_description_html($paramdescription->content, $paramstring);
             $return = $this->rest_param_description_html($paramdescription->content, $paramstring);
             return $return;
         } else if ($paramdescription instanceof external_single_structure) {
-            echo '<h1>';
-            echo 'Instance: Object';
-            echo '</h1>';
             // description object is an object
             $singlestructuredesc = "";
             $initialparamstring = $paramstring;
-            echo 'Entering foreach block';
-            echo '<br>';
             foreach ($paramdescription->keys as $attributname => $attribut) {
 
                 $paramstring = $initialparamstring . '[' . $attributname . ']';
-            echo '<h3>';
-            echo 'Current parameter: ' . $paramstring;
-
-            echo '</h3>';
-                echo '<pre>';
-                echo '$paramdescription->keys[$attributname';
-                echo '<br>';
-                print_r($paramdescription->keys[$attributname]);
-                echo '</pre>';
-                echo '<br>';
-                echo '$paramstring';
-                echo '<br>';
-                echo $paramstring;
-                echo '<br>';
                 $singlestructuredesc .= $this->rest_param_description_html(
                     $paramdescription->keys[$attributname],
                     $paramstring
@@ -228,9 +164,6 @@ class index_page implements \renderable, \templatable {
             }
             return $singlestructuredesc;
         } else {
-            echo '<h1>';
-            echo 'Instance: Type';
-            echo '</h1>';
             // description object is a primary type (string, integer)
             $paramstring = $paramstring . '=';
             $type = '';
@@ -239,45 +172,24 @@ class index_page implements \renderable, \templatable {
                     // 0 or 1 only for now
                 case PARAM_INT:
                     $type = '{{INT}}';
-                    echo '<h3>';
-                    echo 'Type: int';
-                    echo '</h3>';
                     break;
                 case PARAM_BOOL:
                     $type = '{{BOOL}}';
-                    echo '<h3>';
-                    echo 'Type: bool';
-                    echo '</h3>';
                     break;
                 case PARAM_TEXT:
                     $type = '{{TEXT}}';
-                    echo '<h3>';
-                    echo 'Type: text';
-                    echo '</h3>';
                     break;
                 case PARAM_ALPHA:
                     $type = '{{ALPHA}}';
-                    echo '<h3>';
-                    echo 'Type: alpha';
-                    echo '</h3>';
                     break;
                 case PARAM_FLOAT;
-                    echo '<h3>';
-                    echo 'Type: double';
-                    echo '</h3>';
                     $type = '{{DOUBLE}}';
                     break;
                 default:
-                    echo '<h3>';
-                    echo 'Type: string';
-                    echo '</h3>';
                     $type = '{{STRING}}';
             }
 
-            echo $paramstring . $type;
-                    echo '<br>';
             return $paramstring . $type . $brakeline;
-            // print_r($paramdescription->type);
         }
     }
 }

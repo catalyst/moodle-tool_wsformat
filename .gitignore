@@ -1,2 +1,5 @@
 .php-cs-fixer.cache
 .DS_Store
+
+/build
+amd/build

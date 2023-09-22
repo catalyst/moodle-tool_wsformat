@@ -55,6 +55,7 @@ webserviceListItems.forEach(function (webserviceItem) {
 const selectElement = document.getElementById('export-type');
 const exportButton = document.getElementById('export-button-id');
 const initalHref = exportButton.href;
+exportButton.href = `${initalHref}&export-type=curl`;
 
 selectElement.addEventListener('change', (event) => {
     const exportType = event.target.value;
