@@ -2,6 +2,12 @@
     display: flex;
 }
 
+.export-container {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+
 .page-container {
     width: 100%;
     display: flex;

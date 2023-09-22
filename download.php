@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Exports either a json or txt file with exported webservices
+ * Language strings
  *
  * @package          tool_wsformat
  * @copyright        2023 Djarran Cotleanu
@@ -27,11 +27,22 @@ require('../../../config.php');
 require_login();
 
 $serializedjson = required_param('data-json', PARAM_TEXT);
-$unserializedjson = json_decode($serializedjson, true);
+$unserializedjson = json_decode($serializedjson, false);
+
+
+// echo '<pre>';
+// print_r($unserializedjson);
+// echo '</pre>';
 
 $prettyprintsingle = json_encode($unserializedjson[0], JSON_PRETTY_PRINT);
 $prettyprintall = json_encode($unserializedjson, JSON_PRETTY_PRINT);
 
-header('Content-Disposition: attachment; filename=file.json');
-header('Content-Type: application/json');
-echo $prettyprintall;
+header('Content-Disposition: attachment; filename=curl.txt');
+header('Content-Type: application/plain');
+
+// echo $prettyprintall;
+
+foreach($unserializedjson as $webservice) {
+    echo $webservice . "\n" . "\n";
+}
+
