@@ -1,7 +1,10 @@
 import Ajax, { call as fetchMany } from 'core/ajax';
 
 export const init = () => {
+    setUpCopyFunctionality();
+
 };
+
 
 export const testFetch = () => {
     fetchMany([{
@@ -14,9 +17,19 @@ const webserviceListItems = document.querySelectorAll('li[data-name]');
 const placeholderText = document.querySelector('#placeholder-text');
 const wsDescriptionPanel = document.querySelector('#ws-panel');
 
+
 let panelTitle = document.getElementById('ws-title');
 let panelDesc = document.getElementById('ws-description');
 let panelCurl = document.getElementById('ws-curl');
+
+
+const curlCopyButton = document.querySelector('#curl-copy-button');
+curlCopyButton.addEventListener('click', copyCurlContent)
+
+function copyCurlContent() {
+    let curlContent = document.getElementById('ws-curl').innerText;
+    navigator.clipboard.writeText(curlContent);
+}
 
 webserviceListItems.forEach(function (webserviceItem) {
 
