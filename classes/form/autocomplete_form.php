@@ -25,6 +25,7 @@
 
 namespace tool_wsformat\form;
 
+
 use moodleform;
 
 /**
@@ -60,12 +61,11 @@ class autocomplete_form extends moodleform {
 
         $buttonarray = array();
         $buttonarray[] = $mform->createElement('submit', 'submit', 'Update Selection');
-        
-        $clearbutton = '<button type="button" class="btn btn-secondary" onclick="window.location.href=\'https://moodle.localhost/admin/tool/wsformat/index.php\'">Clear</button>';
+
+        $clearbutton = '<button type="button" class="btn btn-secondary" onclick="window.location.href=\'index.php\'">Clear</button>';
         $buttonarray[] = $mform->createElement('html', $clearbutton);
-        
+
         $mform->addGroup($buttonarray, 'buttonarr', '', array(' '), false);
-        $
     }
 
     /**
