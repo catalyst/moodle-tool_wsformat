@@ -18,8 +18,8 @@
  * Implement autocomplete moodle form.
  *
  * @package          tool_wsformat
- * @copyright        2023 Djarran Cotleanu
- * @author           Djarran Cotleanu
+ * @copyright        2023 Djarran Cotleanu, Zach Pregl
+ * @author           Djarran Cotleanu, Zach Pregl
  * @license          http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
