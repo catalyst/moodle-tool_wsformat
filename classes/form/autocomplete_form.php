@@ -57,7 +57,14 @@ class autocomplete_form extends moodleform {
         // Documentation: https://docs.moodle.org/dev/lib/formslib.php_Form_Definition#autocomplete.
         $mform->addElement('autocomplete', 'webservice_form', 'Webservices:', $webservicenames, $options);
 
-        $mform->addElement('submit', 'submit', 'Update Selection');
+        $buttonarray = array();
+        $buttonarray[] = $mform->createElement('submit', 'submit', 'Update Selection');
+        
+        $clearbutton = '<button type="button" class="btn btn-secondary" onclick="window.location.href=\'https://moodle.localhost/admin/tool/wsformat/index.php\'">Clear</button>';
+        $buttonarray[] = $mform->createElement('html', $clearbutton);
+        
+        $mform->addGroup($buttonarray, 'buttonarr', '', array(' '), false);
+        $
     }
 
     /**
