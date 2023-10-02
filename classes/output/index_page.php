@@ -111,9 +111,10 @@ class index_page implements \renderable, \templatable {
             $baseURL = "{{BASE_URL}}";
             $wsToken = "{{WS_TOKEN}}";
             $functionName = $object->name;
+            $functionDesc= $object -> description;
 
             $curlString = "curl" . " " . $baseURL . "/webservice/rest/server.php?wstoken=" . $wsToken . "&wsfunction=" . $functionName . "&moodlewsrestformat=json";
-
+            
             //Add params into curlString
             foreach ($paramsArray as $params) {
                 $curlString = $curlString . "&" . $params;
@@ -124,6 +125,114 @@ class index_page implements \renderable, \templatable {
 
             $filteredrecords[] = $object;
             $curl_urls[] = $curlStringForUrl;
+
+            $postmanURL = $baseURL . "/webservice/rest/server.php?wstoken=" . $wsToken . "&wsfunction=" . $functionName . "&moodlewsrestformat=json";
+            foreach ($paramsArray as $params) {
+                $postmanURL = $postmanURL . "&" . $params;
+            }
+            
+            $paramString = implode(',', $paramsArray);
+            $paramPairs = explode(',', $paramString);
+            $keyValuePairs = [];
+            $keyValPairs = [];
+            foreach ($paramPairs as $paramPair) {
+                // Split each pair by = to separate key and value
+                $paramParts = explode('=', $paramPair);
+
+                // Ensure we have both key and value before assigning
+                if (count($paramParts) === 2) {
+                    $keyValuePairs[$paramParts[0]] = $paramParts[1];
+                }
+                $keyValPair = [
+                    'key' => $paramParts[0],
+                    'value' => $paramParts[1],
+                ];
+
+                $keyValPairs[] = $keyValPair;
+            }
+
+            // print_r($keyValPairs);
+
+            $collection = [
+                'info' => [
+                    'name' => 'My Collection',
+                    'description' => 'Postman Collection',
+                    'schema' => 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json',
+                ],
+                "item" => [
+                    [
+                        "name" => $functionName,
+                        'request' => [
+                            'method' => 'POST',
+                            'header' => [],
+                            'url' => [
+                                'raw' => $postmanURL,
+                                'host' => [$baseURL],
+                                'path' => ['webservice', 'rest', 'server.php'],
+                                'query' => [
+                                    [
+                                        'key' => 'moodlewsrestformat',
+                                        'value' => 'json',
+                                    ],
+                                    [
+                                        'key' => 'wsfunction',
+                                        'value' => $functionName,
+                                    ],
+                                    $keyValPairs,
+                                ],
+                            ],
+                            'description' => $functionDesc
+                        ],
+                        'response' => []
+                    ],              
+                  ],
+                'variable' => [
+                    
+                        [
+                            'key' => 'BASE_URL',
+                            'value' => 'http://moodle.localhost',
+                            'type' => 'string',
+                        ],
+                        [
+                            'key' => 'WSTOKEN',
+                            'value' => '{{WSTOKEN}}',
+                            'type' => 'string',
+                        ]
+                        
+                    ],
+                'auth' => [
+                    'type' => 'apikey',
+                    'apikey' => [
+                    
+                        [
+                            'key' => 'value',
+                            'value' => '{{WSTOKEN}}',
+                            'type' => 'string',
+                        ],
+                        [
+                            'key' => 'key',
+                            'value' => 'wstoken',
+                            'type' => 'string',
+                        ],
+                        [
+                            'key' => 'in',
+                            'value' => 'query',
+                            'type' => 'string',
+                        ]
+                        
+                    ]
+                ]
+                
+            ];
+            
+         
+            
+
+            $postmancol = json_encode($collection, JSON_PRETTY_PRINT);
+            
+            $collectionJson = str_replace('\\/', '/', $postmancol);
+            $object -> postman = $collectionJson;
+            // echo '<pre>' . $collectionJson . '</pre>';
         }
 
         $data = (object) [
