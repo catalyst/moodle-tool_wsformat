@@ -326,12 +326,15 @@ class export_webservices {
             $postmanitems[] = $this->create_postman_request_item($webservice, $paramsarray);
         }
 
-        foreach ($curlstrings as $curlstring) {
-            echo print_r($curlstring) . "\n" . "\n";
-        }
-        foreach ($postmanitems as $item) {
-            echo print_r($item) . "\n" . "\n";
-        }
+        // foreach ($curlstrings as $curlstring) {
+        //     echo print_r($curlstring) . "\n" . "\n";
+        // }
+        // foreach ($postmanitems as $item) {
+        //     echo print_r($item) . "\n" . "\n";
+        // }
+
+        $postmancollection = $this->create_postman_collection($postmanitems);
+        echo print_r($postmancollection);
     }
 
     /**
