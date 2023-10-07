@@ -53,7 +53,7 @@ class index_page implements \renderable, \templatable {
         $this->selectedwebserviceindices = $indicies;
     }
 
-    private function get_indexed_webservice_records() {
+    private function get_indexed_webservice_records(): array {
         global $DB;
 
         // Get_records returns an object array where key for each object is the name of the webservice.
@@ -61,6 +61,20 @@ class index_page implements \renderable, \templatable {
         $webservicesrecords = array_values($DB->get_records('external_functions', array(), ''));
         
         return $webservicesrecords;
+    }
+    
+    private function get_selected_webservice_objects(): array {
+        
+        $webservicesrecords = $this->get_indexed_webservice_records();
+
+        $webservices = [];
+        foreach ($this->selectedwebserviceindices as $index) {
+            $webservice = $webservicesrecords[$index];
+            $webserviceproperties = external_api::external_function_info($webservice);
+            $webservices[] = $webserviceproperties;
+        }
+        
+        return $webservices;
     }
 
     /**
@@ -77,22 +91,21 @@ class index_page implements \renderable, \templatable {
         }
 
         $webservicesrecords = $this->get_indexed_webservice_records();
+        $webservices = $this->get_selected_webservice_objects();
 
         // echo '<pre>';
         // echo print_r($webservicesrecords);
         // echo '</pre>';
         $filteredrecords = [];
         $curl_urls = [];
-        foreach ($this->selectedwebserviceindices as $index) {
+        foreach ($webservices as $webservice) {
             //Mine (new version):
-            $webservice = $webservicesrecords[$index];
-            $webserviceproperties = external_api::external_function_info($webservice);
             $object = new stdClass();
-            $object->name = $webserviceproperties->name;
-            $object->description = $webserviceproperties->description;
+            $object->name = $webservice->name;
+            $object->description = $webservice->description;
 
             //getting the params
-            $paramObjectArray = $webserviceproperties->parameters_desc->keys;
+            $paramObjectArray = $webservice->parameters_desc->keys;
 
             //echo '<pre>';
             //Check what param object array looks like
