@@ -53,6 +53,16 @@ class index_page implements \renderable, \templatable {
         $this->selectedwebserviceindices = $indicies;
     }
 
+    private function get_indexed_webservice_records() {
+        global $DB;
+
+        // Get_records returns an object array where key for each object is the name of the webservice.
+        // Use array_values to change key to the index of each object so that we can filter based on $selectedWebserviceIndices.
+        $webservicesrecords = array_values($DB->get_records('external_functions', array(), ''));
+        
+        return $webservicesrecords;
+    }
+
     /**
      * Exports the data for the index_page.mustache template
      *
@@ -60,16 +70,13 @@ class index_page implements \renderable, \templatable {
      * @return \stdClass
      */
     public function export_for_template(\renderer_base $output): stdClass {
-        global $DB;
 
         // Return empty object if no selected webservices.
         if (empty($this->selectedwebserviceindices)) {
             return new stdClass();
         }
 
-        // Get_records returns an object array where key for each object is the name of the webservice.
-        // Use array_values to change key to the index of each object so that we can filter based on $selectedWebserviceIndices.
-        $webservicesrecords = array_values($DB->get_records('external_functions', array(), ''));
+        $webservicesrecords = $this->get_indexed_webservice_records();
 
         // echo '<pre>';
         // echo print_r($webservicesrecords);
@@ -111,10 +118,10 @@ class index_page implements \renderable, \templatable {
             $baseURL = "{{BASE_URL}}";
             $wsToken = "{{WS_TOKEN}}";
             $functionName = $object->name;
-            $functionDesc= $object -> description;
+            $functionDesc = $object->description;
 
             $curlString = "curl" . " " . $baseURL . "/webservice/rest/server.php?wstoken=" . $wsToken . "&wsfunction=" . $functionName . "&moodlewsrestformat=json";
-            
+
             //Add params into curlString
             foreach ($paramsArray as $params) {
                 $curlString = $curlString . "&" . $params;
@@ -130,7 +137,7 @@ class index_page implements \renderable, \templatable {
             foreach ($paramsArray as $params) {
                 $postmanURL = $postmanURL . "&" . $params;
             }
-            
+
             $paramString = implode(',', $paramsArray);
             $paramPairs = explode(',', $paramString);
             $keyValuePairs = [];
@@ -184,26 +191,26 @@ class index_page implements \renderable, \templatable {
                             'description' => $functionDesc
                         ],
                         'response' => []
-                    ],              
-                  ],
-                'variable' => [
-                    
-                        [
-                            'key' => 'BASE_URL',
-                            'value' => 'http://moodle.localhost',
-                            'type' => 'string',
-                        ],
-                        [
-                            'key' => 'WSTOKEN',
-                            'value' => '{{WSTOKEN}}',
-                            'type' => 'string',
-                        ]
-                        
                     ],
+                ],
+                'variable' => [
+
+                    [
+                        'key' => 'BASE_URL',
+                        'value' => 'http://moodle.localhost',
+                        'type' => 'string',
+                    ],
+                    [
+                        'key' => 'WSTOKEN',
+                        'value' => '{{WSTOKEN}}',
+                        'type' => 'string',
+                    ]
+
+                ],
                 'auth' => [
                     'type' => 'apikey',
                     'apikey' => [
-                    
+
                         [
                             'key' => 'value',
                             'value' => '{{WSTOKEN}}',
@@ -219,19 +226,19 @@ class index_page implements \renderable, \templatable {
                             'value' => 'query',
                             'type' => 'string',
                         ]
-                        
+
                     ]
                 ]
-                
+
             ];
-            
-         
-            
+
+
+
 
             $postmancol = json_encode($collection, JSON_PRETTY_PRINT);
-            
+
             $collectionJson = str_replace('\\/', '/', $postmancol);
-            $object -> postman = $collectionJson;
+            $object->postman = $collectionJson;
             // echo '<pre>' . $collectionJson . '</pre>';
         }
 
