@@ -22,7 +22,7 @@ Example context (json):
             </h3>
             <ul class="selected-webservices-list">
                 {{#formdata}}
-                <li class="selected-webservices-list-item" data-name="{{name}}" data-desc="{{description}}" data-curl="{{curl}}" title="{{description}}">
+                <li class="selected-webservices-list-item" data-name="{{name}}" data-desc="{{description}}" data-curl="{{curl}}" data-postman="{{postman}}" title="{{description}}">
                     <!-- Access the 'name' key of the current element -->
                     {{name}}
                 </li>
@@ -53,13 +53,16 @@ Example context (json):
                 </h3>
                 <div class="details-request-container" id="ws-details">
                     <h4>Request</h4>
-                    <button class="details-curl-button">
+                    <button class="details-curl-button" id="details-curl-button">
                         curl
+                    </button>
+                    <button class="details-postman-button" id="details-postman-button">
+                        Postman
                     </button>
                 </div>
                 <div class="code-container">
                     <code class="code-text" id="ws-curl">
-
+                    
                     </code>
                     <button class="copy-button" id="curl-copy-button">
                         Copy

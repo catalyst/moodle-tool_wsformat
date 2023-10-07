@@ -87,6 +87,16 @@
     border: 1px solid #f2f3f5
 }
 
+.details-postman-button {
+    border: none;
+    width: fit-content;
+    margin: 0;
+    padding: 0.25rem 0.5rem 0.25rem 0.5rem;
+    border-radius: 0.5rem;
+    background-color: transparent;
+    border: 1px solid #f2f3f5
+}
+
 .code-container {
     background-color: #f7f7f7;
     padding: 1rem;

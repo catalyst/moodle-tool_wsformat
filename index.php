@@ -58,7 +58,7 @@ if ($data = $mform->get_data()) {
 }
 
 $selectedsectiontemplate = new \tool_wsformat\output\index_page($formarray);
-$PAGE->requires->js_call_amd('tool_wsformat/test', 'init');
+$PAGE->requires->js_call_amd('tool_wsformat/eventListeners', 'init');
 
 echo $output->render($selectedsectiontemplate);
 
