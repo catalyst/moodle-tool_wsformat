@@ -75,157 +75,154 @@ class index_page implements \renderable, \templatable {
 
         return $webservices;
     }
-    
+
     private function get_formatted_param_array($webservice): array {
-        
-            $paramobjectarray = $webservice->parameters_desc->keys;
+
+        $paramobjectarray = $webservice->parameters_desc->keys;
 
 
-            //Using the code from renderer.php
-            $formattedparamsarray = [];
+        //Using the code from renderer.php
+        $formattedparamsarray = [];
 
-            foreach ($paramobjectarray as $paramname => $paramdesc) {
+        foreach ($paramobjectarray as $paramname => $paramdesc) {
 
-                $filteredParams = $this->rest_param_description_html($paramdesc, $paramname);
+            $filteredParams = $this->rest_param_description_html($paramdesc, $paramname);
 
-                $formatted = explode(PHP_EOL, $filteredParams);
+            $formatted = explode(PHP_EOL, $filteredParams);
 
-                array_pop($formatted);
+            array_pop($formatted);
 
-                for ($i = 0; $i <= count($formatted) - 1; $i++) {
-                    array_push($formattedparamsarray, $formatted[$i]);
-                }
+            for ($i = 0; $i <= count($formatted) - 1; $i++) {
+                array_push($formattedparamsarray, $formatted[$i]);
             }
-            
-            return $formattedparamsarray;
+        }
+
+        return $formattedparamsarray;
     }
-    
-    private function create_curl_string($webservice, $paramsarray): string {
-        
-            $baseURL = "{{BASE_URL}}";
-            $wsToken = "{{WS_TOKEN}}";
 
-            $functionName = $webservice->name;
+    private function create_request_string($webservice, $paramsarray): string {
 
-            $curlstring = "curl" . " " . $baseURL . "/webservice/rest/server.php?wstoken=" . $wsToken . "&wsfunction=" . $functionName . "&moodlewsrestformat=json";
+        $baseURL = "{{BASE_URL}}";
+        $wsToken = "{{WS_TOKEN}}";
 
-            //Add params into curlString
-            foreach ($paramsarray as $params) {
-                $curlstring = $curlstring . "&" . $params;
-            }
-            
-            return $curlstring;
+        $functionName = $webservice->name;
+
+        $curlstring = $baseURL . "/webservice/rest/server.php?wstoken=" . $wsToken . "&wsfunction=" . $functionName . "&moodlewsrestformat=json";
+
+        //Add params into curlString
+        foreach ($paramsarray as $params) {
+            $curlstring = $curlstring . "&" . $params;
+        }
+
+        return $curlstring;
     }
-    
-    private function create_postman_collection($webservice, $paramsarray) {
-        
-            $baseURL = "{{BASE_URL}}";
-            $wsToken = "{{WS_TOKEN}}";
 
-            $functionName = $webservice->name;
-            $functionDesc = $webservice->description;
-            $postmanURL = $baseURL . "/webservice/rest/server.php?wstoken=" . $wsToken . "&wsfunction=" . $functionName . "&moodlewsrestformat=json";
-            foreach ($paramsarray as $params) {
-                $postmanURL = $postmanURL . "&" . $params;
-            }
+    private function create_postman_collection($postmanitems) {
 
-            $paramString = implode(',', $paramsarray);
-            $paramPairs = explode(',', $paramString);
-            $keyValPairs = [];
-            foreach ($paramPairs as $paramPair) {
-                // Split each pair by = to separate key and value
-                $paramParts = explode('=', $paramPair);
-
-                // Ensure we have both key and value before assigning
-                if (count($paramParts) === 2) {
-                    $keyValuePairs[$paramParts[0]] = $paramParts[1];
-                }
-                $keyValPair = [
-                    'key' => $paramParts[0],
-                    'value' => $paramParts[1],
-                ];
-
-                $keyValPairs[] = $keyValPair;
-            }
-
-            // print_r($keyValPairs);
-
-            $collection = [
-                'info' => [
-                    'name' => 'My Collection',
-                    'description' => 'Postman Collection',
-                    'schema' => 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json',
+        $collection = [
+            'info' => [
+                'name' => 'My Collection',
+                'description' => 'Postman Collection',
+                'schema' => 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json',
+            ],
+            "item" => [...$postmanitems],
+            'variable' => [
+                [
+                    'key' => 'BASE_URL',
+                    'value' => 'http://moodle.localhost',
+                    'type' => 'string',
                 ],
-                "item" => [
-                    [
-                        "name" => $functionName,
-                        'request' => [
-                            'method' => 'POST',
-                            'header' => [],
-                            'url' => [
-                                'raw' => $postmanURL,
-                                'host' => [$baseURL],
-                                'path' => ['webservice', 'rest', 'server.php'],
-                                'query' => [
-                                    [
-                                        'key' => 'moodlewsrestformat',
-                                        'value' => 'json',
-                                    ],
-                                    [
-                                        'key' => 'wsfunction',
-                                        'value' => $functionName,
-                                    ],
-                                    $keyValPairs,
-                                ],
-                            ],
-                            'description' => $functionDesc
-                        ],
-                        'response' => []
-                    ],
-                ],
-                'variable' => [
-
-                    [
-                        'key' => 'BASE_URL',
-                        'value' => 'http://moodle.localhost',
-                        'type' => 'string',
-                    ],
-                    [
-                        'key' => 'WSTOKEN',
-                        'value' => '{{WSTOKEN}}',
-                        'type' => 'string',
-                    ]
-
-                ],
-                'auth' => [
-                    'type' => 'apikey',
-                    'apikey' => [
-
-                        [
-                            'key' => 'value',
-                            'value' => '{{WSTOKEN}}',
-                            'type' => 'string',
-                        ],
-                        [
-                            'key' => 'key',
-                            'value' => 'wstoken',
-                            'type' => 'string',
-                        ],
-                        [
-                            'key' => 'in',
-                            'value' => 'query',
-                            'type' => 'string',
-                        ]
-
-                    ]
+                [
+                    'key' => 'WSTOKEN',
+                    'value' => '{{WSTOKEN}}',
+                    'type' => 'string',
                 ]
 
-            ];
-            
-            return $collection;
+            ],
+            'auth' => [
+                'type' => 'apikey',
+                'apikey' => [
 
+                    [
+                        'key' => 'value',
+                        'value' => '{{WSTOKEN}}',
+                        'type' => 'string',
+                    ],
+                    [
+                        'key' => 'key',
+                        'value' => 'wstoken',
+                        'type' => 'string',
+                    ],
+                    [
+                        'key' => 'in',
+                        'value' => 'query',
+                        'type' => 'string',
+                    ]
+
+                ]
+            ]
+
+        ];
+
+        return $collection;
     }
-    
+
+    private function create_postman_request_item($webservice, $paramsarray) {
+
+        $paramString = implode(',', $paramsarray);
+        $paramPairs = explode(',', $paramString);
+        $keyValPairs = [];
+        foreach ($paramPairs as $paramPair) {
+            // Split each pair by = to separate key and value
+            $paramParts = explode('=', $paramPair);
+
+            // Ensure we have both key and value before assigning
+            if (count($paramParts) === 2) {
+                $keyValuePairs[$paramParts[0]] = $paramParts[1];
+            }
+            $keyValPair = [
+                'key' => $paramParts[0],
+                'value' => $paramParts[1],
+            ];
+
+            $keyValPairs[] = $keyValPair;
+        }
+
+        $object = [
+            "name" => $webservice->name,
+            "request" => [
+                "method" => "GET",
+                "header" => [],
+                "url" => [
+                    "raw" => $this->create_request_string($webservice, $paramsarray),
+                    "host" => [
+                        "{{BASE_URL}}"
+                    ],
+                    "path" => [
+                        "webservice",
+                        "rest",
+                        "server.php"
+                    ],
+                    "query" => [
+                        [
+                            "key" => "moodlewsrestformat",
+                            "value" => "json"
+                        ],
+                        [
+                            "key" => "wsfunction",
+                            "value" => "core_webservice_get_site_info"
+                        ],
+                        ...$keyValPairs
+                    ]
+                ],
+                "description" => $webservice->name
+            ],
+            "response" => []
+        ];
+
+        return $object;
+    }
+
 
     /**
      * Exports the data for the index_page.mustache template
@@ -237,56 +234,51 @@ class index_page implements \renderable, \templatable {
 
         // Return empty object if no selected webservices.
         if (empty($this->selectedwebserviceindices)) {
-            return new stdClass();
+            return (object) [];
         }
 
         $webservices = $this->get_selected_webservice_objects();
 
         $filteredrecords = [];
-        $curl_urls = [];
-
+        $curlstringsforexport = [];
+        $postmanitems = [];
         foreach ($webservices as $webservice) {
-            $object = new stdClass();
-            $object->name = $webservice->name;
-            $object->description = $webservice->description;
 
             //getting the params
             $paramsarray = $this->get_formatted_param_array($webservice);
 
-            $curlstring = $this->create_curl_string($webservice, $paramsarray);
-            $curlStringForUrl = str_replace('&', '%26', $curlstring);
+            $curlstring = "curl " . $this->create_request_string($webservice, $paramsarray);
+            $curlstringsforexport[] = str_replace('&', '%26', $curlstring);
 
-            $object->curl = $curlstring;
+            // $collection = $this->create_postman_collection($webservice, $paramsarray);
+            // $postmancol = json_encode($collection, JSON_PRETTY_PRINT);
+            // $collectionJson = str_replace('\\/', '/', $postmancol);
 
-            // $filteredrecords[] = $object;
-            $curl_urls[] = $curlStringForUrl;
+            $postmanitems[] = $this->create_postman_request_item($webservice, $paramsarray);
 
+            // echo '<pre>';
+            // echo print_r($testcol);
+            // echo '</pre>';
 
-            $collection = $this->create_postman_collection($webservice, $paramsarray);
-
-            $postmancol = json_encode($collection, JSON_PRETTY_PRINT);
-            echo '<pre>';
-            echo print_r($postmancol);
-            echo '</pre>';
-
-            $collectionJson = str_replace('\\/', '/', $postmancol);
-            $object->postman = $collectionJson;
-            
             $webserviceexport = (object) [
-              'name' => $webservice->name,
-              'description' => $webservice->description,
-              'curl' => $curlstring,  
-              'postman' => $collectionJson,
+                'name' => $webservice->name,
+                'description' => $webservice->description,
+                'curl' => $curlstring,
+                'postman' => 'shit',
             ];
-            
             $filteredrecords[] = $webserviceexport;
         }
 
+        $collection = $this->create_postman_collection($postmanitems);
+
+        echo '<pre>';
+        echo print_r($collection);
+        echo '</pre>';
         $data = (object) [
             'formdata' => $filteredrecords,
             'items_selected' => true,
             'download' => json_encode($filteredrecords),
-            'urls' => json_encode($curl_urls)
+            'urls' => json_encode($curlstringsforexport)
         ];
         return $data;
     }
