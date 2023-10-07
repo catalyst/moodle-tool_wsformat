@@ -17,12 +17,8 @@ export const exportSelectChangeHandler = (event) => {
     const exportType = event.target.value;
     if (exportType === 'curl') {
         urlObj.searchParams.set('export-type', 'curl')
-        const curlData = exportButtonElement.getAttribute('data-curl')
-        urlObj.searchParams.set('data-json', curlData)
     } else {
         urlObj.searchParams.set('export-type', 'postman')
-        const postmanData = exportButtonElement.getAttribute('data-postman')
-        urlObj.searchParams.set('data-json', postmanData)
     }
     exportButtonElement.href = urlObj.href;
 

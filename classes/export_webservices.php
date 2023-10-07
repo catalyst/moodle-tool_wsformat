@@ -42,27 +42,18 @@ class export_webservices {
      * @var string
      */
     private $host = '';
-
-    /**
-     * Stores webservice export data passed to download.php from template.
-     * @var string
-     */
-    private $serializeddata = '';
-
-    private $selectedwebserviceindices = [];
+    
+    private $webservices = [];
 
     /**
      * Constructor function - assign instance variables.
-     * @param string $type
      * @param string $host
-     * @param string $serializeddata
+     * @param array $selectedwebserviceindices
      */
-    public function __construct(string $host, string $serializeddata, array $selectedwebserviceindices) {
+    public function __construct(string $host, array $selectedwebserviceindices) {
         $this->host = $host;
-        $this->serializeddata = $serializeddata;
-        $this->selectedwebserviceindices = $selectedwebserviceindices;
+        $this->webservices = $this->get_selected_webservice_objects($selectedwebserviceindices);
     }
-
 
     /**
      * Exports data as cURL commands in a text file.
@@ -72,19 +63,46 @@ class export_webservices {
         header('Content-Disposition: attachment; filename=curl.txt');
         header('Content-Type: application/plain');
 
-        $curlcommands = json_decode($this->serializeddata, JSON_OBJECT_AS_ARRAY);
+        $curlstrings = [];
+        foreach ($this->webservices as $webservice) {
 
-        foreach ($curlcommands as $curlcommand) {
-            echo $curlcommand . "\n" . "\n";
+            $paramsarray = $this->get_formatted_param_array($webservice);
+
+            $curlstrings[] = "curl " . $this->create_request_string($webservice, $paramsarray);
+        }
+
+        foreach ($curlstrings as $curlstring) {
+            echo $curlstring . "\n" . "\n";
         }
     }
 
-    private function get_selected_webservice_objects(): array {
+    /**
+     * Exports data as Postman Collection in a json file.
+     * Sets header to initiate download with filename and extension.
+     */
+    public function export_as_postman() {
+        header('Content-Disposition: attachment; filename=postman.json');
+        header('Content-Type: application/json');
+
+        $postmanitems = [];
+        foreach ($this->webservices as $webservice) {
+
+            $paramsarray = $this->get_formatted_param_array($webservice);
+
+            $postmanitems[] = $this->create_postman_request_item($webservice, $paramsarray);
+        }
+
+        $postmancollection = $this->create_postman_collection($postmanitems);
+        $beautifiedjson = json_encode($postmancollection, JSON_PRETTY_PRINT);
+        echo $beautifiedjson;
+
+    }
+    private function get_selected_webservice_objects(array $selectedwebserviceindices): array {
 
         $webservicesrecords = $this->get_indexed_webservice_records();
 
         $webservices = [];
-        foreach ($this->selectedwebserviceindices as $index) {
+        foreach ($selectedwebserviceindices as $index) {
             $webservice = $webservicesrecords[$index];
             $webservices[] = external_api::external_function_info($webservice);
         }
@@ -303,52 +321,5 @@ class export_webservices {
 
         return $object;
     }
-    public function test_export($selected) {
-        header('Content-Disposition: attachment; filename=curl.txt');
-        header('Content-Type: application/plain');
 
-
-        echo $this->host . "\n" . "\n";
-
-        // foreach ($this->selectedwebserviceindices as $index) {
-        //     echo $index . "\n" . "\n";
-        // }
-
-        $webservices = $this->get_selected_webservice_objects();
-
-        $curlstrings = [];
-        $postmanitems = [];
-        foreach ($webservices as $webservice) {
-
-            $paramsarray = $this->get_formatted_param_array($webservice);
-
-            $curlstrings[] = "curl " . $this->create_request_string($webservice, $paramsarray);
-            $postmanitems[] = $this->create_postman_request_item($webservice, $paramsarray);
-        }
-
-        // foreach ($curlstrings as $curlstring) {
-        //     echo print_r($curlstring) . "\n" . "\n";
-        // }
-        // foreach ($postmanitems as $item) {
-        //     echo print_r($item) . "\n" . "\n";
-        // }
-
-        $postmancollection = $this->create_postman_collection($postmanitems);
-        echo print_r($postmancollection);
-    }
-
-    /**
-     * Exports data as Postman Collection in a json file.
-     * Sets header to initiate download with filename and extension.
-     */
-    public function export_as_postman() {
-        header('Content-Disposition: attachment; filename=postman.json');
-        header('Content-Type: application/json');
-
-        $postmancollection = json_decode($this->serializeddata, true);
-        echo $this->serializeddata;
-
-        // $prettyprintsingle = json_encode($unserializedjson[0], JSON_PRETTY_PRINT);
-        // $prettyprintall = json_encode($unserializedjson, JSON_PRETTY_PRINT);
-    }
 }
