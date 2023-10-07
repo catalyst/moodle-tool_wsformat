@@ -27,6 +27,7 @@ use tool_wsformat\export_webservices;
 
 require('../../../config.php');
 $hostaddress = $CFG->wwwroot;
+
 require_login();
 
 define('EXPORT_CURL', 'curl');

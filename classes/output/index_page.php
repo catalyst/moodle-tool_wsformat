@@ -194,7 +194,7 @@ class index_page implements \renderable, \templatable {
                 "method" => "GET",
                 "header" => [],
                 "url" => [
-                    "raw" => $this->create_request_string($webservice, $paramsarray),
+                    "raw" => $this->url_safe($this->create_request_string($webservice, $paramsarray)) ,
                     "host" => [
                         "{{BASE_URL}}"
                     ],
@@ -250,10 +250,6 @@ class index_page implements \renderable, \templatable {
             $curlstring = "curl " . $this->create_request_string($webservice, $paramsarray);
             $curlstringsforexport[] = str_replace('&', '%26', $curlstring);
 
-            // $collection = $this->create_postman_collection($webservice, $paramsarray);
-            // $postmancol = json_encode($collection, JSON_PRETTY_PRINT);
-            // $collectionJson = str_replace('\\/', '/', $postmancol);
-
             $postmanitems[] = $this->create_postman_request_item($webservice, $paramsarray);
 
             // echo '<pre>';
@@ -269,18 +265,21 @@ class index_page implements \renderable, \templatable {
             $filteredrecords[] = $webserviceexport;
         }
 
-        $collection = $this->create_postman_collection($postmanitems);
+        $postmancollection = $this->create_postman_collection($postmanitems);
 
-        echo '<pre>';
-        echo print_r($collection);
-        echo '</pre>';
         $data = (object) [
             'formdata' => $filteredrecords,
             'items_selected' => true,
             'download' => json_encode($filteredrecords),
-            'urls' => json_encode($curlstringsforexport)
+            'urls' => json_encode($curlstringsforexport),
+            'postmancollection' => json_encode($postmancollection),
         ];
+
         return $data;
+    }
+    
+    private function url_safe($url) {
+        return str_replace('&', '%26', $url);
     }
 
     //Taken from renderer.php

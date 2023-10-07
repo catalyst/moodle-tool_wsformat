@@ -83,6 +83,9 @@ class export_webservices {
     public function export_as_postman() {
         header('Content-Disposition: attachment; filename=postman.json');
         header('Content-Type: application/json');
+        
+        $postmancollection = json_decode($this->serializeddata, true);
+        echo $this->serializeddata;
 
         // $prettyprintsingle = json_encode($unserializedjson[0], JSON_PRETTY_PRINT);
         // $prettyprintall = json_encode($unserializedjson, JSON_PRETTY_PRINT);
