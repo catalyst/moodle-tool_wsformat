@@ -59,62 +59,32 @@ class index_page implements \renderable, \templatable {
         // Get_records returns an object array where key for each object is the name of the webservice.
         // Use array_values to change key to the index of each object so that we can filter based on $selectedWebserviceIndices.
         $webservicesrecords = array_values($DB->get_records('external_functions', array(), ''));
-        
+
         return $webservicesrecords;
     }
-    
+
     private function get_selected_webservice_objects(): array {
-        
+
         $webservicesrecords = $this->get_indexed_webservice_records();
 
         $webservices = [];
         foreach ($this->selectedwebserviceindices as $index) {
             $webservice = $webservicesrecords[$index];
-            $webserviceproperties = external_api::external_function_info($webservice);
-            $webservices[] = $webserviceproperties;
+            $webservices[] = external_api::external_function_info($webservice);
         }
-        
+
         return $webservices;
     }
+    
+    private function get_formatted_param_array($webservice): array {
+        
+            $paramobjectarray = $webservice->parameters_desc->keys;
 
-    /**
-     * Exports the data for the index_page.mustache template
-     *
-     * @param \renderer_base $output
-     * @return \stdClass
-     */
-    public function export_for_template(\renderer_base $output): stdClass {
-
-        // Return empty object if no selected webservices.
-        if (empty($this->selectedwebserviceindices)) {
-            return new stdClass();
-        }
-
-        $webservicesrecords = $this->get_indexed_webservice_records();
-        $webservices = $this->get_selected_webservice_objects();
-
-        // echo '<pre>';
-        // echo print_r($webservicesrecords);
-        // echo '</pre>';
-        $filteredrecords = [];
-        $curl_urls = [];
-        foreach ($webservices as $webservice) {
-            //Mine (new version):
-            $object = new stdClass();
-            $object->name = $webservice->name;
-            $object->description = $webservice->description;
-
-            //getting the params
-            $paramObjectArray = $webservice->parameters_desc->keys;
-
-            //echo '<pre>';
-            //Check what param object array looks like
-            //echo print_r($paramObjectArray);
 
             //Using the code from renderer.php
-            $paramsArray = [];
+            $formattedparamsarray = [];
 
-            foreach ($paramObjectArray as $paramname => $paramdesc) {
+            foreach ($paramobjectarray as $paramname => $paramdesc) {
 
                 $filteredParams = $this->rest_param_description_html($paramdesc, $paramname);
 
@@ -123,37 +93,44 @@ class index_page implements \renderable, \templatable {
                 array_pop($formatted);
 
                 for ($i = 0; $i <= count($formatted) - 1; $i++) {
-                    array_push($paramsArray, $formatted[$i]);
+                    array_push($formattedparamsarray, $formatted[$i]);
                 }
             }
-
-            //Creating the curl 
+            
+            return $formattedparamsarray;
+    }
+    
+    private function create_curl_string($webservice, $paramsarray): string {
+        
             $baseURL = "{{BASE_URL}}";
             $wsToken = "{{WS_TOKEN}}";
-            $functionName = $object->name;
-            $functionDesc = $object->description;
 
-            $curlString = "curl" . " " . $baseURL . "/webservice/rest/server.php?wstoken=" . $wsToken . "&wsfunction=" . $functionName . "&moodlewsrestformat=json";
+            $functionName = $webservice->name;
+
+            $curlstring = "curl" . " " . $baseURL . "/webservice/rest/server.php?wstoken=" . $wsToken . "&wsfunction=" . $functionName . "&moodlewsrestformat=json";
 
             //Add params into curlString
-            foreach ($paramsArray as $params) {
-                $curlString = $curlString . "&" . $params;
+            foreach ($paramsarray as $params) {
+                $curlstring = $curlstring . "&" . $params;
             }
-            $curlStringForUrl = str_replace('&', '%26', $curlString);
+            
+            return $curlstring;
+    }
+    
+    private function create_postman_collection($webservice, $paramsarray) {
+        
+            $baseURL = "{{BASE_URL}}";
+            $wsToken = "{{WS_TOKEN}}";
 
-            $object->curl = $curlString;
-
-            $filteredrecords[] = $object;
-            $curl_urls[] = $curlStringForUrl;
-
+            $functionName = $webservice->name;
+            $functionDesc = $webservice->description;
             $postmanURL = $baseURL . "/webservice/rest/server.php?wstoken=" . $wsToken . "&wsfunction=" . $functionName . "&moodlewsrestformat=json";
-            foreach ($paramsArray as $params) {
+            foreach ($paramsarray as $params) {
                 $postmanURL = $postmanURL . "&" . $params;
             }
 
-            $paramString = implode(',', $paramsArray);
+            $paramString = implode(',', $paramsarray);
             $paramPairs = explode(',', $paramString);
-            $keyValuePairs = [];
             $keyValPairs = [];
             foreach ($paramPairs as $paramPair) {
                 // Split each pair by = to separate key and value
@@ -244,15 +221,65 @@ class index_page implements \renderable, \templatable {
                 ]
 
             ];
+            
+            return $collection;
+
+    }
+    
+
+    /**
+     * Exports the data for the index_page.mustache template
+     *
+     * @param \renderer_base $output
+     * @return \stdClass
+     */
+    public function export_for_template(\renderer_base $output): stdClass {
+
+        // Return empty object if no selected webservices.
+        if (empty($this->selectedwebserviceindices)) {
+            return new stdClass();
+        }
+
+        $webservices = $this->get_selected_webservice_objects();
+
+        $filteredrecords = [];
+        $curl_urls = [];
+
+        foreach ($webservices as $webservice) {
+            $object = new stdClass();
+            $object->name = $webservice->name;
+            $object->description = $webservice->description;
+
+            //getting the params
+            $paramsarray = $this->get_formatted_param_array($webservice);
+
+            $curlstring = $this->create_curl_string($webservice, $paramsarray);
+            $curlStringForUrl = str_replace('&', '%26', $curlstring);
+
+            $object->curl = $curlstring;
+
+            // $filteredrecords[] = $object;
+            $curl_urls[] = $curlStringForUrl;
 
 
-
+            $collection = $this->create_postman_collection($webservice, $paramsarray);
 
             $postmancol = json_encode($collection, JSON_PRETTY_PRINT);
+            echo '<pre>';
+            echo print_r($postmancol);
+            echo '</pre>';
 
             $collectionJson = str_replace('\\/', '/', $postmancol);
             $object->postman = $collectionJson;
-            // echo '<pre>' . $collectionJson . '</pre>';
+            
+            $webserviceexport = (object) [
+              'name' => $webservice->name,
+              'description' => $webservice->description,
+              'curl' => $curlstring,  
+              'postman' => $collectionJson,
+            ];
+            
+            $filteredrecords[] = $webserviceexport;
         }
 
         $data = (object) [
