@@ -47,6 +47,7 @@ webserviceListItems.forEach(function (webserviceItem) {
         e.preventDefault();
         const name = webserviceItem.getAttribute("data-name");
         const description = webserviceItem.getAttribute("data-desc");
+        const curl = webserviceItem.getAttribute("data-curl");
 
         if (placeholderText) {
             placeholderText.remove();
@@ -56,6 +57,7 @@ webserviceListItems.forEach(function (webserviceItem) {
 
         panelTitle.innerHTML = name;
         panelDesc.innerHTML = description;
+        panelCurl.innerHTML = curl;
 
         document.getElementById("details-curl-button").addEventListener('click', (e) => {
             e.preventDefault();
@@ -63,11 +65,11 @@ webserviceListItems.forEach(function (webserviceItem) {
             panelCurl.innerHTML = curl;
         });
         document.getElementById("details-postman-button").addEventListener('click', (e) => {
-            e.preventDefault();          
+            e.preventDefault();
             const postman = webserviceItem.getAttribute("data-postman");
             panelCurl.innerHTML = postman;
         });
-        
+
 
     });
 });
