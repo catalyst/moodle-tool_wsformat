@@ -14,8 +14,7 @@ requestCopyButton.addEventListener('click', copyRequestClickHandler)
 selectedWebservicesListElements.forEach(webserviceItemClickHandler);
 exportSelectElement.addEventListener('change', exportSelectChangeHandler);
 
-// Set initial href of export button. 
-export const initalExportButtonHref = exportButtonElement.href;
-exportButtonElement.href = `${initalExportButtonHref}&export-type=curl`;
+
+
 
 

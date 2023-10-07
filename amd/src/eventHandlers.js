@@ -11,8 +11,21 @@ const detailRequestElement = document.getElementById('ws-curl');
 const exportButtonElement = document.getElementById('export-button-id');
 
 export const exportSelectChangeHandler = (event) => {
+    const url = exportButtonElement.href
+    let urlObj = new URL(url);
+
     const exportType = event.target.value;
-    exportButtonElement.href = `${initalExportButtonHref}&export-type=${exportType}`;
+    if (exportType === 'curl') {
+        urlObj.searchParams.set('export-type', 'curl')
+        const curlData = exportButtonElement.getAttribute('data-curl')
+        urlObj.searchParams.set('data-json', curlData)
+    } else {
+        urlObj.searchParams.set('export-type', 'postman')
+        const postmanData = exportButtonElement.getAttribute('data-postman')
+        urlObj.searchParams.set('data-json', postmanData)
+    }
+    exportButtonElement.href = urlObj.href;
+
     console.log(exportButtonElement.href)
 }
 
