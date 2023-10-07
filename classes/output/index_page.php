@@ -273,6 +273,7 @@ class index_page implements \renderable, \templatable {
             'download' => json_encode($filteredrecords),
             'urls' => json_encode($curlstringsforexport),
             'postmancollection' => json_encode($postmancollection),
+            'selectedindexes' => json_encode($this->selectedwebserviceindices),
         ];
 
         return $data;

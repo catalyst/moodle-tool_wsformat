@@ -32,15 +32,22 @@ require_login();
 
 define('EXPORT_CURL', 'curl');
 define('EXPORT_POSTMAN', 'postman');
+define('EXPORT_TEST', 'test');
 
 $serializedjson = required_param('data-json', PARAM_TEXT);
+$selected = required_param('selected', PARAM_TEXT);
 $exporttype = required_param('export-type', PARAM_TEXT);
 
-$export = new export_webservices($exporttype, $hostaddress, $serializedjson);
+
+$array = json_decode($selected);
+
+$export = new export_webservices($hostaddress, $serializedjson, $array);
 
 switch ($exporttype) {
     case EXPORT_CURL:
         $export->export_as_curl();
     case EXPORT_POSTMAN:
         $export->export_as_postman();
+    case EXPORT_TEST:
+        $export->test_export($selected);
 }
