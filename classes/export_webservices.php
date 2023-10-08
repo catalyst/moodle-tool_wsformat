@@ -25,16 +25,15 @@
 
 namespace tool_wsformat;
 
+use core_external\external_api;
+
+use core_external\external_multiple_structure;
+use core_external\external_single_structure;
+
 /**
  * Class for processing and exporting web service data.
  */
 class export_webservices {
-
-    /**
-     * Stores export type.
-     * @var string
-     */
-    private $exporttype = '';
 
     /**
      * Stores the host address of the server.
@@ -42,37 +41,36 @@ class export_webservices {
      */
     private $host = '';
 
-    /**
-     * Stores webservice export data passed to download.php from template.
-     * @var string
-     */
-    private $serializeddata = '';
+    public $webservices = [];
 
     /**
      * Constructor function - assign instance variables.
-     * @param string $type
      * @param string $host
-     * @param string $serializeddata
+     * @param array $selectedwebserviceindices
      */
-    public function __construct(string $type, string $host, string $serializeddata) {
-        $this->exporttype = $type;
+    public function __construct(string $host, array $selectedwebserviceindices) {
         $this->host = $host;
-        $this->serializeddata = $serializeddata;
+        $this->webservices = $this->get_selected_webservice_objects($selectedwebserviceindices);
     }
-
 
     /**
      * Exports data as cURL commands in a text file.
      * Sets header to initiate download with filename and extension.
      */
-    public function export_as_curl() {
+    public function export_as_curl(): void {
         header('Content-Disposition: attachment; filename=curl.txt');
         header('Content-Type: application/plain');
 
-        $curlcommands = json_decode($this->serializeddata, JSON_OBJECT_AS_ARRAY);
+        $curlstrings = [];
+        foreach ($this->webservices as $webservice) {
 
-        foreach ($curlcommands as $curlcommand) {
-            echo $curlcommand . "\n" . "\n";
+            $paramsarray = $this->get_formatted_param_array($webservice);
+
+            $curlstrings[] = "curl " . $this->create_request_string($webservice, $paramsarray);
+        }
+
+        foreach ($curlstrings as $curlstring) {
+            echo $curlstring . "\n" . "\n";
         }
     }
 
@@ -80,14 +78,242 @@ class export_webservices {
      * Exports data as Postman Collection in a json file.
      * Sets header to initiate download with filename and extension.
      */
-    public function export_as_postman() {
+    public function export_as_postman(): void {
         header('Content-Disposition: attachment; filename=postman.json');
         header('Content-Type: application/json');
-        
-        $postmancollection = json_decode($this->serializeddata, true);
-        echo $this->serializeddata;
 
-        // $prettyprintsingle = json_encode($unserializedjson[0], JSON_PRETTY_PRINT);
-        // $prettyprintall = json_encode($unserializedjson, JSON_PRETTY_PRINT);
+        $postmanitems = [];
+        foreach ($this->webservices as $webservice) {
+
+            $paramsarray = $this->get_formatted_param_array($webservice);
+
+            $postmanitems[] = $this->create_postman_request_item($webservice, $paramsarray);
+        }
+
+        $postmancollection = $this->create_postman_collection($postmanitems);
+        $beautifiedjson = json_encode($postmancollection, JSON_PRETTY_PRINT);
+        echo $beautifiedjson;
+
     }
+    private function get_selected_webservice_objects(array $selectedwebserviceindices): array {
+
+        $webservicesrecords = $this->get_indexed_webservice_records();
+
+        $webservices = [];
+        foreach ($selectedwebserviceindices as $index) {
+            $webservice = $webservicesrecords[$index];
+            $webservices[] = external_api::external_function_info($webservice);
+        }
+
+        return $webservices;
+    }
+
+    private function get_indexed_webservice_records(): array {
+        global $DB;
+
+        // Get_records returns an object array where key for each object is the name of the webservice.
+        // Use array_values to change key to the index of each object so that we can filter based on $selectedWebserviceIndices.
+        $webservicesrecords = array_values($DB->get_records('external_functions', array(), ''));
+
+        return $webservicesrecords;
+    }
+
+    public function rest_param_description_html(object $paramdescription, string $paramstring): mixed {
+        $brakeline = <<<EOF
+
+
+        EOF;
+
+        // Description object is a list.
+        if ($paramdescription instanceof external_multiple_structure) {
+            $paramstring = $paramstring . '[0]';
+            $return = $this->rest_param_description_html($paramdescription->content, $paramstring);
+            return $return;
+        } else if ($paramdescription instanceof external_single_structure) {
+            // Description object is an object.
+            $singlestructuredesc = "";
+            $initialparamstring = $paramstring;
+            foreach ($paramdescription->keys as $attributname => $attribut) {
+
+                $paramstring = $initialparamstring . '[' . $attributname . ']';
+                $singlestructuredesc .= $this->rest_param_description_html(
+                    $paramdescription->keys[$attributname],
+                    $paramstring
+                );
+            }
+            return $singlestructuredesc;
+        } else {
+            // Description object is a primary type (string, integer).
+            $paramstring = $paramstring . '=';
+            $type = '';
+
+            switch ($paramdescription->type) {
+                    // 0 or 1 only for now
+                case PARAM_INT:
+                    $type = '{{INT}}';
+                    break;
+                case PARAM_BOOL:
+                    $type = '{{BOOL}}';
+                    break;
+                case PARAM_TEXT:
+                    $type = '{{TEXT}}';
+                    break;
+                case PARAM_ALPHA:
+                    $type = '{{ALPHA}}';
+                    break;
+                case PARAM_FLOAT;
+                    $type = '{{DOUBLE}}';
+                    break;
+                default:
+                    $type = '{{STRING}}';
+            }
+
+            return $paramstring . $type . $brakeline;
+        }
+    }
+    public function get_formatted_param_array(object $webservice): array {
+
+        $paramobjectarray = $webservice->parameters_desc->keys;
+
+        // Using the code from renderer.php.
+        $formattedparamsarray = [];
+
+        foreach ($paramobjectarray as $paramname => $paramdesc) {
+
+            $filteredparams = $this->rest_param_description_html($paramdesc, $paramname);
+
+            $formatted = explode(PHP_EOL, $filteredparams);
+
+            array_pop($formatted);
+
+            for ($i = 0; $i <= count($formatted) - 1; $i++) {
+                array_push($formattedparamsarray, $formatted[$i]);
+            }
+        }
+
+        return $formattedparamsarray;
+    }
+    public function create_request_string(object $webservice, array $paramsarray): string {
+
+        $baseurl = "{{BASE_URL}}";
+        $wstoken = "{{WS_TOKEN}}";
+
+        $functionname = $webservice->name;
+
+        $curlstring = $baseurl . "/webservice/rest/server.php?wstoken=" . $wstoken
+                               . "&wsfunction=" . $functionname . "&moodlewsrestformat=json";
+
+        // Add params into curlString.
+        foreach ($paramsarray as $params) {
+            $curlstring = $curlstring . "&" . $params;
+        }
+
+        return $curlstring;
+    }
+    private function create_postman_collection(array $postmanitems): object {
+
+        $collection = (object) [
+            'info' => [
+                'name' => 'My Collection',
+                'description' => 'Postman Collection',
+                'schema' => 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json',
+            ],
+            "item" => [...$postmanitems],
+            'variable' => [
+                [
+                    'key' => 'BASE_URL',
+                    'value' => 'http://moodle.localhost',
+                    'type' => 'string',
+                ],
+                [
+                    'key' => 'WSTOKEN',
+                    'value' => '{{WSTOKEN}}',
+                    'type' => 'string',
+                ]
+
+            ],
+            'auth' => [
+                'type' => 'apikey',
+                'apikey' => [
+
+                    [
+                        'key' => 'value',
+                        'value' => '{{WSTOKEN}}',
+                        'type' => 'string',
+                    ],
+                    [
+                        'key' => 'key',
+                        'value' => 'wstoken',
+                        'type' => 'string',
+                    ],
+                    [
+                        'key' => 'in',
+                        'value' => 'query',
+                        'type' => 'string',
+                    ]
+
+                ]
+            ]
+
+        ];
+
+        return $collection;
+    }
+
+    private function create_postman_request_item(object $webservice, array $paramsarray): object {
+
+        $paramstring = implode(',', $paramsarray);
+        $parampairs = explode(',', $paramstring);
+        $keyvalpairs = [];
+        foreach ($parampairs as $parampair) {
+            // Split each pair by = to separate key and value.
+            $paramparts = explode('=', $parampair);
+
+            // Ensure we have both key and value before assigning.
+            if (count($paramparts) === 2) {
+                $keyvaluepairs[$paramparts[0]] = $paramparts[1];
+            }
+            $keyvalpair = [
+                'key' => $paramparts[0],
+                'value' => $paramparts[1],
+            ];
+
+            $keyvalpairs[] = $keyvalpair;
+        }
+
+        $object = (object) [
+            "name" => $webservice->name,
+            "request" => [
+                "method" => "GET",
+                "header" => [],
+                "url" => [
+                    "raw" => $this->create_request_string($webservice, $paramsarray),
+                    "host" => [
+                        "{{BASE_URL}}"
+                    ],
+                    "path" => [
+                        "webservice",
+                        "rest",
+                        "server.php"
+                    ],
+                    "query" => [
+                        [
+                            "key" => "moodlewsrestformat",
+                            "value" => "json"
+                        ],
+                        [
+                            "key" => "wsfunction",
+                            "value" => "core_webservice_get_site_info"
+                        ],
+                        ...$keyvalpairs
+                    ]
+                ],
+                "description" => $webservice->name
+            ],
+            "response" => []
+        ];
+
+        return $object;
+    }
+
 }

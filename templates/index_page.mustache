@@ -22,14 +22,14 @@ Example context (json):
             </h3>
             <ul class="selected-webservices-list">
                 {{#formdata}}
-                <li class="selected-webservices-list-item" data-name="{{name}}" data-desc="{{description}}" data-curl="{{curl}}" data-postman="{{postman}}" title="{{description}}">
+                <li class="selected-webservices-list-item" data-name="{{name}}" data-desc="{{description}}" data-curl="{{curl}}" title="{{description}}">
                     <!-- Access the 'name' key of the current element -->
                     {{name}}
                 </li>
                 {{/formdata}}
             </ul>
             <div class="export-container">
-            <a id="export-button-id" href="download.php?export-type=curl&data-json={{urls}}" data-curl="{{urls}}" data-postman="{{postmancollection}}" class="btn btn-primary" style="width:fit-content">Export All</a>
+            <a id="export-button-id" href="download.php?export-type=curl&selected={{selectedindexes}}" data-selected="{{selectedindexes}}" class="btn btn-primary" style="width:fit-content">Export All</a>
                 <select id="export-type" name="export-type-select" class="form-control custom-select" {{#readonly}}disabled{{/readonly}}>
                     <option value="curl" selected="">cURL</option>
                     <option value="postman" >Postman</option>

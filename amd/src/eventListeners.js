@@ -7,10 +7,9 @@ export const init = () => {
 const selectedWebservicesListElements = document.querySelectorAll('li[data-name]');
 const requestCopyButton = document.querySelector('#curl-copy-button');
 const exportSelectElement = document.getElementById('export-type');
-const exportButtonElement = document.getElementById('export-button-id');
 
 // Add event listeners
-requestCopyButton.addEventListener('click', copyRequestClickHandler)
+requestCopyButton.addEventListener('click', copyRequestClickHandler);
 selectedWebservicesListElements.forEach(webserviceItemClickHandler);
 exportSelectElement.addEventListener('change', exportSelectChangeHandler);
 
