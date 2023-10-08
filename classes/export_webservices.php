@@ -43,7 +43,7 @@ class export_webservices {
      */
     private $host = '';
     
-    private $webservices = [];
+    public $webservices = [];
 
     /**
      * Constructor function - assign instance variables.
@@ -176,7 +176,7 @@ class export_webservices {
             return $paramstring . $type . $brakeline;
         }
     }
-    private function get_formatted_param_array($webservice): array {
+    public function get_formatted_param_array($webservice): array {
 
         $paramobjectarray = $webservice->parameters_desc->keys;
 
@@ -199,7 +199,7 @@ class export_webservices {
 
         return $formattedparamsarray;
     }
-    private function create_request_string($webservice, $paramsarray): string {
+    public function create_request_string($webservice, $paramsarray): string {
 
         $baseURL = "{{BASE_URL}}";
         $wsToken = "{{WS_TOKEN}}";
