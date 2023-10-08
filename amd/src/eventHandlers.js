@@ -1,6 +1,4 @@
-
 import * as Toast from 'core/toast';
-import { initalExportButtonHref } from './eventListeners';
 
 // Select needed elements for event handlers.
 const detailContainerElement = document.querySelector('#ws-panel');
@@ -11,19 +9,18 @@ const detailRequestElement = document.getElementById('ws-curl');
 const exportButtonElement = document.getElementById('export-button-id');
 
 export const exportSelectChangeHandler = (event) => {
-    const url = exportButtonElement.href
+    const url = exportButtonElement.href;
     let urlObj = new URL(url);
 
     const exportType = event.target.value;
     if (exportType === 'curl') {
-        urlObj.searchParams.set('export-type', 'curl')
+        urlObj.searchParams.set('export-type', 'curl');
     } else {
-        urlObj.searchParams.set('export-type', 'postman')
+        urlObj.searchParams.set('export-type', 'postman');
     }
-    exportButtonElement.href = urlObj.href;
 
-    console.log(exportButtonElement.href)
-}
+    exportButtonElement.href = urlObj.href;
+};
 
 export const webserviceItemClickHandler = (webservice) => {
     webservice.addEventListener('click', (e) => {
@@ -53,8 +50,8 @@ export const webserviceItemClickHandler = (webservice) => {
             const postman = webservice.getAttribute("data-postman");
             detailRequestElement.innerHTML = postman;
         });
-    })
-}
+    });
+};
 
 export const copyRequestClickHandler = () => {
     const requestString = document.getElementById('ws-curl').innerText;
@@ -62,14 +59,15 @@ export const copyRequestClickHandler = () => {
     // Source: https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText#examples.
     navigator.clipboard.writeText(requestString)
         .then(() => {
-            // From the official Moodle Component Library:https://componentlibrary.moodle.com/admin/tool/componentlibrary/docspage.php/moodle/javascript/toast/ 
+            // From the official Moodle Component Library:
+            // https://componentlibrary.moodle.com/admin/tool/componentlibrary/docspage.php/moodle/javascript/toast/
             Toast.add('cURL successfully copied to clipboard', {
                 type: 'success'
-            })
+            });
         })
         .catch(() => {
             Toast.add('cURL unable to be copied to clipboard', {
                 type: 'danger'
-            })
-        })
-}
+            });
+        });
+};
