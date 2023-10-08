@@ -24,7 +24,6 @@
  */
 
 namespace tool_wsformat\output;
-use stdClass;
 
 /**
  * Class for processing data for index_page template.
@@ -52,7 +51,7 @@ class index_page implements \renderable, \templatable {
      * @param \renderer_base $output
      * @return \stdClass
      */
-    public function export_for_template(\renderer_base $output): stdClass {
+    public function export_for_template(\renderer_base $output): object {
 
         // Return empty object if no selected webservices.
         if (empty($this->selectedwebserviceindices)) {

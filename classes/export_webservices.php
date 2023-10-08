@@ -26,8 +26,6 @@
 namespace tool_wsformat;
 
 use core_external\external_api;
-use core_webservice_renderer;
-use stdClass;
 
 use core_external\external_multiple_structure;
 use core_external\external_single_structure;
@@ -59,7 +57,7 @@ class export_webservices {
      * Exports data as cURL commands in a text file.
      * Sets header to initiate download with filename and extension.
      */
-    public function export_as_curl() {
+    public function export_as_curl(): void {
         header('Content-Disposition: attachment; filename=curl.txt');
         header('Content-Type: application/plain');
 
@@ -80,7 +78,7 @@ class export_webservices {
      * Exports data as Postman Collection in a json file.
      * Sets header to initiate download with filename and extension.
      */
-    public function export_as_postman() {
+    public function export_as_postman(): void {
         header('Content-Disposition: attachment; filename=postman.json');
         header('Content-Type: application/json');
 
@@ -120,7 +118,7 @@ class export_webservices {
         return $webservicesrecords;
     }
 
-    public function rest_param_description_html($paramdescription, $paramstring) {
+    public function rest_param_description_html(object $paramdescription, string $paramstring): mixed {
         $brakeline = <<<EOF
 
 
@@ -176,7 +174,7 @@ class export_webservices {
             return $paramstring . $type . $brakeline;
         }
     }
-    public function get_formatted_param_array($webservice): array {
+    public function get_formatted_param_array(object $webservice): array {
 
         $paramobjectarray = $webservice->parameters_desc->keys;
 
@@ -199,7 +197,7 @@ class export_webservices {
 
         return $formattedparamsarray;
     }
-    public function create_request_string($webservice, $paramsarray): string {
+    public function create_request_string(object $webservice, array $paramsarray): string {
 
         $baseURL = "{{BASE_URL}}";
         $wsToken = "{{WS_TOKEN}}";
@@ -215,10 +213,10 @@ class export_webservices {
 
         return $curlstring;
     }
-    private function create_postman_collection($postmanitems) {
+    private function create_postman_collection(array $postmanitems): object {
 
 
-        $collection = [
+        $collection = (object) [
             'info' => [
                 'name' => 'My Collection',
                 'description' => 'Postman Collection',
@@ -266,7 +264,7 @@ class export_webservices {
         return $collection;
     }
 
-    private function create_postman_request_item($webservice, $paramsarray) {
+    private function create_postman_request_item(object $webservice, array $paramsarray): object {
 
         $paramString = implode(',', $paramsarray);
         $paramPairs = explode(',', $paramString);
@@ -287,7 +285,7 @@ class export_webservices {
             $keyValPairs[] = $keyValPair;
         }
 
-        $object = [
+        $object = (object) [
             "name" => $webservice->name,
             "request" => [
                 "method" => "GET",

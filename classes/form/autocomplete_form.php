@@ -42,7 +42,7 @@ class autocomplete_form extends moodleform {
     /**
      * Define an autocomplete element for browsing webservices and a submit button.
      */
-    public function definition() {
+    public function definition(): void {
         global $DB;
 
         $webservicenames = $this->get_webservice_name_array();
@@ -65,7 +65,7 @@ class autocomplete_form extends moodleform {
         $clearbutton = '<button type="button" class="btn btn-secondary" onclick="window.location.href=\'index.php\'">Clear</button>';
         $buttonarray[] = $mform->createElement('html', $clearbutton);
 
-        $mform->addGroup($buttonarray, 'buttonarr', '', array(' '), false);
+        $mform->addGroup($buttonarray, 'buttonarr', '', null, false);
     }
 
     /**
