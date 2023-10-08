@@ -40,7 +40,7 @@ class export_webservices {
      * @var string
      */
     private $host = '';
-    
+
     public $webservices = [];
 
     /**
@@ -124,13 +124,13 @@ class export_webservices {
 
         EOF;
 
-        // description object is a list
+        // Description object is a list.
         if ($paramdescription instanceof external_multiple_structure) {
             $paramstring = $paramstring . '[0]';
             $return = $this->rest_param_description_html($paramdescription->content, $paramstring);
             return $return;
         } else if ($paramdescription instanceof external_single_structure) {
-            // description object is an object
+            // Description object is an object.
             $singlestructuredesc = "";
             $initialparamstring = $paramstring;
             foreach ($paramdescription->keys as $attributname => $attribut) {
@@ -140,13 +140,10 @@ class export_webservices {
                     $paramdescription->keys[$attributname],
                     $paramstring
                 );
-
-                // print_r($paramdescription->keys);
-                // echo $paramstring;
             }
             return $singlestructuredesc;
         } else {
-            // description object is a primary type (string, integer)
+            // Description object is a primary type (string, integer).
             $paramstring = $paramstring . '=';
             $type = '';
 
@@ -178,15 +175,14 @@ class export_webservices {
 
         $paramobjectarray = $webservice->parameters_desc->keys;
 
-
-        //Using the code from renderer.php
+        // Using the code from renderer.php.
         $formattedparamsarray = [];
 
         foreach ($paramobjectarray as $paramname => $paramdesc) {
 
-            $filteredParams = $this->rest_param_description_html($paramdesc, $paramname);
+            $filteredparams = $this->rest_param_description_html($paramdesc, $paramname);
 
-            $formatted = explode(PHP_EOL, $filteredParams);
+            $formatted = explode(PHP_EOL, $filteredparams);
 
             array_pop($formatted);
 
@@ -199,14 +195,15 @@ class export_webservices {
     }
     public function create_request_string(object $webservice, array $paramsarray): string {
 
-        $baseURL = "{{BASE_URL}}";
-        $wsToken = "{{WS_TOKEN}}";
+        $baseurl = "{{BASE_URL}}";
+        $wstoken = "{{WS_TOKEN}}";
 
-        $functionName = $webservice->name;
+        $functionname = $webservice->name;
 
-        $curlstring = $baseURL . "/webservice/rest/server.php?wstoken=" . $wsToken . "&wsfunction=" . $functionName . "&moodlewsrestformat=json";
+        $curlstring = $baseurl . "/webservice/rest/server.php?wstoken=" . $wstoken
+                               . "&wsfunction=" . $functionname . "&moodlewsrestformat=json";
 
-        //Add params into curlString
+        // Add params into curlString.
         foreach ($paramsarray as $params) {
             $curlstring = $curlstring . "&" . $params;
         }
@@ -214,7 +211,6 @@ class export_webservices {
         return $curlstring;
     }
     private function create_postman_collection(array $postmanitems): object {
-
 
         $collection = (object) [
             'info' => [
@@ -266,23 +262,23 @@ class export_webservices {
 
     private function create_postman_request_item(object $webservice, array $paramsarray): object {
 
-        $paramString = implode(',', $paramsarray);
-        $paramPairs = explode(',', $paramString);
-        $keyValPairs = [];
-        foreach ($paramPairs as $paramPair) {
-            // Split each pair by = to separate key and value
-            $paramParts = explode('=', $paramPair);
+        $paramstring = implode(',', $paramsarray);
+        $parampairs = explode(',', $paramstring);
+        $keyvalpairs = [];
+        foreach ($parampairs as $parampair) {
+            // Split each pair by = to separate key and value.
+            $paramparts = explode('=', $parampair);
 
-            // Ensure we have both key and value before assigning
-            if (count($paramParts) === 2) {
-                $keyValuePairs[$paramParts[0]] = $paramParts[1];
+            // Ensure we have both key and value before assigning.
+            if (count($paramparts) === 2) {
+                $keyvaluepairs[$paramparts[0]] = $paramparts[1];
             }
-            $keyValPair = [
-                'key' => $paramParts[0],
-                'value' => $paramParts[1],
+            $keyvalpair = [
+                'key' => $paramparts[0],
+                'value' => $paramparts[1],
             ];
 
-            $keyValPairs[] = $keyValPair;
+            $keyvalpairs[] = $keyvalpair;
         }
 
         $object = (object) [
@@ -309,7 +305,7 @@ class export_webservices {
                             "key" => "wsfunction",
                             "value" => "core_webservice_get_site_info"
                         ],
-                        ...$keyValPairs
+                        ...$keyvalpairs
                     ]
                 ],
                 "description" => $webservice->name

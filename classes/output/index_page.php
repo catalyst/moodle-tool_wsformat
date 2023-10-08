@@ -57,7 +57,7 @@ class index_page implements \renderable, \templatable {
         if (empty($this->selectedwebserviceindices)) {
             return (object) [];
         }
-        
+
         $exportwebservices = new \tool_wsformat\export_webservices('http', $this->selectedwebserviceindices);
 
         $webservicesexport = [];

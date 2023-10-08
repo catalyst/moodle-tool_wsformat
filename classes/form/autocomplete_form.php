@@ -29,7 +29,7 @@ namespace tool_wsformat\form;
 use moodleform;
 
 /**
- * 
+ *
  * Form for selecting web services to format.
  *
  * @package   tool_wsformat
@@ -62,7 +62,9 @@ class autocomplete_form extends moodleform {
         $buttonarray = array();
         $buttonarray[] = $mform->createElement('submit', 'submit', 'Update Selection');
 
-        $clearbutton = '<button type="button" class="btn btn-secondary" onclick="window.location.href=\'index.php\'">Clear</button>';
+        $clearbutton = '<button type="button" class="btn btn-secondary" onclick="window.location.href=\'index.php\'">
+                            Clear
+                        </button>';
         $buttonarray[] = $mform->createElement('html', $clearbutton);
 
         $mform->addGroup($buttonarray, 'buttonarr', '', null, false);
