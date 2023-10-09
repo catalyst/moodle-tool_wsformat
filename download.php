@@ -25,7 +25,7 @@
 
 use tool_wsformat\export_webservices;
 
-require '../../../config.php';
+require('../../../config.php');
 $hostaddress = $CFG->wwwroot;
 
 require_login();

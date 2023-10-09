@@ -78,7 +78,6 @@
 }
 
 .details-curl-button {
-    border: none;
     width: fit-content;
     margin: 0;
     padding: 0.25rem 0.5rem 0.25rem 0.5rem;
@@ -88,7 +87,6 @@
 }
 
 .details-postman-button {
-    border: none;
     width: fit-content;
     margin: 0;
     padding: 0.25rem 0.5rem 0.25rem 0.5rem;
@@ -116,7 +114,6 @@
     position: absolute;
     right: 1rem;
     top: 1rem;
-    border: none;
     width: fit-content;
     margin: 0;
     padding: 0.25rem 0.5rem 0.25rem 0.5rem;
