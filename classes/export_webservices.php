@@ -212,14 +212,12 @@ class export_webservices {
     }//end rest_param_description_html()
 
 
-     /**
-      * Retrieves an array of webservice objects based on provided indices.
-      *
-      * @param  array $selectedwebserviceindices An array of indices to grab the webservice objects.
-      * @return array An array of webservice objects.
-      */
-
-
+    /**
+     * Generates an array of formatted parameters for a given webservice.
+     *
+     * @param  object $webservice The webservice object.
+     * @return array An array of formatted parameters.
+     */
     public function get_formatted_param_array(object $webservice): array {
         $paramobjectarray = $webservice->parameters_desc->keys;
 
@@ -256,7 +254,8 @@ class export_webservices {
 
         $functionname = $webservice->name;
 
-        $curlstring = $baseurl.'/webservice/rest/server.php?wstoken='.$wstoken.'&wsfunction='.$functionname.'&moodlewsrestformat=json';
+        $curlstring = $baseurl.'/webservice/rest/server.php?wstoken='.$wstoken.'&wsfunction='
+        .$functionname.'&moodlewsrestformat=json';
 
         // Add params into curlString.
         foreach ($paramsarray as $params) {
@@ -269,11 +268,10 @@ class export_webservices {
 
 
     /**
-     * Creator of a request string for cURL.
+     * Creates a Postman collection object for given Postman items.
      *
-     * @param  object $webservice  The webservice object.
-     * @param  array  $paramsarray An array of parameters for the request.
-     * @return string The generated string.
+     * @param array $postmanitems An array of Postman request item objects.
+     * @return object The created Postman collection object.
      */
     private function create_postman_collection(array $postmanitems): object {
         $collection = (object) [
