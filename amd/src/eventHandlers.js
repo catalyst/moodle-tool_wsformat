@@ -26,28 +26,28 @@ export const webserviceItemClickHandler = (webservice) => {
     webservice.addEventListener('click', (e) => {
         e.preventDefault();
 
-        const name = webservice.getAttribute("data-name");
-        const description = webservice.getAttribute("data-desc");
-        const curlString = webservice.getAttribute("data-curl");
+        const name = webservice.getAttribute('data-name');
+        const description = webservice.getAttribute('data-desc');
+        const curlString = webservice.getAttribute('data-curl');
 
         if (detailPlaceholderText) {
             detailPlaceholderText.remove();
         }
 
-        detailContainerElement.style.display = "flex";
+        detailContainerElement.style.display = 'flex';
 
         detailTitleElement.innerHTML = name;
         detailDescriptionElement.innerHTML = description;
         detailRequestElement.innerHTML = curlString;
 
-        document.getElementById("details-curl-button").addEventListener('click', (e) => {
+        document.getElementById('details-curl-button').addEventListener('click', (e) => {
             e.preventDefault();
             detailRequestElement.innerHTML = curlString;
         });
 
-        document.getElementById("details-postman-button").addEventListener('click', (e) => {
+        document.getElementById('details-postman-button').addEventListener('click', (e) => {
             e.preventDefault();
-            const postman = webservice.getAttribute("data-postman");
+            const postman = webservice.getAttribute('data-postman');
             detailRequestElement.innerHTML = postman;
         });
     });
