@@ -9,5 +9,11 @@ Example context (json):
 "query": "themedesigner"
 }
 }}
-<h2>{{#str}} pluginname, tool_wsformat {{/str}}</h2>
-<p>{{#str}} plugindescription, tool_wsformat {{/str}}</p>
+
+{{! Plugin Header }}
+<section aria-label="{{#str}} header, tool_wsformat {{/str}}">
+    {{!Plugin name and description}}
+    <h2>{{#str}} pluginname, tool_wsformat {{/str}}</h2>
+    
+    <p>{{#str}} plugindescription, tool_wsformat {{/str}}</p>
+</section>

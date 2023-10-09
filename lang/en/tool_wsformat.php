@@ -41,3 +41,4 @@ $string['searchwebservices'] = 'Search webservices...';
 $string['pleaseselectwebservice'] = 'Please select a webservice';
 $string['pagecontainer'] = 'Page container';
 $string['exportgroup'] = 'Export group';
+$string['header'] = 'Header Section';
