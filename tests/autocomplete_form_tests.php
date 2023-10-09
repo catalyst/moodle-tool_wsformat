@@ -14,6 +14,10 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+
+
+namespace tool_wsformat;
+
 /**
  * Implement autocomplete moodle form.
  *
@@ -22,10 +26,6 @@
  * @author           Djarran Cotleanu, Zach Pregl
  * @license          http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-namespace tool_wsformat;
-
-
 class autocomplete_form_tests extends \basic_testcase {
 
     /**
