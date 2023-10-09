@@ -17,10 +17,10 @@
 /**
  * Admin tool presets plugin to load some settings.
  *
- * @package          tool_wsformat
- * @copyright        2023 Djarran Cotleanu, Jacqueline Mail
- * @author           Djarran Cotleanu, Jacqueline Mail
- * @license          http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   tool_wsformat
+ * @copyright 2023 Djarran Cotleanu, Jacqueline Mail, Zach Pregl
+ * @author    Djarran Cotleanu, Jacqueline Mail, Zach Pregl
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace tool_wsformat\output;
@@ -28,31 +28,37 @@ namespace tool_wsformat\output;
 /**
  * Class for processing data for index_page template.
  */
-class index_page implements \renderable, \templatable {
+class index_page implements \renderable, \templatable
+{
 
     /**
      * Stores the selected webservice indices.
      *
      * @var array
      */
-    protected $selectedwebserviceindices = array();
+    protected $selectedwebserviceindices = [];
+
 
     /**
      * Constructor function - assign instance variable.
+     *
      * @param array $indicies
      */
-    public function __construct(array $indicies) {
+    public function __construct(array $indicies)
+    {
         $this->selectedwebserviceindices = $indicies;
-    }
+
+    }//end __construct()
+
 
     /**
      * Exports the data for the index_page.mustache template
      *
-     * @param \renderer_base $output
+     * @param  \renderer_base $output
      * @return \stdClass
      */
-    public function export_for_template(\renderer_base $output): object {
-
+    public function export_for_template(\renderer_base $output): object
+    {
         // Return empty object if no selected webservices.
         if (empty($this->selectedwebserviceindices)) {
             return (object) [];
@@ -62,23 +68,25 @@ class index_page implements \renderable, \templatable {
 
         $webservicesexport = [];
         foreach ($exportwebservices->webservices as $webservice) {
-
             $paramsarray = $exportwebservices->get_formatted_param_array($webservice);
-            $curlstring = "curl " . $exportwebservices->create_request_string($webservice, $paramsarray);
+            $curlstring  = 'curl '.$exportwebservices->create_request_string($webservice, $paramsarray);
 
             $webservicesexport[] = (object) [
-                'name' => $webservice->name,
+                'name'        => $webservice->name,
                 'description' => $webservice->description,
-                'curl' => $curlstring,
+                'curl'        => $curlstring,
             ];
         }
 
         $data = (object) [
-            'formdata' => $webservicesexport,
-            'items_selected' => true,
+            'formdata'        => $webservicesexport,
+            'items_selected'  => true,
             'selectedindexes' => json_encode($this->selectedwebserviceindices),
         ];
 
         return $data;
-    }
-}
+
+    }//end export_for_template()
+
+
+}//end class

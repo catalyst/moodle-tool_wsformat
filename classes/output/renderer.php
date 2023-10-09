@@ -17,10 +17,10 @@
 /**
  * Implement renderable class
  *
- * @package          tool_wsformat
- * @copyright        2023 Djarran Cotleanu
- * @author           Djarran Cotleanu
- * @license          http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   tool_wsformat
+ * @copyright 2023 Djarran Cotleanu, Zach Pregl
+ * @author    Djarran Cotleanu, Zach Pregl
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace tool_wsformat\output;
@@ -30,23 +30,35 @@ use plugin_renderer_base;
 /**
  * Renderer class.
  */
-class renderer extends plugin_renderer_base {
+class renderer extends plugin_renderer_base
+{
+
+
     /**
      * Renders index_page mustache template.
-     * @param \tool_wsformat\output\index_page $indexpage The index_page renderable object.
+     *
+     * @param  \tool_wsformat\output\index_page $indexpage The index_page renderable object.
      * @return string|boolean
      */
-    protected function render_index_page(\tool_wsformat\output\index_page $indexpage): string | bool {
+    protected function render_index_page(\tool_wsformat\output\index_page $indexpage): string | bool
+    {
         $data = $indexpage->export_for_template($this);
         return parent::render_from_template('tool_wsformat/index_page', $data);
-    }
+
+    }//end render_index_page()
+
 
     /**
      * Renders the plugin_description mustache template.
-     * @param \tool_wsformat\output\plugin_description $plugindescription The plugin description object.
+     *
+     * @param  \tool_wsformat\output\plugin_description $plugindescription The plugin description object.
      * @return string|boolean
      */
-    protected function render_plugin_description(\tool_wsformat\output\plugin_description $plugindescription): string | bool {
+    protected function render_plugin_description(\tool_wsformat\output\plugin_description $plugindescription): string | bool
+    {
         return parent::render_from_template('tool_wsformat/plugin_description', new \stdClass);
-    }
-}
+
+    }//end render_plugin_description()
+
+
+}//end class

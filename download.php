@@ -17,15 +17,15 @@
 /**
  * Language strings
  *
- * @package          tool_wsformat
- * @copyright        2023 Djarran Cotleanu
- * @author           Djarran Cotleanu
- * @license          http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   tool_wsformat
+ * @copyright 2023 Djarran Cotleanu, Zach Pregl
+ * @author    Djarran Cotleanu, Zach Pregl
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 use tool_wsformat\export_webservices;
 
-require('../../../config.php');
+require '../../../config.php';
 $hostaddress = $CFG->wwwroot;
 
 require_login();
@@ -33,7 +33,7 @@ require_login();
 define('EXPORT_CURL', 'curl');
 define('EXPORT_POSTMAN', 'postman');
 
-$selected = required_param('selected', PARAM_TEXT);
+$selected   = required_param('selected', PARAM_TEXT);
 $exporttype = required_param('export-type', PARAM_TEXT);
 
 $selectedwebserviceindices = json_decode($selected);
@@ -43,8 +43,9 @@ $export = new export_webservices($hostaddress, $selectedwebserviceindices);
 switch ($exporttype) {
     case EXPORT_CURL:
         $export->export_as_curl();
-        break;
+    break;
+
     case EXPORT_POSTMAN:
         $export->export_as_postman();
-        break;
+    break;
 }

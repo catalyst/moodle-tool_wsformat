@@ -17,10 +17,10 @@
 /**
  * Implement autocomplete moodle form.
  *
- * @package          tool_wsformat
- * @copyright        2023 Djarran Cotleanu, Zach Pregl
- * @author           Djarran Cotleanu, Zach Pregl
- * @license          http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   tool_wsformat
+ * @copyright 2023 Djarran Cotleanu, Zach Pregl
+ * @author    Djarran Cotleanu, Zach Pregl
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace tool_wsformat\form;
@@ -29,7 +29,6 @@ namespace tool_wsformat\form;
 use moodleform;
 
 /**
- *
  * Form for selecting web services to format.
  *
  * @package   tool_wsformat
@@ -37,12 +36,15 @@ use moodleform;
  * @author    Djarran Cotleanu, Zach Pregl
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class autocomplete_form extends moodleform {
+class autocomplete_form extends moodleform
+{
+
 
     /**
      * Define an autocomplete element for browsing webservices and a submit button.
      */
-    public function definition(): void {
+    public function definition(): void
+    {
         global $DB;
 
         $webservicenames = $this->get_webservice_name_array();
@@ -50,41 +52,45 @@ class autocomplete_form extends moodleform {
         $mform = $this->_form;
 
         $options = [
-            'minchars' => 2,
+            'minchars'          => 2,
             'noselectionstring' => get_string('nowebservicesselected', 'tool_wsformat'),
-            'multiple' => true,
-            'placeholder' => get_string('searchwebservices', 'tool_wsformat'),
+            'multiple'          => true,
+            'placeholder'       => get_string('searchwebservices', 'tool_wsformat'),
         ];
-        
 
         // Documentation: https://docs.moodle.org/dev/lib/formslib.php_Form_Definition#autocomplete.
         $mform->addElement('autocomplete', 'webservice_form', get_string('webservices', 'tool_wsformat'), $webservicenames, $options);
 
-
-        $buttonarray = array();
+        $buttonarray   = [];
         $buttonarray[] = $mform->createElement('submit', 'submit', get_string('updateselection', 'tool_wsformat'));
 
-        $clearbutton = '<button type="button" class="btn btn-secondary" onclick="window.location.href=\'index.php\'">
-                        ' . get_string('clearbtn', 'tool_wsformat') . '
+        $clearbutton   = '<button type="button" class="btn btn-secondary" onclick="window.location.href=\'index.php\'">
+                        '.get_string('clearbtn', 'tool_wsformat').'
                     </button>';
         $buttonarray[] = $mform->createElement('html', $clearbutton);
 
         $mform->addGroup($buttonarray, 'buttonarr', '', null, false);
-    }
+
+    }//end definition()
+
 
     /**
      * Get web service names from database.
      */
-    public function get_webservice_name_array(): array {
+    public function get_webservice_name_array(): array
+    {
         global $DB;
-        $webservicesobject = $DB->get_records('external_functions', array(), '');
+        $webservicesobject = $DB->get_records('external_functions', [], '');
 
-        $webservicenames = array();
+        $webservicenames = [];
 
         foreach ($webservicesobject as $key => $webservice) {
             $webservicenames[] = $webservice->name;
         }
 
         return $webservicenames;
-    }
-}
+
+    }//end get_webservice_name_array()
+
+
+}//end class
