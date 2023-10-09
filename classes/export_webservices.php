@@ -18,8 +18,8 @@
  * Variables and methods relating to exporting and downloading of webservice formats
  *
  * @package          tool_wsformat
- * @copyright        2023 Djarran Cotleanu
- * @author           Djarran Cotleanu
+ * @copyright        2023 Djarran Cotleanu, Zach Pregl
+ * @author           Djarran Cotleanu, Zach Pregl
  * @license          http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -40,7 +40,10 @@ class export_webservices {
      * @var string
      */
     private $host = '';
-
+    /**
+     * An array to hold webservice objects.
+     * @var array
+     */
     public $webservices = [];
 
     /**
@@ -95,6 +98,11 @@ class export_webservices {
         echo $beautifiedjson;
 
     }
+    /**
+     * Retrieves an array of webservice objects based on provided indices.
+     * @param array $selectedwebserviceindices An array of indices to grab the webservice objects.
+     * @return array An array of webservice objects.
+     */
     private function get_selected_webservice_objects(array $selectedwebserviceindices): array {
 
         $webservicesrecords = $this->get_indexed_webservice_records();
@@ -108,6 +116,10 @@ class export_webservices {
         return $webservices;
     }
 
+    /**
+     * Retrieves indexed webservice records from the database.
+     * @return array An array of the indexed webservices.
+     */
     private function get_indexed_webservice_records(): array {
         global $DB;
 
@@ -118,6 +130,12 @@ class export_webservices {
         return $webservicesrecords;
     }
 
+    /**
+     * Generates HTML for REST parameter description.
+     * @param object $paramdescription Description object for the parameter.
+     * @param string $paramstring Parameter string to be formatted.
+     * @return mixed HTML formatted parameter description.
+     */
     public function rest_param_description_html(object $paramdescription, string $paramstring): mixed {
         $brakeline = <<<EOF
 
@@ -171,6 +189,12 @@ class export_webservices {
             return $paramstring . $type . $brakeline;
         }
     }
+
+     /**
+     * Retrieves a formatted array of parameters for a given webservice.
+     * @param object $webservice The webservice obj.
+     * @return array An array of the formatted parameters.
+     */
     public function get_formatted_param_array(object $webservice): array {
 
         $paramobjectarray = $webservice->parameters_desc->keys;
@@ -193,6 +217,13 @@ class export_webservices {
 
         return $formattedparamsarray;
     }
+
+    /**
+     * Create a request string for cURL.
+     * @param object $webservice The object.
+     * @param array $paramsarray array of parameters for the request.
+     * @return string The generated string.
+     */
     public function create_request_string(object $webservice, array $paramsarray): string {
 
         $baseurl = "{{BASE_URL}}";
@@ -210,6 +241,13 @@ class export_webservices {
 
         return $curlstring;
     }
+
+    /**
+     * Creator of a request string for cURL.
+     * @param object $webservice The webservice object.
+     * @param array $paramsarray An array of parameters for the request.
+     * @return string The generated string.
+     */
     private function create_postman_collection(array $postmanitems): object {
 
         $collection = (object) [
@@ -259,7 +297,12 @@ class export_webservices {
 
         return $collection;
     }
-
+    /**
+     * Creates a Postman request item object for a given webservice and parameter array.
+     * @param object $webservice The webservice object.
+     * @param array $paramsarray An array of parameters for the request.
+     * @return object The created Postman request item object.
+     */
     private function create_postman_request_item(object $webservice, array $paramsarray): object {
 
         $paramstring = implode(',', $paramsarray);
