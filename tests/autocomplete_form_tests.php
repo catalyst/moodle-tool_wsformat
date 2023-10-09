@@ -23,15 +23,13 @@ namespace tool_wsformat;
  * @author    Djarran Cotleanu, Zach Pregl
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class autocomplete_form_tests extends \basic_testcase
-{
+class autocomplete_form_tests extends \basic_testcase {
 
 
     /**
      * Test that the length is correct.
      */
-    public function test_length()
-    {
+    public function test_length() {
         $autocompleteform = new \tool_wsformat\form\autocomplete_form();
         $webservicearray  = $autocompleteform->get_webservice_name_array();
         $length           = count($webservicearray);
@@ -43,8 +41,7 @@ class autocomplete_form_tests extends \basic_testcase
     /**
      * Test that an array is returned from the function.
      */
-    public function test_array_returned()
-    {
+    public function test_array_returned() {
         $autocompleteform = new \tool_wsformat\form\autocomplete_form();
         $webservicearray  = $autocompleteform->get_webservice_name_array();
         $this->assertIsArray($webservicearray);
@@ -55,8 +52,7 @@ class autocomplete_form_tests extends \basic_testcase
     /**
      * Test is array is in the correct order.
      */
-    public function test_correct_order()
-    {
+    public function test_correct_order() {
         $autocompleteform = new \tool_wsformat\form\autocomplete_form();
         $webservicearray  = $autocompleteform->get_webservice_name_array();
         $this->assertEquals('core_auth_confirm_user', $webservicearray[0]);
@@ -68,8 +64,7 @@ class autocomplete_form_tests extends \basic_testcase
     /**
      * Test whether array values are strings as expected by consumer.
      */
-    public function test_array_strings()
-    {
+    public function test_array_strings() {
         $autocompleteform = new \tool_wsformat\form\autocomplete_form();
         $webservicearray  = $autocompleteform->get_webservice_name_array();
         foreach ($webservicearray as $webservice) {

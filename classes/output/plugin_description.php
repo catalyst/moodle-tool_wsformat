@@ -28,15 +28,13 @@ namespace tool_wsformat\output;
 /**
  * Class for processing data for plugin_description template.
  */
-class plugin_description implements \renderable, \templatable
-{
+class plugin_description implements \renderable, \templatable {
 
 
     /**
      * Constructor function.
      */
-    public function __construct()
-    {
+    public function __construct() {
 
     }//end __construct()
 
@@ -47,8 +45,7 @@ class plugin_description implements \renderable, \templatable
      * @param  \renderer_base $output
      * @return void
      */
-    public function export_for_template(\renderer_base $output)
-    {
+    public function export_for_template(\renderer_base $output) {
 
     }//end export_for_template()
 

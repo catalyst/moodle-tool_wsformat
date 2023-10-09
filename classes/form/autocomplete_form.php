@@ -36,15 +36,13 @@ use moodleform;
  * @author    Djarran Cotleanu, Zach Pregl
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class autocomplete_form extends moodleform
-{
+class autocomplete_form extends moodleform {
 
 
     /**
      * Define an autocomplete element for browsing webservices and a submit button.
      */
-    public function definition(): void
-    {
+    public function definition(): void {
         global $DB;
 
         $webservicenames = $this->get_webservice_name_array();
@@ -64,7 +62,8 @@ class autocomplete_form extends moodleform
         $buttonarray   = [];
         $buttonarray[] = $mform->createElement('submit', 'submit', get_string('updateselection', 'tool_wsformat'));
 
-        $clearbutton   = '<button type="button" class="btn btn-secondary" onclick="window.location.href=\'index.php\'">
+        $clearbutton   = '<button type="button" class="btn btn-secondary" 
+        onclick="window.location.href=\'index.php\'">
                         '.get_string('clearbtn', 'tool_wsformat').'
                     </button>';
         $buttonarray[] = $mform->createElement('html', $clearbutton);
@@ -77,8 +76,7 @@ class autocomplete_form extends moodleform
     /**
      * Get web service names from database.
      */
-    public function get_webservice_name_array(): array
-    {
+    public function get_webservice_name_array(): array {
         global $DB;
         $webservicesobject = $DB->get_records('external_functions', [], '');
 

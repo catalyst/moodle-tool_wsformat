@@ -25,7 +25,7 @@
 
 use core_external\external_api;
 
-require '../../../config.php';
+require('../../../config.php');
 
 require_login();
 require_capability('moodle/site:config', context_system::instance());
@@ -66,8 +66,7 @@ echo $output->render($selectedsectiontemplate);
 /**
  * Function prints webservice function info including parameters and response objects. Used to aid development only.
  */
-function print_webservices()
-{
+function print_webservices() {
     global $DB;
     $webservicesobject = $DB->get_records('external_functions', [], 'name');
 

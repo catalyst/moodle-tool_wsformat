@@ -33,8 +33,7 @@ use core_external\external_single_structure;
 /**
  * Class for processing and exporting web service data.
  */
-class export_webservices
-{
+class export_webservices {
 
     /**
      * Stores the host address of the server.
@@ -57,8 +56,7 @@ class export_webservices
      * @param string $host
      * @param array  $selectedwebserviceindices
      */
-    public function __construct(string $host, array $selectedwebserviceindices)
-    {
+    public function __construct(string $host, array $selectedwebserviceindices) {
         $this->host        = $host;
         $this->webservices = $this->get_selected_webservice_objects($selectedwebserviceindices);
 
@@ -69,8 +67,7 @@ class export_webservices
      * Exports data as cURL commands in a text file.
      * Sets header to initiate download with filename and extension.
      */
-    public function export_as_curl(): void
-    {
+    public function export_as_curl(): void {
         header('Content-Disposition: attachment; filename=curl.txt');
         header('Content-Type: application/plain');
 
@@ -92,8 +89,7 @@ class export_webservices
      * Exports data as Postman Collection in a json file.
      * Sets header to initiate download with filename and extension.
      */
-    public function export_as_postman(): void
-    {
+    public function export_as_postman(): void {
         header('Content-Disposition: attachment; filename=postman.json');
         header('Content-Type: application/json');
 
@@ -117,8 +113,7 @@ class export_webservices
      * @param  array $selectedwebserviceindices An array of indices to grab the webservice objects.
      * @return array An array of webservice objects.
      */
-    private function get_selected_webservice_objects(array $selectedwebserviceindices): array
-    {
+    private function get_selected_webservice_objects(array $selectedwebserviceindices): array {
         $webservicesrecords = $this->get_indexed_webservice_records();
 
         $webservices = [];
@@ -137,8 +132,7 @@ class export_webservices
      *
      * @return array An array of the indexed webservices.
      */
-    private function get_indexed_webservice_records(): array
-    {
+    private function get_indexed_webservice_records(): array {
         global $DB;
 
         // Get_records returns an object array where key for each object is the name of the webservice.
@@ -157,8 +151,7 @@ class export_webservices
      * @param  string $paramstring      Parameter string to be formatted.
      * @return mixed HTML formatted parameter description.
      */
-    public function rest_param_description_html(object $paramdescription, string $paramstring): mixed
-    {
+    public function rest_param_description_html(object $paramdescription, string $paramstring): mixed {
         $brakeline = <<<EOF
 
 
@@ -227,8 +220,7 @@ class export_webservices
       */
 
 
-    public function get_formatted_param_array(object $webservice): array
-    {
+    public function get_formatted_param_array(object $webservice): array {
         $paramobjectarray = $webservice->parameters_desc->keys;
 
         // Using the code from renderer.php.
@@ -258,8 +250,7 @@ class export_webservices
      * @param  array  $paramsarray array of parameters for the request.
      * @return string The generated string.
      */
-    public function create_request_string(object $webservice, array $paramsarray): string
-    {
+    public function create_request_string(object $webservice, array $paramsarray): string {
         $baseurl = '{{BASE_URL}}';
         $wstoken = '{{WS_TOKEN}}';
 
@@ -284,8 +275,7 @@ class export_webservices
      * @param  array  $paramsarray An array of parameters for the request.
      * @return string The generated string.
      */
-    private function create_postman_collection(array $postmanitems): object
-    {
+    private function create_postman_collection(array $postmanitems): object {
         $collection = (object) [
             'info'     => [
                 'name'        => 'My Collection',
@@ -343,8 +333,7 @@ class export_webservices
      * @param  array  $paramsarray An array of parameters for the request.
      * @return object The created Postman request item object.
      */
-    private function create_postman_request_item(object $webservice, array $paramsarray): object
-    {
+    private function create_postman_request_item(object $webservice, array $paramsarray): object {
         $paramstring = implode(',', $paramsarray);
         $parampairs  = explode(',', $paramstring);
         $keyvalpairs = [];

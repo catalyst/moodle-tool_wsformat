@@ -28,8 +28,7 @@ namespace tool_wsformat\output;
 /**
  * Class for processing data for index_page template.
  */
-class index_page implements \renderable, \templatable
-{
+class index_page implements \renderable, \templatable {
 
     /**
      * Stores the selected webservice indices.
@@ -44,8 +43,7 @@ class index_page implements \renderable, \templatable
      *
      * @param array $indicies
      */
-    public function __construct(array $indicies)
-    {
+    public function __construct(array $indicies) {
         $this->selectedwebserviceindices = $indicies;
 
     }//end __construct()
@@ -57,8 +55,7 @@ class index_page implements \renderable, \templatable
      * @param  \renderer_base $output
      * @return \stdClass
      */
-    public function export_for_template(\renderer_base $output): object
-    {
+    public function export_for_template(\renderer_base $output): object {
         // Return empty object if no selected webservices.
         if (empty($this->selectedwebserviceindices)) {
             return (object) [];

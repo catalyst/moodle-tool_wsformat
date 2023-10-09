@@ -30,8 +30,7 @@ use plugin_renderer_base;
 /**
  * Renderer class.
  */
-class renderer extends plugin_renderer_base
-{
+class renderer extends plugin_renderer_base {
 
 
     /**
@@ -40,8 +39,7 @@ class renderer extends plugin_renderer_base
      * @param  \tool_wsformat\output\index_page $indexpage The index_page renderable object.
      * @return string|boolean
      */
-    protected function render_index_page(\tool_wsformat\output\index_page $indexpage): string | bool
-    {
+    protected function render_index_page(\tool_wsformat\output\index_page $indexpage): string | bool {
         $data = $indexpage->export_for_template($this);
         return parent::render_from_template('tool_wsformat/index_page', $data);
 
@@ -54,8 +52,7 @@ class renderer extends plugin_renderer_base
      * @param  \tool_wsformat\output\plugin_description $plugindescription The plugin description object.
      * @return string|boolean
      */
-    protected function render_plugin_description(\tool_wsformat\output\plugin_description $plugindescription): string | bool
-    {
+    protected function render_plugin_description(\tool_wsformat\output\plugin_description $plugindescription): string | bool {
         return parent::render_from_template('tool_wsformat/plugin_description', new \stdClass);
 
     }//end render_plugin_description()
