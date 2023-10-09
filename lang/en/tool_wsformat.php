@@ -25,4 +25,13 @@
 
 $string['pluginname'] = 'Format Webservices';
 $string['plugindescription'] = 'This plugin displays all web services available within Moodle and the respective formatted requests to help developers better understand the communication between their Moodle site and external applications or services';
-
+$string['select'] = 'Selected Webservices';
+$string['curldefault'] = 'Default: cURL';
+$string['exportall'] = 'Export All';
+$string['curl'] = 'cURL';
+$string['postman'] = 'Postman';
+$string['selectwebservicedetails'] = 'Select a web service to view details';
+$string['copybtn'] = 'Copy';
+$string['requestt'] = 'Request';
+$string['clearbtn'] = 'Clear';
+$string['updateselection'] = 'Update Selection';

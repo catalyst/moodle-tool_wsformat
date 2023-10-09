@@ -60,11 +60,11 @@ class autocomplete_form extends moodleform {
         $mform->addElement('autocomplete', 'webservice_form', 'Webservices:', $webservicenames, $options);
 
         $buttonarray = array();
-        $buttonarray[] = $mform->createElement('submit', 'submit', 'Update Selection');
+        $buttonarray[] = $mform->createElement('submit', 'submit', get_string('updateselection', 'tool_wsformat'));
 
         $clearbutton = '<button type="button" class="btn btn-secondary" onclick="window.location.href=\'index.php\'">
-                            Clear
-                        </button>';
+                        ' . get_string('clearbtn', 'tool_wsformat') . '
+                    </button>';
         $buttonarray[] = $mform->createElement('html', $clearbutton);
 
         $mform->addGroup($buttonarray, 'buttonarr', '', null, false);

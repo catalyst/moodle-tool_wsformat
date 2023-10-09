@@ -18,7 +18,8 @@ Example context (json):
     <div class="columns-container">
         <div class="selected-webservices-column">
             <h3>
-                Selected Web Services
+                
+                {{#str}} select, tool_wsformat {{/str}}
             </h3>
             <ul class="selected-webservices-list">
                 {{#formdata}}
@@ -29,20 +30,21 @@ Example context (json):
                 {{/formdata}}
             </ul>
             <div class="export-container">
-            <a id="export-button-id" href="download.php?export-type=curl&selected={{selectedindexes}}" data-selected="{{selectedindexes}}" class="btn btn-primary" style="width:fit-content">Export All</a>
+                <a id="export-button-id" href="download.php?export-type=curl&selected={{selectedindexes}}" data-selected="{{selectedindexes}}" class="btn btn-primary" style="width:fit-content">{{#str}} exportall, tool_wsformat {{/str}}</a>
                 <select id="export-type" name="export-type-select" class="form-control custom-select" {{#readonly}}disabled{{/readonly}}>
-                    <option value="curl" selected="">cURL</option>
-                    <option value="postman" >Postman</option>
+                    <option value="curl" selected="">{{#str}} curl, tool_wsformat {{/str}}</option>
+                    <option value="postman">{{#str}} postman, tool_wsformat {{/str}}</option>
+
                 </select>
                 <div class="form-defaultinfo text-muted">
-                    Default: cURL
+                   {{#str}} curldefault, tool_wsformat {{/str}}
                 </div>
             </div>
         </div>
 
         <div id="selection-panel" class="details-column">
             <h3 id="placeholder-text">
-                Select a web service to view details
+                {{#str}} selectwebservicedetails, tool_wsformat {{/str}}
             </h3>
             <div class="details-content" id="ws-panel">
                 <div class="details-title" id="ws-title">
@@ -52,12 +54,12 @@ Example context (json):
                     {{! Replace the descriptions }}  
                 </h3>
                 <div class="details-request-container" id="ws-details">
-                    <h4>Request</h4>
+                    <h4>{{#str}} requestt, tool_wsformat {{/str}}</h4>
                     <button class="details-curl-button" id="details-curl-button">
-                        curl
+                        {{#str}} curl, tool_wsformat {{/str}}
                     </button>
                     <button class="details-postman-button" id="details-postman-button">
-                        Postman
+                        {{#str}} postman, tool_wsformat {{/str}}
                     </button>
                 </div>
                 <div class="code-container">
@@ -65,7 +67,7 @@ Example context (json):
                     
                     </code>
                     <button class="copy-button" id="curl-copy-button">
-                        Copy
+                        {{#str}} copybtn, tool_wsformat {{/str}}
                     </button>
                 </div>
             </div>
