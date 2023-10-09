@@ -84,7 +84,7 @@
     padding: 0.25rem 0.5rem 0.25rem 0.5rem;
     border-radius: 0.5rem;
     background-color: transparent;
-    border: 1px solid #f2f3f5
+    border: 1px solid #f2f3f5;
 }
 
 .details-postman-button {
@@ -94,7 +94,7 @@
     padding: 0.25rem 0.5rem 0.25rem 0.5rem;
     border-radius: 0.5rem;
     background-color: transparent;
-    border: 1px solid #f2f3f5
+    border: 1px solid #f2f3f5;
 }
 
 .code-container {
@@ -109,7 +109,7 @@
 
 .code-text {
     color: black;
-    font-size: 14px
+    font-size: 14px;
 }
 
 .copy-button {
@@ -123,5 +123,5 @@
     border-radius: 0.5rem;
     background-color: #106cbf;
     color: white;
-    border: 1px solid #f2f3f5
+    border: 1px solid #f2f3f5;
 }
