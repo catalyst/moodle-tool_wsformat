@@ -35,3 +35,6 @@ $string['copybtn'] = 'Copy';
 $string['requestt'] = 'Request';
 $string['clearbtn'] = 'Clear';
 $string['updateselection'] = 'Update Selection';
+$string['webservices'] = 'Webservices:';
+$string['nowebservicesselected'] = 'No webservices selected';
+$string['searchwebservices'] = 'Search webservices...';

@@ -51,13 +51,15 @@ class autocomplete_form extends moodleform {
 
         $options = [
             'minchars' => 2,
-            'noselectionstring' => 'No webservices selected',
+            'noselectionstring' => get_string('nowebservicesselected', 'tool_wsformat'),
             'multiple' => true,
-            'placeholder' => 'Search webservices...',
+            'placeholder' => get_string('searchwebservices', 'tool_wsformat'),
         ];
+        
 
         // Documentation: https://docs.moodle.org/dev/lib/formslib.php_Form_Definition#autocomplete.
-        $mform->addElement('autocomplete', 'webservice_form', 'Webservices:', $webservicenames, $options);
+        $mform->addElement('autocomplete', 'webservice_form', get_string('webservices', 'tool_wsformat'), $webservicenames, $options);
+
 
         $buttonarray = array();
         $buttonarray[] = $mform->createElement('submit', 'submit', get_string('updateselection', 'tool_wsformat'));
