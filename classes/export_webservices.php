@@ -191,10 +191,11 @@ class export_webservices {
     }
 
      /**
-     * Retrieves a formatted array of parameters for a given webservice.
-     * @param object $webservice The webservice obj.
-     * @return array An array of the formatted parameters.
+     * Retrieves an array of webservice objects based on provided indices.
+     * @param array $selectedwebserviceindices An array of indices to grab the webservice objects.
+     * @return array An array of webservice objects.
      */
+
     public function get_formatted_param_array(object $webservice): array {
 
         $paramobjectarray = $webservice->parameters_desc->keys;
