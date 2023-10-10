@@ -66,6 +66,7 @@ class export_webservices {
      *
      * @param string $host
      * @param array  $selectedwebserviceindices
+     * @param int  $electedserviceindex
      */
     public function __construct(string $host, array $selectedwebserviceindices, int $selectedserviceindex = null) {
         global $DB;

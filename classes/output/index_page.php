@@ -37,14 +37,26 @@ class index_page implements \renderable, \templatable {
      */
     protected $selectedwebserviceindices = [];
     
+    /**
+     * Stores the index of the selected external service.
+     *
+     * @var array
+     */
     protected $serviceindex = null;
 
+    /**
+     * Stores the user id of the logged in user.
+     *
+     * @var array
+     */
     protected $userid = null;
 
     /**
      * Constructor function - assign instance variable.
      *
-     * @param array $indicies
+     * @param array $indicies Indicies of the selected web services to export.
+     * @param int $serviceindex Index of the selected external service.
+     * @param int $userid ID of the logged in user.
      */
     public function __construct(array $webserviceindicies, int $serviceindex = null, int $userid) {
         $this->selectedwebserviceindices = $webserviceindicies;
