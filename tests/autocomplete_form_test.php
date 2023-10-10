@@ -23,7 +23,7 @@ namespace tool_wsformat;
  * @author    Djarran Cotleanu, Zach Pregl
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class autocomplete_form_tests extends \basic_testcase {
+class autocomplete_form_test extends \basic_testcase {
 
 
     /**
