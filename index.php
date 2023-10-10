@@ -47,48 +47,6 @@ use tool_wsformat\form\autocomplete_form;
 
 require_once($CFG->dirroot . '/webservice/lib.php');
 
-$webservicemanager = new webservice();
-$tokens = $DB->get_records('external_tokens', [], '');
-$services = $DB->get_records('external_services', [], '');
-
-// echo print_r($services);
-
-// foreach ($services as $key => $service) {
-//     echo $service->shortname;
-// }
-
-echo '<pre>';
-echo print_r($services);
-echo '</pre>';
-
-
-echo '<pre>';
-echo print_r($tokens);
-echo '</pre>';
-
-// foreach ($tokens as $key => $token) {
-//     echo print_r($token);
-// }
-
-function get_created_by_user_ws_token($externalserviceid) {
-    global $DB;
-    $sql = "SELECT
-                    t.token, s.name
-                FROM
-                    {external_tokens} t, {external_services} s
-                WHERE
-                    s.id=? AND s.id = t.externalserviceid";
-    //must be the token creator
-    $token = $DB->get_record_sql($sql, array($externalserviceid), MUST_EXIST);
-    return $token;
-}
-
-// $wow = get_created_by_user_ws_token(3);
-// echo '<pre>';
-// echo print_r($wow->token);
-// echo '</pre>';
-
-
 $mform = new autocomplete_form();
 $mform->display();
 

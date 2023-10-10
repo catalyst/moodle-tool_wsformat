@@ -27,6 +27,8 @@ namespace tool_wsformat;
 
 use core_external\external_api;
 
+require_once($CFG->dirroot . '/webservice/lib.php');
+
 use core_external\external_multiple_structure;
 use core_external\external_single_structure;
 use dml_exception;
@@ -60,19 +62,36 @@ class export_webservices {
      * @param array  $selectedwebserviceindices
      */
     public function __construct(string $host, array $selectedwebserviceindices, int $selectedserviceindex = null) {
+        global $DB;
+
         $this->host        = $host;
         $this->webservices = $this->get_selected_webservice_objects($selectedwebserviceindices);
 
         if (is_numeric($selectedserviceindex) && $selectedserviceindex !== null) {
-            $token = $this->get_service_token($selectedserviceindex);
+            $externalservices = array_values($DB->get_records('external_services', [], ''));
+            $externalserviceid = $externalservices[$selectedserviceindex]->id;
+
+            $webservicemanager = new \webservice();
+
+            foreach ($this->webservices as $webservice) {
+                if (!$webservicemanager->service_function_exists(
+                    $webservice->name,
+                    $externalserviceid
+                )) {
+                    $webservicemanager->add_external_function_to_service(
+                        $webservice->name,
+                        $externalserviceid
+                    );
+                }
+            }
+
+            $token = $this->get_service_token($externalserviceid);
             $this->servicetoken = $token->token;
         }
     }
 
-    private function get_service_token($externalserviceindex): object {
+    private function get_service_token($externalserviceid): object {
         global $DB;
-        $externalservices = array_values($DB->get_records('external_services', [], ''));
-        $externalserviceid = $externalservices[$externalserviceindex]->id;
 
         $sql = "SELECT
                     t.token, s.name
