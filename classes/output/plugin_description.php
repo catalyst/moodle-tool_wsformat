@@ -36,7 +36,7 @@ class plugin_description implements \renderable, \templatable {
      */
     public function __construct() {
 
-    }//end __construct()
+    }
 
 
     /**
@@ -47,7 +47,7 @@ class plugin_description implements \renderable, \templatable {
      */
     public function export_for_template(\renderer_base $output) {
 
-    }//end export_for_template()
+    }
 
 
-}//end class
+}

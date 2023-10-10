@@ -60,7 +60,7 @@ class export_webservices {
         $this->host        = $host;
         $this->webservices = $this->get_selected_webservice_objects($selectedwebserviceindices);
 
-    }//end __construct()
+    } 
 
 
     /**
@@ -82,7 +82,7 @@ class export_webservices {
             echo $curlstring."\n"."\n";
         }
 
-    }//end export_as_curl()
+    }
 
 
     /**
@@ -104,7 +104,7 @@ class export_webservices {
         $beautifiedjson    = json_encode($postmancollection, JSON_PRETTY_PRINT);
         echo $beautifiedjson;
 
-    }//end export_as_postman()
+    }
 
 
     /**
@@ -124,7 +124,7 @@ class export_webservices {
 
         return $webservices;
 
-    }//end get_selected_webservice_objects()
+    }
 
 
     /**
@@ -141,7 +141,7 @@ class export_webservices {
 
         return $webservicesrecords;
 
-    }//end get_indexed_webservice_records()
+    }
 
 
     /**
@@ -204,12 +204,12 @@ class export_webservices {
 
                 default:
                     $type = '{{STRING}}';
-            }//end switch
+            }
 
             return $paramstring.$type.$brakeline;
-        }//end if
+        }
 
-    }//end rest_param_description_html()
+    }
 
 
     /**
@@ -238,7 +238,7 @@ class export_webservices {
 
         return $formattedparamsarray;
 
-    }//end get_formatted_param_array()
+    }
 
 
     /**
@@ -264,7 +264,7 @@ class export_webservices {
 
         return $curlstring;
 
-    }//end create_request_string()
+    }
 
 
     /**
@@ -321,7 +321,7 @@ class export_webservices {
 
         return $collection;
 
-    }//end create_postman_collection()
+    }
 
 
     /**
@@ -384,7 +384,7 @@ class export_webservices {
 
         return $object;
 
-    }//end create_postman_request_item()
+    }
 
 
-}//end class
+}

@@ -43,7 +43,7 @@ class renderer extends plugin_renderer_base {
         $data = $indexpage->export_for_template($this);
         return parent::render_from_template('tool_wsformat/index_page', $data);
 
-    }//end render_index_page()
+    }
 
 
     /**
@@ -55,7 +55,7 @@ class renderer extends plugin_renderer_base {
     protected function render_plugin_description(\tool_wsformat\output\plugin_description $plugindescription): string | bool {
         return parent::render_from_template('tool_wsformat/plugin_description', new \stdClass);
 
-    }//end render_plugin_description()
+    }
 
 
-}//end class
+}

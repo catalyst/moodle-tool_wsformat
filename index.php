@@ -78,7 +78,7 @@ function print_webservices() {
 
     return $functiondescs;
 
-}//end print_webservices()
+}
 
 
 print_webservices();
