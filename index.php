@@ -57,12 +57,28 @@ $services = $DB->get_records('external_services', [], '');
 //     echo $service->shortname;
 // }
 
-
+echo $USER->id;
+// echo print_r($usercontext);
+function get_created_by_user_ws_token($userid, $tokenid) {
+    global $DB;
+    $sql = "SELECT
+                    t.id, t.token, u.firstname, u.lastname, s.name
+                FROM
+                    {external_tokens} t, {user} u, {external_services} s
+                WHERE
+                    t.creatorid=? AND t.id=? AND t.tokentype = "
+            . EXTERNAL_TOKEN_PERMANENT
+            . " AND s.id = t.externalserviceid AND t.userid = u.id";
+    //must be the token creator
+    $token = $DB->get_record_sql($sql, array($userid, $tokenid), MUST_EXIST);
+    return $token;
+}
 
 
 $mform = new autocomplete_form();
 $mform->display();
 
+$userid = $USER->id;
 $formarray = [];
 $selectedservice;
 if ($data = $mform->get_data()) {

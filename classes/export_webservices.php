@@ -49,6 +49,7 @@ class export_webservices {
      */
     public $webservices = [];
 
+    private $selectedservice = null;
 
     /**
      * Constructor function - assign instance variables.
@@ -56,9 +57,14 @@ class export_webservices {
      * @param string $host
      * @param array  $selectedwebserviceindices
      */
-    public function __construct(string $host, array $selectedwebserviceindices) {
+    public function __construct(string $host, array $selectedwebserviceindices, int $selectedservice = null) {
         $this->host        = $host;
         $this->webservices = $this->get_selected_webservice_objects($selectedwebserviceindices);
+        $this->selectedservice = $selectedservice;
+    }
+    
+    private function get_token() {
+        
     }
 
     /**
