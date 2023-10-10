@@ -36,7 +36,7 @@ class index_page implements \renderable, \templatable {
      * @var array
      */
     protected $selectedwebserviceindices = [];
-    
+
     /**
      * Stores the index of the selected external service.
      *
@@ -93,7 +93,7 @@ class index_page implements \renderable, \templatable {
 
         $data = (object) [
             'formdata'        => $webservicesexport,
-            'serviceindex'    => $this->serviceindex,  
+            'serviceindex'    => $this->serviceindex,
             'items_selected'  => true,
             'selectedindexes' => json_encode($this->selectedwebserviceindices),
         ];

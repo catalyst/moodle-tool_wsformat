@@ -54,7 +54,6 @@ $userid = $USER->id;
 $formarray = [];
 $selectedservice = null;
 if ($data = $mform->get_data()) {
-    // echo print_r($data);
     // Populate formarray with selected form web services.
     foreach ($data->selected_webservices as $key => $value) {
         $formarray[] = (string) $value;
