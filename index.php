@@ -1,7 +1,29 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-  use core_external\external_api;
+/**
+ * Setup inital plugin page
+ *
+ * @package          tool_wsformat
+ * @copyright        2023 Djarran Cotleanu
+ * @author           Djarran Cotleanu
+ * @license          http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
+use core_external\external_api;
 
 require('../../../config.php');
 
@@ -10,35 +32,54 @@ require_capability('moodle/site:config', context_system::instance());
 
 
 $PAGE->set_context(context_system::instance());
-$PAGE->set_url('/admin/tool/api_test/index.php');
-$PAGE->set_title(get_string('pluginname', 'tool_api_test'));
+$PAGE->set_url('/admin/tool/wsformat/index.php');
+$PAGE->set_title(get_string('pluginname', 'tool_wsformat'));
 $PAGE->set_heading($SITE->fullname);
 
 echo $OUTPUT->header();
-// echo $OUTPUT->heading(get_string('pluginname', 'tool_api_test'));
-// echo get_string('plugindescription', 'tool_api_test');
-echo $OUTPUT->box_start();
 
-// Prepare the data (context) for the template
-$template_data = new stdClass(); // Create new object
+$output = $PAGE->get_renderer('tool_wsformat');
 
-// Load the template and render it, passing it $template_data
-// See templates/mytemplate.mustache
-echo $OUTPUT->render_from_template('tool_api_test/mytemplate', $template_data);
+$plugindescriptiontemplate = new \tool_wsformat\output\plugin_description();
+echo $output->render($plugindescriptiontemplate);
 
+use tool_wsformat\form\autocomplete_form;
 
-$webservicesObject = $DB->get_records('external_functions', array(), 'name');
-$count = $DB->count_records('external_functions', array());
-echo $count;
-echo '<pre>';
-print_r($webservicesObject);
-echo '</pre>';
+$mform = new autocomplete_form();
+$mform->display();
 
+$formarray = [];
 
+if ($data = $mform->get_data()) {
+    // Populate formarray with selected form web services.
+    foreach ($data->webservice_form as $key => $value) {
+        $formarray[] = (string) $value;
+    }
+}
 
+$selectedsectiontemplate = new \tool_wsformat\output\index_page($formarray);
+$PAGE->requires->js_call_amd('tool_wsformat/test', 'init');
 
+echo $output->render($selectedsectiontemplate);
 
-echo $OUTPUT->box_end();
+/**
+ * Function prints webservice function info including parameters and response objects. Used to aid development only.
+ */
+function print_webservices() {
 
+    global $DB;
+    $webservicesobject = $DB->get_records('external_functions', array(), 'name');
+
+    $functiondescs = array();
+    foreach ($webservicesobject as $key => $webservice) {
+
+        // Documentation: sites/moodle/lib/external/classes/external_api.php.
+        $functiondescs[] = external_api::external_function_info($webservice);
+    }
+
+    return $functiondescs;
+}
+
+print_webservices();
 
 echo $OUTPUT->footer();

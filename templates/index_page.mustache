@@ -1,0 +1,125 @@
+{{!
+@template tool_wsformat/mytemplate
+
+Admin search input for page header.
+
+Example context (json):
+{
+"action": "http://moodle.local/admin/search.php",
+"query": "themedesigner"
+}
+}}
+{{! Get string from template }}
+{{^items_selected}}
+{{! <h2>Please select a webservice</h2> }}
+{{/items_selected}}
+{{#items_selected}}
+<div
+    style="width: 100%; display: flex;flex-direction: column; margin-bottom: 15rem; margin-top: 2rem; padding-bottom: 2rem; border-top: 1px solid #f2f3f5;">
+    <div style="padding-top: 2rem; display: flex;flex-direction: row;">
+        <div style="
+        display: flex;
+        flex-direction: column;
+        border-right: 1px solid #e3e3e4;
+        overflow-y: hidden;
+        overflow-x: hidden;
+        height: 50vh;
+        width: 40%;
+    ">
+            <h3>
+                Selected Web Services
+            </h3>
+            <ul style="
+            display: flex;
+            flex-direction: column;
+            overflow-y: scroll;
+       
+            padding: 0;
+            list-style-type: none;
+        ">
+                {{#formdata}}
+                <li data-name="{{name}}" id="" style="
+                    cursor: pointer; 
+                    font-weight: 700; 
+                    color: #0f6cbf; 
+                    display: flex; 
+                    flex-direction: row;
+                ">
+                    <!-- Access the 'name' key of the current element -->
+                    {{name}}
+                </li>
+                {{/formdata}}
+            </ul>
+            {{! <button type="button" class="btn btn-primary" style="width:fit-content">Export All</button> }}
+            <a href="download.php?data-json={{test}}" class="btn btn-primary" style="width:fit-content">Export All</a>
+        </div>
+        <div id="selection-panel" style="
+        width: 60%;
+        padding-left: 2rem;
+        gap: 1rem;
+    ">
+            <h3 id="placeholder-text">
+                Select a web service to view details
+            </h3>
+            <div id="ws-panel" style="display: none; flex-direction: column;">
+                <div id="ws-title" style="color: #116dc0;">
+                    block_accessreview_get_module_data
+                </div>
+                <h3 id="ws-description">
+                    Gets error data for course modules.
+                </h3>
+                <div id="ws-details" style="
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                gap: 1rem;
+            ">
+                    <h4>Request</h4>
+                    <button style="border: none;
+                        width:fit-content;
+                        margin: 0;
+                        padding: 0.25rem 0.5rem 0.25rem 0.5rem;
+                        border-radius: 0.5rem;
+                        background-color: transparent;
+                        border: 1px solid #f2f3f5">
+                        curl
+                    </button>
+                </div>
+                <div style="
+                background-color: #f7f7f7;
+                padding: 1rem;
+                border-radius: 0.5rem;
+                overflow-x: scroll;
+                width: 100%;
+                color: red;
+                position: relative;
+            ">
+                    <code id="curl" style="color: black;">
+                <pre style="font-size: 14px">
+                    curl 'https://moodle.example.com/webservice/rest/server.php' \ 
+                        -d 'wstoken=...' \ 
+                        -d 'wsfunction=block_accessreview_get_module_data' \ 
+                        -d 'moodlewsrestformat=json' \ 
+                        -d 'courseid=...'
+                </pre>
+                </code>
+                    <button style="
+                    position: absolute;
+                    right: 1rem;
+                    top: 1rem;
+                    border: none;
+                    width:fit-content;
+                    margin: 0;
+                    padding: 0.25rem 0.5rem 0.25rem 0.5rem;
+                    border-radius: 0.5rem;
+                    background-color: #106cbf;
+                    color: white;
+                    border: 1px solid #f2f3f5" onclick="copyFunction()">
+                        Copy
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{/items_selected}}

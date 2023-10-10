@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Setup inital plugin page
+ * Exports either a json or txt file with exported webservices
  *
  * @package          tool_wsformat
  * @copyright        2023 Djarran Cotleanu
@@ -23,9 +23,15 @@
  * @license          http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+require('../../../config.php');
+require_login();
 
-if ($hassiteconfig) {
-    $url = $CFG->wwwroot . '/' . $CFG->admin . '/tool/wsformat/index.php';
-    $ADMIN->add('development', new admin_externalpage('toolwsformat', 'Format Webservices', $url));
-}
+$serializedjson = required_param('data-json', PARAM_TEXT);
+$unserializedjson = json_decode($serializedjson, true);
+
+$prettyprintsingle = json_encode($unserializedjson[0], JSON_PRETTY_PRINT);
+$prettyprintall = json_encode($unserializedjson, JSON_PRETTY_PRINT);
+
+header('Content-Disposition: attachment; filename=file.json');
+header('Content-Type: application/json');
+echo $prettyprintall;

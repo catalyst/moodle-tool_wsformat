@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Setup inital plugin page
+ * Setup required boilerplate to render plugin_description template.
  *
  * @package          tool_wsformat
  * @copyright        2023 Djarran Cotleanu
@@ -23,9 +23,25 @@
  * @license          http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+namespace tool_wsformat\output;
 
-if ($hassiteconfig) {
-    $url = $CFG->wwwroot . '/' . $CFG->admin . '/tool/wsformat/index.php';
-    $ADMIN->add('development', new admin_externalpage('toolwsformat', 'Format Webservices', $url));
+/**
+ * Class for processing data for plugin_description template.
+ */
+class plugin_description implements \renderable, \templatable {
+
+    /**
+     * Constructor function.
+     */
+    public function __construct() {
+    }
+
+    /**
+     * Exports the data for the index_page.mustache template
+     *
+     * @param \renderer_base $output
+     * @return void
+     */
+    public function export_for_template(\renderer_base $output) {
+    }
 }

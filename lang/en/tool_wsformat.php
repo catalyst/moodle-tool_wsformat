@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Setup inital plugin page
+ * Language strings
  *
  * @package          tool_wsformat
  * @copyright        2023 Djarran Cotleanu
@@ -23,9 +23,6 @@
  * @license          http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+$string['pluginname'] = 'Format Webservices';
+$string['plugindescription'] = 'This plugin displays all web services available within Moodle and the respective formatted requests to help developers better understand the communication between their Moodle site and external applications or services';
 
-if ($hassiteconfig) {
-    $url = $CFG->wwwroot . '/' . $CFG->admin . '/tool/wsformat/index.php';
-    $ADMIN->add('development', new admin_externalpage('toolwsformat', 'Format Webservices', $url));
-}
