@@ -29,7 +29,7 @@ require('../../../config.php');
 
 require_login();
 require_capability('moodle/site:config', context_system::instance());
-
+global $DB;
 
 $PAGE->set_context(context_system::instance());
 $PAGE->set_url('/admin/tool/wsformat/index.php');
@@ -44,7 +44,12 @@ $plugindescriptiontemplate = new \tool_wsformat\output\plugin_description();
 echo $output->render($plugindescriptiontemplate);
 
 use tool_wsformat\form\autocomplete_form;
+require_once($CFG->dirroot . '/webservice/lib.php');
 
+$webservicemanager = new webservice();
+$tokens = $DB->get_records('external_tokens', [], '');
+$services = $DB->get_records('external_services', [], '');
+echo print_r($tokens[2]->token);
 $mform = new autocomplete_form();
 $mform->display();
 
