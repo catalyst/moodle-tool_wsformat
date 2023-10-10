@@ -29,6 +29,7 @@ use core_external\external_api;
 
 use core_external\external_multiple_structure;
 use core_external\external_single_structure;
+use dml_exception;
 
 /**
  * Class for processing and exporting web service data.
@@ -58,18 +59,35 @@ class export_webservices {
      * @param string $host
      * @param array  $selectedwebserviceindices
      */
-    public function __construct(string $host, array $selectedwebserviceindices, int $selectedservice = null) {
+    public function __construct(string $host, array $selectedwebserviceindices, int $selectedserviceindex = null) {
         $this->host        = $host;
         $this->webservices = $this->get_selected_webservice_objects($selectedwebserviceindices);
-        
-        if (is_numeric($selectedservice) && $selectedservice !== null) {
-            $token = $this->get_service_token($selectedservice);
+
+        if (is_numeric($selectedserviceindex) && $selectedserviceindex !== null) {
+            $token = $this->get_service_token($selectedserviceindex);
             $this->servicetoken = $token->token;
         }
     }
-
-    private function get_service_token($externalserviceid) {
+    public function get_external_services(): array {
         global $DB;
+        $serviceobject = $DB->get_records('external_services', [], '');
+
+        $servicenames = [];
+
+        foreach ($serviceobject as $key => $service) {
+            $servicenames[] = $service->shortname;
+        }
+
+        return $servicenames;
+    }
+
+    private function get_service_token($externalserviceindex): object {
+        global $DB;
+        $externalservices = $DB->get_records('external_services', [], '');
+        $indices = array_values($externalservices);
+
+        $externalserviceid = $indices[$externalserviceindex]->id;
+
         $sql = "SELECT
                     t.token, s.name
                 FROM
@@ -263,7 +281,7 @@ class export_webservices {
      */
     public function create_request_string(object $webservice, array $paramsarray): string {
         $baseurl = '{{BASE_URL}}';
-        
+
         $token = $this->servicetoken !== null ? $this->servicetoken : '{{WS_TOKEN}}';
 
         $functionname = $webservice->name;

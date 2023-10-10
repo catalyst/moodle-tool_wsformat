@@ -57,14 +57,14 @@ $services = $DB->get_records('external_services', [], '');
 //     echo $service->shortname;
 // }
 
-// echo '<pre>';
-// echo print_r($services);
-// echo '</pre>';
+echo '<pre>';
+echo print_r($services);
+echo '</pre>';
 
 
-// echo '<pre>';
-// echo print_r($tokens);
-// echo '</pre>';
+echo '<pre>';
+echo print_r($tokens);
+echo '</pre>';
 
 // foreach ($tokens as $key => $token) {
 //     echo print_r($token);
@@ -83,10 +83,10 @@ function get_created_by_user_ws_token($externalserviceid) {
     return $token;
 }
 
-$wow = get_created_by_user_ws_token(3);
-echo '<pre>';
-echo print_r($wow->token);
-echo '</pre>';
+// $wow = get_created_by_user_ws_token(3);
+// echo '<pre>';
+// echo print_r($wow->token);
+// echo '</pre>';
 
 
 $mform = new autocomplete_form();
@@ -102,6 +102,7 @@ if ($data = $mform->get_data()) {
         $formarray[] = (string) $value;
     }
     $selectedservice = $data->selected_external_service;
+    echo $selectedservice;
 }
 
 $selectedsectiontemplate = new \tool_wsformat\output\index_page($formarray, $selectedservice, $userid);
