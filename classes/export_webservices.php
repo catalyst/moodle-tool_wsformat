@@ -68,25 +68,11 @@ class export_webservices {
             $this->servicetoken = $token->token;
         }
     }
-    public function get_external_services(): array {
-        global $DB;
-        $serviceobject = $DB->get_records('external_services', [], '');
-
-        $servicenames = [];
-
-        foreach ($serviceobject as $key => $service) {
-            $servicenames[] = $service->shortname;
-        }
-
-        return $servicenames;
-    }
 
     private function get_service_token($externalserviceindex): object {
         global $DB;
-        $externalservices = $DB->get_records('external_services', [], '');
-        $indices = array_values($externalservices);
-
-        $externalserviceid = $indices[$externalserviceindex]->id;
+        $externalservices = array_values($DB->get_records('external_services', [], ''));
+        $externalserviceid = $externalservices[$externalserviceindex]->id;
 
         $sql = "SELECT
                     t.token, s.name
@@ -286,7 +272,7 @@ class export_webservices {
 
         $functionname = $webservice->name;
 
-        $curlstring = $baseurl . '/webservice/rest/server.php?wstoken=' . $token . '&wsfunction='
+        $curlstring = $this->host . '/webservice/rest/server.php?wstoken=' . $token . '&wsfunction='
             . $functionname . '&moodlewsrestformat=json';
 
         // Add params into curlString.
@@ -317,7 +303,7 @@ class export_webservices {
             'variable' => [
                 [
                     'key'   => 'BASE_URL',
-                    'value' => 'http://moodle.localhost',
+                    'value' => $this->host,
                     'type'  => 'string',
                 ],
                 [
@@ -394,7 +380,7 @@ class export_webservices {
                 'header'      => [],
                 'url'         => [
                     'raw'   => $this->create_request_string($webservice, $paramsarray),
-                    'host'  => ['{{BASE_URL}}'],
+                    'host'  => [$this->host],
                     'path'  => [
                         'webservice',
                         'rest',
@@ -407,7 +393,7 @@ class export_webservices {
                         ],
                         [
                             'key'   => 'wsfunction',
-                            'value' => 'core_webservice_get_site_info',
+                            'value' => $webservice->name,
                         ],
                         ...$keyvalpairs,
                     ],
