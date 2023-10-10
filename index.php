@@ -72,9 +72,12 @@ if ($data = $mform->get_data()) {
         $formarray[] = (string) $value;
     }
     $selectedservice = $data->selected_external_service;
+    if (is_numeric($data->selected_external_service)) {
+        echo 'shit';
+    }
 }
 
-$selectedsectiontemplate = new \tool_wsformat\output\index_page($formarray);
+$selectedsectiontemplate = new \tool_wsformat\output\index_page($formarray, $selectedservice);
 $PAGE->requires->js_call_amd('tool_wsformat/eventListeners', 'init');
 
 echo $output->render($selectedsectiontemplate);

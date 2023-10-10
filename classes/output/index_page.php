@@ -36,6 +36,8 @@ class index_page implements \renderable, \templatable {
      * @var array
      */
     protected $selectedwebserviceindices = [];
+    
+    protected $serviceindex = null;
 
 
     /**
@@ -43,9 +45,9 @@ class index_page implements \renderable, \templatable {
      *
      * @param array $indicies
      */
-    public function __construct(array $indicies) {
-        $this->selectedwebserviceindices = $indicies;
-
+    public function __construct(array $webserviceindicies, $serviceindex) {
+        $this->selectedwebserviceindices = $webserviceindicies;
+        $this->serviceindex = $serviceindex;
     }
 
 
@@ -77,6 +79,7 @@ class index_page implements \renderable, \templatable {
 
         $data = (object) [
             'formdata'        => $webservicesexport,
+            'serviceindex'    => $this->serviceindex,  
             'items_selected'  => true,
             'selectedindexes' => json_encode($this->selectedwebserviceindices),
         ];
