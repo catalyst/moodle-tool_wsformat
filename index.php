@@ -82,9 +82,10 @@ function get_created_by_user_ws_token($externalserviceid) {
     $token = $DB->get_record_sql($sql, array($externalserviceid), MUST_EXIST);
     return $token;
 }
+
 $wow = get_created_by_user_ws_token(3);
 echo '<pre>';
-echo print_r($wow);
+echo print_r($wow->token);
 echo '</pre>';
 
 
@@ -93,7 +94,7 @@ $mform->display();
 
 $userid = $USER->id;
 $formarray = [];
-$selectedservice;
+$selectedservice = null;
 if ($data = $mform->get_data()) {
     // echo print_r($data);
     // Populate formarray with selected form web services.

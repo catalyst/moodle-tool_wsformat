@@ -49,7 +49,8 @@ class export_webservices {
      */
     public $webservices = [];
 
-    private $selectedservice = null;
+    private $servicetoken = null;
+
 
     /**
      * Constructor function - assign instance variables.
@@ -60,11 +61,25 @@ class export_webservices {
     public function __construct(string $host, array $selectedwebserviceindices, int $selectedservice = null) {
         $this->host        = $host;
         $this->webservices = $this->get_selected_webservice_objects($selectedwebserviceindices);
-        $this->selectedservice = $selectedservice;
-    }
-    
-    private function get_token() {
         
+        if (is_numeric($selectedservice) && $selectedservice !== null) {
+            $token = $this->get_service_token($selectedservice);
+            $this->servicetoken = $token->token;
+        }
+    }
+
+    private function get_service_token($externalserviceid) {
+        global $DB;
+        $sql = "SELECT
+                    t.token, s.name
+                FROM
+                    {external_tokens} t, {external_services} s
+                WHERE
+                    s.id=? AND s.id = t.externalserviceid";
+
+        // Only handling the use case where only one token exists for the service.
+        $token = $DB->get_record_sql($sql, array($externalserviceid), MUST_EXIST);
+        return $token;
     }
 
     /**
@@ -125,7 +140,6 @@ class export_webservices {
         }
 
         return $webservices;
-
     }
 
 
@@ -142,7 +156,6 @@ class export_webservices {
         $webservicesrecords = array_values($DB->get_records('external_functions', [], ''));
 
         return $webservicesrecords;
-
     }
 
 
@@ -208,7 +221,7 @@ class export_webservices {
                     $type = '{{STRING}}';
             }
 
-            return $paramstring.$type.$brakeline;
+            return $paramstring . $type . $brakeline;
         }
     }
 
@@ -238,7 +251,6 @@ class export_webservices {
         }
 
         return $formattedparamsarray;
-
     }
 
 
@@ -251,11 +263,12 @@ class export_webservices {
      */
     public function create_request_string(object $webservice, array $paramsarray): string {
         $baseurl = '{{BASE_URL}}';
-        $wstoken = '{{WS_TOKEN}}';
+        
+        $token = $this->servicetoken !== null ? $this->servicetoken : '{{WS_TOKEN}}';
 
         $functionname = $webservice->name;
 
-        $curlstring = $baseurl . '/webservice/rest/server.php?wstoken=' . $wstoken . '&wsfunction='
+        $curlstring = $baseurl . '/webservice/rest/server.php?wstoken=' . $token . '&wsfunction='
             . $functionname . '&moodlewsrestformat=json';
 
         // Add params into curlString.
@@ -274,6 +287,8 @@ class export_webservices {
      * @return object The created Postman collection object.
      */
     private function create_postman_collection(array $postmanitems): object {
+        $token = $this->servicetoken !== null ? $this->servicetoken : '{{WS_TOKEN}}';
+
         $collection = (object) [
             'info'     => [
                 'name'        => 'My Collection',
@@ -289,7 +304,7 @@ class export_webservices {
                 ],
                 [
                     'key'   => 'WSTOKEN',
-                    'value' => '{{WSTOKEN}}',
+                    'value' => $token,
                     'type'  => 'string',
                 ],
 
@@ -300,7 +315,7 @@ class export_webservices {
 
                     [
                         'key'   => 'value',
-                        'value' => '{{WSTOKEN}}',
+                        'value' => $token,
                         'type'  => 'string',
                     ],
                     [
@@ -320,7 +335,6 @@ class export_webservices {
         ];
 
         return $collection;
-
     }
 
 
@@ -386,8 +400,5 @@ class export_webservices {
         ];
 
         return $object;
-
     }
-
-
 }

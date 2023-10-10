@@ -46,7 +46,7 @@ class index_page implements \renderable, \templatable {
      *
      * @param array $indicies
      */
-    public function __construct(array $webserviceindicies, int $serviceindex, int $userid) {
+    public function __construct(array $webserviceindicies, int $serviceindex = null, int $userid) {
         $this->selectedwebserviceindices = $webserviceindicies;
         $this->serviceindex = $serviceindex;
         $this->userid = $userid;

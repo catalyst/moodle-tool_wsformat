@@ -58,7 +58,7 @@ Example context (json):
             </ul>
 
             <div class="export-container" role="group" aria-label="{{#str}} exportgroup, tool_wsformat {{/str}}">
-                <a id="export-button-id" href="download.php?export-type=curl&selected={{selectedindexes}}" data-selected="{{selectedindexes}}" class="btn btn-primary" style="width:fit-content">{{#str}} exportall, tool_wsformat {{/str}}</a>
+                <a id="export-button-id" href="download.php?export-type=curl&externalservice={{serviceindex}}&selected={{selectedindexes}}" data-selected="{{selectedindexes}}" class="btn btn-primary" style="width:fit-content">{{#str}} exportall, tool_wsformat {{/str}}</a>
                 <select id="export-type" name="export-type-select" class="form-control custom-select" {{#readonly}}disabled{{/readonly}}>
                     <option value="curl" selected="">{{#str}} curl, tool_wsformat {{/str}}</option>
                     <option value="postman">{{#str}} postman, tool_wsformat {{/str}}</option>
