@@ -46,7 +46,7 @@ class index_page implements \renderable, \templatable {
     public function __construct(array $indicies) {
         $this->selectedwebserviceindices = $indicies;
 
-    }//end __construct()
+    }
 
 
     /**
@@ -83,7 +83,7 @@ class index_page implements \renderable, \templatable {
 
         return $data;
 
-    }//end export_for_template()
+    }
 
 
-}//end class
+}

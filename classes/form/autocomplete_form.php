@@ -72,7 +72,7 @@ class autocomplete_form extends moodleform {
 
         $mform->addGroup($buttonarray, 'buttonarr', '', null, false);
 
-    }//end definition()
+    }
 
 
     /**
@@ -90,7 +90,7 @@ class autocomplete_form extends moodleform {
 
         return $webservicenames;
 
-    }//end get_webservice_name_array()
+    }
 
 
-}//end class
+}

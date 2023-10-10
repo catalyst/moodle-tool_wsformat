@@ -35,7 +35,7 @@ class autocomplete_form_tests extends \basic_testcase {
         $length           = count($webservicearray);
         $this->assertNotEquals(0, $length);
 
-    }//end test_length()
+    }
 
 
     /**
@@ -46,7 +46,7 @@ class autocomplete_form_tests extends \basic_testcase {
         $webservicearray  = $autocompleteform->get_webservice_name_array();
         $this->assertIsArray($webservicearray);
 
-    }//end test_array_returned()
+    }
 
 
     /**
@@ -58,7 +58,7 @@ class autocomplete_form_tests extends \basic_testcase {
         $this->assertEquals('core_auth_confirm_user', $webservicearray[0]);
         $this->assertEquals('tiny_equation_filter', $webservicearray[694]);
 
-    }//end test_correct_order()
+    }
 
 
     /**
@@ -71,7 +71,7 @@ class autocomplete_form_tests extends \basic_testcase {
             $this->assertIsString($webservice);
         }
 
-    }//end test_array_strings()
+    }
 
 
-}//end class
+}
