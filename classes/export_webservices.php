@@ -60,8 +60,7 @@ class export_webservices {
         $this->host        = $host;
         $this->webservices = $this->get_selected_webservice_objects($selectedwebserviceindices);
 
-    } 
-
+    }
 
     /**
      * Exports data as cURL commands in a text file.
