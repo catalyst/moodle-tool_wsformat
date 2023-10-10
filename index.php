@@ -57,22 +57,35 @@ $services = $DB->get_records('external_services', [], '');
 //     echo $service->shortname;
 // }
 
-echo $USER->id;
-// echo print_r($usercontext);
-function get_created_by_user_ws_token($userid, $tokenid) {
+// echo '<pre>';
+// echo print_r($services);
+// echo '</pre>';
+
+
+// echo '<pre>';
+// echo print_r($tokens);
+// echo '</pre>';
+
+// foreach ($tokens as $key => $token) {
+//     echo print_r($token);
+// }
+
+function get_created_by_user_ws_token($externalserviceid) {
     global $DB;
     $sql = "SELECT
-                    t.id, t.token, u.firstname, u.lastname, s.name
+                    t.token, s.name
                 FROM
-                    {external_tokens} t, {user} u, {external_services} s
+                    {external_tokens} t, {external_services} s
                 WHERE
-                    t.creatorid=? AND t.id=? AND t.tokentype = "
-            . EXTERNAL_TOKEN_PERMANENT
-            . " AND s.id = t.externalserviceid AND t.userid = u.id";
+                    s.id=? AND s.id = t.externalserviceid";
     //must be the token creator
-    $token = $DB->get_record_sql($sql, array($userid, $tokenid), MUST_EXIST);
+    $token = $DB->get_record_sql($sql, array($externalserviceid), MUST_EXIST);
     return $token;
 }
+$wow = get_created_by_user_ws_token(3);
+echo '<pre>';
+echo print_r($wow);
+echo '</pre>';
 
 
 $mform = new autocomplete_form();
@@ -88,12 +101,9 @@ if ($data = $mform->get_data()) {
         $formarray[] = (string) $value;
     }
     $selectedservice = $data->selected_external_service;
-    if (is_numeric($data->selected_external_service)) {
-        echo 'shit';
-    }
 }
 
-$selectedsectiontemplate = new \tool_wsformat\output\index_page($formarray, $selectedservice);
+$selectedsectiontemplate = new \tool_wsformat\output\index_page($formarray, $selectedservice, $userid);
 $PAGE->requires->js_call_amd('tool_wsformat/eventListeners', 'init');
 
 echo $output->render($selectedsectiontemplate);
