@@ -46,6 +46,7 @@ class autocomplete_form extends moodleform {
         global $DB;
 
         $webservicenames = $this->get_webservice_name_array();
+        $servicenames = $this->get_external_services();
 
         $mform = $this->_form;
 
@@ -56,9 +57,17 @@ class autocomplete_form extends moodleform {
             'placeholder'       => get_string('searchwebservices', 'tool_wsformat'),
         ];
 
+        $options2 = [
+            'minchars'          => 2,
+            'noselectionstring' => get_string('nowebservicesselected', 'tool_wsformat'),
+            'placeholder'       => get_string('searchwebservices', 'tool_wsformat'),
+        ];
+
         // Documentation: https://docs.moodle.org/dev/lib/formslib.php_Form_Definition#autocomplete.
-        $mform->addElement('autocomplete', 'webservice_form', get_string('webservices', 'tool_wsformat'), $webservicenames,
+        $mform->addElement('autocomplete', 'selected_webservices', get_string('webservices', 'tool_wsformat'), $webservicenames,
          $options);
+        $mform->addElement('select', 'selected_external_service', 'Choose service token', $servicenames,
+         $options2);
 
         $buttonarray   = [];
         $buttonarray[] = $mform->createElement('submit', 'submit', get_string('updateselection', 'tool_wsformat'));
@@ -92,5 +101,18 @@ class autocomplete_form extends moodleform {
 
     }
 
+    public function get_external_services(): array {
+        global $DB;
+        $serviceobject = $DB->get_records('external_services', [], '');
+
+        $servicenames = [];
+
+        foreach ($serviceobject as $key => $service) {
+            $servicenames[] = $service->shortname;
+        }
+
+        return $servicenames;
+
+    }
 
 }

@@ -44,22 +44,34 @@ $plugindescriptiontemplate = new \tool_wsformat\output\plugin_description();
 echo $output->render($plugindescriptiontemplate);
 
 use tool_wsformat\form\autocomplete_form;
+
 require_once($CFG->dirroot . '/webservice/lib.php');
 
 $webservicemanager = new webservice();
 $tokens = $DB->get_records('external_tokens', [], '');
 $services = $DB->get_records('external_services', [], '');
-echo print_r($tokens[2]->token);
+
+// echo print_r($services);
+
+// foreach ($services as $key => $service) {
+//     echo $service->shortname;
+// }
+
+
+
+
 $mform = new autocomplete_form();
 $mform->display();
 
 $formarray = [];
-
+$selectedservice;
 if ($data = $mform->get_data()) {
+    // echo print_r($data);
     // Populate formarray with selected form web services.
-    foreach ($data->webservice_form as $key => $value) {
+    foreach ($data->selected_webservices as $key => $value) {
         $formarray[] = (string) $value;
     }
+    $selectedservice = $data->selected_external_service;
 }
 
 $selectedsectiontemplate = new \tool_wsformat\output\index_page($formarray);
@@ -82,7 +94,6 @@ function print_webservices() {
     }
 
     return $functiondescs;
-
 }
 
 
