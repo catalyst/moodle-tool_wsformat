@@ -13,10 +13,14 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
+namespace tool_wsformat;
+use tool_wsformat\form\autocomplete_form;
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
+
+
+
 
 /**
  * Implement autocomplete moodle form.
@@ -33,7 +37,7 @@ class autocomplete_form_test extends \basic_testcase {
      * Test that the length is correct.
      */
     public function test_length() {
-        $autocompleteform = new \tool_wsformat\form\autocomplete_form();
+        $autocompleteform = new autocomplete_form();
         $webservicearray  = $autocompleteform->get_webservice_name_array();
         $length           = count($webservicearray);
         $this->assertNotEquals(0, $length);
@@ -45,7 +49,7 @@ class autocomplete_form_test extends \basic_testcase {
      * Test that an array is returned from the function.
      */
     public function test_array_returned() {
-        $autocompleteform = new \tool_wsformat\form\autocomplete_form();
+        $autocompleteform = new autocomplete_form();
         $webservicearray  = $autocompleteform->get_webservice_name_array();
         $this->assertIsArray($webservicearray);
 
@@ -56,7 +60,7 @@ class autocomplete_form_test extends \basic_testcase {
      * Test is array is in the correct order.
      */
     public function test_correct_order() {
-        $autocompleteform = new \tool_wsformat\form\autocomplete_form();
+        $autocompleteform = new autocomplete_form();
         $webservicearray  = $autocompleteform->get_webservice_name_array();
         $this->assertEquals('core_auth_confirm_user', $webservicearray[0]);
         $this->assertEquals('tiny_equation_filter', $webservicearray[694]);
@@ -68,7 +72,7 @@ class autocomplete_form_test extends \basic_testcase {
      * Test whether array values are strings as expected by consumer.
      */
     public function test_array_strings() {
-        $autocompleteform = new \tool_wsformat\form\autocomplete_form();
+        $autocompleteform = new autocomplete_form();
         $webservicearray  = $autocompleteform->get_webservice_name_array();
         foreach ($webservicearray as $webservice) {
             $this->assertIsString($webservice);
