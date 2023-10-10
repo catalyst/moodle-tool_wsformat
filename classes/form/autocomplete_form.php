@@ -101,6 +101,9 @@ class autocomplete_form extends moodleform {
 
     }
 
+    /**
+     * Get external service names from database.
+     */
     public function get_external_services(): array {
         global $DB;
         $serviceobject = $DB->get_records('external_services', [], '');

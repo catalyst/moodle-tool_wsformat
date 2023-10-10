@@ -52,6 +52,12 @@ class export_webservices {
      */
     public $webservices = [];
 
+    /**
+     * The service token of the selected external service.
+     * Is null upon class instantiation.
+     *
+     * @var string
+     */
     private $servicetoken = null;
 
 
@@ -90,7 +96,13 @@ class export_webservices {
         }
     }
 
-    private function get_service_token($externalserviceid): object {
+    /**
+     * Retrieves the service token for a given external service
+     *
+     * @param  string $externalserviceid The id of the external service to get a token for.
+     * @return object An array of webservice objects.
+     */
+    private function get_service_token(string $externalserviceid): object {
         global $DB;
 
         $sql = "SELECT
