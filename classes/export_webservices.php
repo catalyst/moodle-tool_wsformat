@@ -59,7 +59,6 @@ class export_webservices {
     public function __construct(string $host, array $selectedwebserviceindices) {
         $this->host        = $host;
         $this->webservices = $this->get_selected_webservice_objects($selectedwebserviceindices);
-
     }
 
     /**
@@ -74,13 +73,12 @@ class export_webservices {
         foreach ($this->webservices as $webservice) {
             $paramsarray = $this->get_formatted_param_array($webservice);
 
-            $curlstrings[] = 'curl '.$this->create_request_string($webservice, $paramsarray);
+            $curlstrings[] = 'curl ' . $this->create_request_string($webservice, $paramsarray);
         }
 
         foreach ($curlstrings as $curlstring) {
-            echo $curlstring."\n"."\n";
+            echo $curlstring . "\n" . "\n";
         }
-
     }
 
 
@@ -102,7 +100,6 @@ class export_webservices {
         $postmancollection = $this->create_postman_collection($postmanitems);
         $beautifiedjson    = json_encode($postmancollection, JSON_PRETTY_PRINT);
         echo $beautifiedjson;
-
     }
 
 
@@ -158,7 +155,7 @@ class export_webservices {
 
         // Description object is a list.
         if ($paramdescription instanceof external_multiple_structure) {
-            $paramstring = $paramstring.'[0]';
+            $paramstring = $paramstring . '[0]';
             $return      = $this->rest_param_description_html($paramdescription->content, $paramstring);
             return $return;
         } else if ($paramdescription instanceof external_single_structure) {
@@ -166,7 +163,7 @@ class export_webservices {
             $singlestructuredesc = '';
             $initialparamstring  = $paramstring;
             foreach ($paramdescription->keys as $attributname => $attribut) {
-                $paramstring          = $initialparamstring.'['.$attributname.']';
+                $paramstring          = $initialparamstring . '[' . $attributname . ']';
                 $singlestructuredesc .= $this->rest_param_description_html(
                     $paramdescription->keys[$attributname],
                     $paramstring
@@ -176,30 +173,30 @@ class export_webservices {
             return $singlestructuredesc;
         } else {
             // Description object is a primary type (string, integer).
-            $paramstring = $paramstring.'=';
+            $paramstring = $paramstring . '=';
             $type        = '';
 
             switch ($paramdescription->type) {
                     // 0 or 1 only for now
                 case PARAM_INT:
                     $type = '{{INT}}';
-                break;
+                    break;
 
                 case PARAM_BOOL:
                     $type = '{{BOOL}}';
-                break;
+                    break;
 
                 case PARAM_TEXT:
                     $type = '{{TEXT}}';
-                break;
+                    break;
 
                 case PARAM_ALPHA:
                     $type = '{{ALPHA}}';
-                break;
+                    break;
 
                 case PARAM_FLOAT;
                     $type = '{{DOUBLE}}';
-                break;
+                    break;
 
                 default:
                     $type = '{{STRING}}';
@@ -207,7 +204,6 @@ class export_webservices {
 
             return $paramstring.$type.$brakeline;
         }
-
     }
 
 
@@ -253,16 +249,15 @@ class export_webservices {
 
         $functionname = $webservice->name;
 
-        $curlstring = $baseurl.'/webservice/rest/server.php?wstoken='.$wstoken.'&wsfunction='
-        .$functionname.'&moodlewsrestformat=json';
+        $curlstring = $baseurl . '/webservice/rest/server.php?wstoken=' . $wstoken . '&wsfunction='
+            . $functionname . '&moodlewsrestformat=json';
 
         // Add params into curlString.
         foreach ($paramsarray as $params) {
-            $curlstring = $curlstring.'&'.$params;
+            $curlstring = $curlstring . '&' . $params;
         }
 
         return $curlstring;
-
     }
 
 
@@ -334,21 +329,24 @@ class export_webservices {
         $paramstring = implode(',', $paramsarray);
         $parampairs  = explode(',', $paramstring);
         $keyvalpairs = [];
-        foreach ($parampairs as $parampair) {
-            // Split each pair by = to separate key and value.
-            $paramparts = explode('=', $parampair);
 
-            // Ensure we have both key and value before assigning.
-            if (count($paramparts) === 2) {
-                $keyvaluepairs[$paramparts[0]] = $paramparts[1];
+        if (!empty($paramstring)) {
+            foreach ($parampairs as $parampair) {
+                // Split each pair by = to separate key and value.
+                $paramparts = explode('=', $parampair);
+
+                // Ensure we have both key and value before assigning.
+                if (count($paramparts) === 2) {
+                    $keyvaluepairs[$paramparts[0]] = $paramparts[1];
+                }
+
+                $keyvalpair = [
+                    'key'   => $paramparts[0],
+                    'value' => $paramparts[1],
+                ];
+
+                $keyvalpairs[] = $keyvalpair;
             }
-
-            $keyvalpair = [
-                'key'   => $paramparts[0],
-                'value' => $paramparts[1],
-            ];
-
-            $keyvalpairs[] = $keyvalpair;
         }
 
         $object = (object) [
@@ -376,7 +374,7 @@ class export_webservices {
                         ...$keyvalpairs,
                     ],
                 ],
-                'description' => $webservice->name,
+                'description' => $webservice->description,
             ],
             'response' => [],
         ];
