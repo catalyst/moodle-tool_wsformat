@@ -17,10 +17,10 @@
 /**
  * Setup inital plugin page
  *
- * @package          tool_wsformat
- * @copyright        2023 Djarran Cotleanu
- * @author           Djarran Cotleanu
- * @license          http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   tool_wsformat
+ * @copyright 2023 Djarran Cotleanu, Zach Pregl
+ * @author    Djarran Cotleanu, Zach Pregl
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 use core_external\external_api;
@@ -58,27 +58,28 @@ if ($data = $mform->get_data()) {
 }
 
 $selectedsectiontemplate = new \tool_wsformat\output\index_page($formarray);
-$PAGE->requires->js_call_amd('tool_wsformat/test', 'init');
+$PAGE->requires->js_call_amd('tool_wsformat/eventListeners', 'init');
 
 echo $output->render($selectedsectiontemplate);
+
 
 /**
  * Function prints webservice function info including parameters and response objects. Used to aid development only.
  */
 function print_webservices() {
-
     global $DB;
-    $webservicesobject = $DB->get_records('external_functions', array(), 'name');
+    $webservicesobject = $DB->get_records('external_functions', [], 'name');
 
-    $functiondescs = array();
+    $functiondescs = [];
     foreach ($webservicesobject as $key => $webservice) {
-
         // Documentation: sites/moodle/lib/external/classes/external_api.php.
         $functiondescs[] = external_api::external_function_info($webservice);
     }
 
     return $functiondescs;
+
 }
+
 
 print_webservices();
 

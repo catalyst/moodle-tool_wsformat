@@ -17,10 +17,10 @@
 /**
  * Setup required boilerplate to render plugin_description template.
  *
- * @package          tool_wsformat
- * @copyright        2023 Djarran Cotleanu
- * @author           Djarran Cotleanu
- * @license          http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   tool_wsformat
+ * @copyright 2023 Djarran Cotleanu, Zach Pregl
+ * @author    Djarran Cotleanu, Zach Pregl
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace tool_wsformat\output;
@@ -30,18 +30,24 @@ namespace tool_wsformat\output;
  */
 class plugin_description implements \renderable, \templatable {
 
+
     /**
      * Constructor function.
      */
     public function __construct() {
+
     }
+
 
     /**
      * Exports the data for the index_page.mustache template
      *
-     * @param \renderer_base $output
+     * @param  \renderer_base $output
      * @return void
      */
     public function export_for_template(\renderer_base $output) {
+
     }
+
+
 }

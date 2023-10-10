@@ -15,23 +15,37 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Exports either a json or txt file with exported webservices
+ * Language strings
  *
- * @package          tool_wsformat
- * @copyright        2023 Djarran Cotleanu
- * @author           Djarran Cotleanu
- * @license          http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   tool_wsformat
+ * @copyright 2023 Djarran Cotleanu, Zach Pregl
+ * @author    Djarran Cotleanu, Zach Pregl
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use tool_wsformat\export_webservices;
+
 require('../../../config.php');
+$hostaddress = $CFG->wwwroot;
+
 require_login();
 
-$serializedjson = required_param('data-json', PARAM_TEXT);
-$unserializedjson = json_decode($serializedjson, true);
+define('EXPORT_CURL', 'curl');
+define('EXPORT_POSTMAN', 'postman');
 
-$prettyprintsingle = json_encode($unserializedjson[0], JSON_PRETTY_PRINT);
-$prettyprintall = json_encode($unserializedjson, JSON_PRETTY_PRINT);
+$selected   = required_param('selected', PARAM_TEXT);
+$exporttype = required_param('export-type', PARAM_TEXT);
 
-header('Content-Disposition: attachment; filename=file.json');
-header('Content-Type: application/json');
-echo $prettyprintall;
+$selectedwebserviceindices = json_decode($selected);
+
+$export = new export_webservices($hostaddress, $selectedwebserviceindices);
+
+switch ($exporttype) {
+    case EXPORT_CURL:
+        $export->export_as_curl();
+    break;
+
+    case EXPORT_POSTMAN:
+        $export->export_as_postman();
+    break;
+}

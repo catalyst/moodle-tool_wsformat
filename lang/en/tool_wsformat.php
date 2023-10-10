@@ -17,12 +17,28 @@
 /**
  * Language strings
  *
- * @package          tool_wsformat
- * @copyright        2023 Djarran Cotleanu
- * @author           Djarran Cotleanu
- * @license          http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   tool_wsformat
+ * @copyright 2023 Djarran Cotleanu, Zach Pregl
+ * @author    Djarran Cotleanu, Zach Pregl
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['pluginname'] = 'Format Webservices';
-$string['plugindescription'] = 'This plugin displays all web services available within Moodle and the respective formatted requests to help developers better understand the communication between their Moodle site and external applications or services';
-
+$string['pluginname']              = 'Format Webservices';
+$string['plugindescription']       = 'This plugin displays all web services available within Moodle and the respective formatted requests to help developers better understand the communication between their Moodle site and external applications or services';
+$string['select']                  = 'Selected Webservices';
+$string['curldefault']             = 'Default: cURL';
+$string['exportall']               = 'Export All';
+$string['curl']                    = 'cURL';
+$string['postman']                 = 'Postman';
+$string['selectwebservicedetails'] = 'Select a web service to view details';
+$string['copybtn']                 = 'Copy';
+$string['requestt']                = 'Request';
+$string['clearbtn']                = 'Clear';
+$string['updateselection']         = 'Update Selection';
+$string['webservices']             = 'Webservices:';
+$string['nowebservicesselected']   = 'No webservices selected';
+$string['searchwebservices']       = 'Search webservices...';
+$string['pleaseselectwebservice']  = 'Please select a webservice';
+$string['pagecontainer']           = 'Page container';
+$string['exportgroup']             = 'Export group';
+$string['header']                  = 'Header Section';
