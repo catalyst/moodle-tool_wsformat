@@ -33,9 +33,9 @@ require_login();
 define('EXPORT_CURL', 'curl');
 define('EXPORT_POSTMAN', 'postman');
 
-$selected   = required_param('selected', PARAM_TEXT);
-$selectedservice   = required_param('externalservice', PARAM_INT);
-$exporttype = required_param('export-type', PARAM_TEXT);
+$selected        = required_param('selected', PARAM_TEXT);
+$selectedservice = required_param('externalservice', PARAM_INT);
+$exporttype      = required_param('export-type', PARAM_TEXT);
 
 $selectedwebserviceindices = json_decode($selected);
 

@@ -54,7 +54,7 @@ class index_page implements \renderable, \templatable {
     /**
      * Constructor function - assign instance variable.
      *
-     * @param array $indicies Indicies of the selected web services to export.
+     * @param array $webserviceindicies Indicies of the selected web services to export.
      * @param int $serviceindex Index of the selected external service.
      * @param int $userid ID of the logged in user.
      */
