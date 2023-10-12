@@ -23,7 +23,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace tool_wsformat\form;
+namespace tool_wsformat\classes\form;
 
 
 use moodleform;
