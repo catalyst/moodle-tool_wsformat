@@ -64,7 +64,6 @@ class index_page implements \renderable, \templatable {
         $this->userid = $userid;
     }
 
-
     /**
      * Exports the data for the index_page.mustache template
      *
@@ -99,8 +98,5 @@ class index_page implements \renderable, \templatable {
         ];
 
         return $data;
-
     }
-
-
 }

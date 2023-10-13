@@ -19,9 +19,6 @@ defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
 
-
-
-
 /**
  * Implement autocomplete moodle form.
  *
@@ -31,7 +28,6 @@ global $CFG;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class autocomplete_form_test extends \basic_testcase {
-
 
     /**
      * Test that the length is correct.
@@ -44,7 +40,6 @@ class autocomplete_form_test extends \basic_testcase {
 
     }
 
-
     /**
      * Test that an array is returned from the function.
      */
@@ -52,9 +47,7 @@ class autocomplete_form_test extends \basic_testcase {
         $autocompleteform = new autocomplete_form();
         $webservicearray  = $autocompleteform->get_webservice_name_array();
         $this->assertIsArray($webservicearray);
-
     }
-
 
     /**
      * Test is array is in the correct order.
@@ -64,9 +57,7 @@ class autocomplete_form_test extends \basic_testcase {
         $webservicearray  = $autocompleteform->get_webservice_name_array();
         $this->assertEquals('core_auth_confirm_user', $webservicearray[0]);
         $this->assertEquals('tiny_equation_filter', $webservicearray[694]);
-
     }
-
 
     /**
      * Test whether array values are strings as expected by consumer.
@@ -77,8 +68,5 @@ class autocomplete_form_test extends \basic_testcase {
         foreach ($webservicearray as $webservice) {
             $this->assertIsString($webservice);
         }
-
     }
-
-
 }

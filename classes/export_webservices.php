@@ -62,7 +62,6 @@ class export_webservices {
      */
     private $servicetoken = null;
 
-
     /**
      * Constructor function - assign instance variables.
      *
@@ -93,7 +92,6 @@ class export_webservices {
                     );
                 }
             }
-
             $token = $this->get_service_token($externalserviceid);
             $this->servicetoken = $token->token;
         }
@@ -140,7 +138,6 @@ class export_webservices {
         }
     }
 
-
     /**
      * Exports data as Postman Collection in a json file.
      * Sets header to initiate download with filename and extension.
@@ -161,7 +158,6 @@ class export_webservices {
         echo $beautifiedjson;
     }
 
-
     /**
      * Retrieves an array of webservice objects based on provided indices.
      *
@@ -176,7 +172,6 @@ class export_webservices {
             $webservice    = $webservicesrecords[$index];
             $webservices[] = external_api::external_function_info($webservice);
         }
-
         return $webservices;
     }
 
@@ -226,7 +221,6 @@ class export_webservices {
                     $paramstring
                 );
             }
-
             return $singlestructuredesc;
         } else {
             // Description object is a primary type (string, integer).
@@ -258,11 +252,9 @@ class export_webservices {
                 default:
                     $type = '{{STRING}}';
             }
-
             return $paramstring . $type . $brakeline;
         }
     }
-
 
     /**
      * Generates an array of formatted parameters for a given webservice.
@@ -287,10 +279,8 @@ class export_webservices {
                 array_push($formattedparamsarray, $formatted[$i]);
             }
         }
-
         return $formattedparamsarray;
     }
-
 
     /**
      * Create a request string for cURL.
@@ -313,10 +303,8 @@ class export_webservices {
         foreach ($paramsarray as $params) {
             $curlstring = $curlstring . '&' . $params;
         }
-
         return $curlstring;
     }
-
 
     /**
      * Creates a Postman collection object for given Postman items.
@@ -366,15 +354,11 @@ class export_webservices {
                         'value' => 'query',
                         'type'  => 'string',
                     ],
-
                 ],
             ],
-
         ];
-
         return $collection;
     }
-
 
     /**
      * Creates a Postman request item object for a given webservice and parameter array.
@@ -402,7 +386,6 @@ class export_webservices {
                     'key'   => $paramparts[0],
                     'value' => $paramparts[1],
                 ];
-
                 $keyvalpairs[] = $keyvalpair;
             }
         }
@@ -436,7 +419,6 @@ class export_webservices {
             ],
             'response' => [],
         ];
-
         return $object;
     }
 }

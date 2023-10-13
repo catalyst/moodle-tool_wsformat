@@ -12,8 +12,3 @@ const exportSelectElement = document.getElementById('export-type');
 requestCopyButton.addEventListener('click', copyRequestClickHandler);
 selectedWebservicesListElements.forEach(webserviceItemClickHandler);
 exportSelectElement.addEventListener('change', exportSelectChangeHandler);
-
-
-
-
-

@@ -25,7 +25,6 @@
 
 namespace tool_wsformat\form;
 
-
 use moodleform;
 
 /**
@@ -38,11 +37,10 @@ use moodleform;
  */
 class autocomplete_form extends moodleform {
 
-
     /**
      * Define an autocomplete element for browsing webservices and a submit button.
      */
-    public function definition(): void {
+    public function definition() {
         global $DB;
 
         $webservicenames = $this->get_webservice_name_array();
@@ -80,9 +78,7 @@ class autocomplete_form extends moodleform {
         $buttonarray[] = $mform->createElement('html', $clearbutton);
 
         $mform->addGroup($buttonarray, 'buttonarr', '', null, false);
-
     }
-
 
     /**
      * Get web service names from database.
@@ -96,9 +92,7 @@ class autocomplete_form extends moodleform {
         foreach ($webservicesobject as $key => $webservice) {
             $webservicenames[] = $webservice->name;
         }
-
         return $webservicenames;
-
     }
 
     /**
@@ -115,7 +109,5 @@ class autocomplete_form extends moodleform {
         }
 
         return $servicenames;
-
     }
-
 }
