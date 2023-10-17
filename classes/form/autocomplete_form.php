@@ -85,7 +85,7 @@ class autocomplete_form extends moodleform {
      */
     public function get_webservice_name_array(): array {
         global $DB;
-        $webservicesobject = $DB->get_records('external_functions', [], '');
+        $webservicesobject = $DB->get_records('external_functions');
 
         $webservicenames = [];
 
@@ -100,7 +100,7 @@ class autocomplete_form extends moodleform {
      */
     public function get_external_services(): array {
         global $DB;
-        $serviceobject = $DB->get_records('external_services', [], '');
+        $serviceobject = $DB->get_records('external_services');
 
         $servicenames = [];
 
