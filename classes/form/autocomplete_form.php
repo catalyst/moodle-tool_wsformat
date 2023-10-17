@@ -48,36 +48,33 @@ class autocomplete_form extends moodleform {
 
         $mform = $this->_form;
 
-        $options = [
+        $autocompleteoptions = [
             'minchars'          => 2,
             'noselectionstring' => get_string('nowebservicesselected', 'tool_wsformat'),
             'multiple'          => true,
             'placeholder'       => get_string('searchwebservices', 'tool_wsformat'),
         ];
 
-        $options2 = [
-            'minchars'          => 2,
-            'noselectionstring' => get_string('nowebservicesselected', 'tool_wsformat'),
-            'placeholder'       => get_string('searchwebservices', 'tool_wsformat'),
-        ];
 
         // Documentation: https://docs.moodle.org/dev/lib/formslib.php_Form_Definition#autocomplete.
-        $mform->addElement('autocomplete', 'selected_webservices', get_string('webservices', 'tool_wsformat'), $webservicenames,
-         $options);
-        $mform->addElement('select', 'selected_external_service', 'Choose service token', $servicenames,
-         $options2);
+        $mform->addElement(
+            'autocomplete',
+            'selected_webservices',
+            get_string('webservices', 'tool_wsformat'),
+            $webservicenames,
+            $autocompleteoptions
+        );
 
-        $buttonarray   = [];
-        $buttonarray[] = $mform->createElement('submit', 'submit', get_string('updateselection', 'tool_wsformat'));
+        $mform->addElement(
+            'select',
+            'selected_external_service',
+            'Choose service token',
+            $servicenames,
+        );
 
-        $clearbutton   = '<button type="button" class="btn btn-secondary" '
-        .'onclick="window.location.href=\'index.php\'">'
-        .get_string('clearbtn', 'tool_wsformat')
-        .'</button>';
-
-        $buttonarray[] = $mform->createElement('html', $clearbutton);
-
-        $mform->addGroup($buttonarray, 'buttonarr', '', null, false);
+        $submitbutton = $mform->createElement('submit', 'submit', get_string('updateselection', 'tool_wsformat'));
+        $clearbutton = $mform->createElement('button', 'ws_clear_button', get_string('clearbtn', 'tool_wsformat'));
+        $mform->addGroup([$submitbutton, $clearbutton], 'buttongroup', '', null, false);
     }
 
     /**
