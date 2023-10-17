@@ -13,6 +13,13 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * This module defines the event handlers to be added to the listeners in eventListners.
+ *
+ * @module     tool_wsformat/eventHandlers
+ * @copyright  2023 Djarran Cotleanu, Zach Pregl
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 import * as Toast from 'core/toast';
 
 // Select needed elements for event handlers.
@@ -23,6 +30,12 @@ const detailDescriptionElement = document.getElementById('ws-description');
 const detailRequestElement = document.getElementById('ws-curl');
 const exportButtonElement = document.getElementById('export-button-id');
 
+/**
+ * The select change handler. Changed the type parameter of the export button's href.
+ * Valid export type relates to the different formats that can be exported to.
+ * 
+ * @param {HTMLSelectEvent} event Properties and methods for select element event
+ */
 export const exportSelectChangeHandler = (event) => {
     const url = exportButtonElement.href;
     let urlObj = new URL(url);
@@ -37,6 +50,16 @@ export const exportSelectChangeHandler = (event) => {
     exportButtonElement.href = urlObj.href;
 };
 
+/**
+ * Adds click handlers to each webservice list item.
+ *
+ * Removes the "Please select webservice" placeholder element.
+ *
+ * Assign values to placeholder title, description, and curl string elements
+ * to the respective webservice selected.
+ * 
+ * @param {Element} webservice 
+ */
 export const webserviceItemClickHandler = (webservice) => {
     webservice.addEventListener('click', (e) => {
         e.preventDefault();
@@ -68,6 +91,11 @@ export const webserviceItemClickHandler = (webservice) => {
     });
 };
 
+/**
+ * Copies the cURL string of the selected webservice to the user's clipboard.
+ * 
+ * Adds toast element upon successful copy.
+ */
 export const copyRequestClickHandler = () => {
     const requestString = document.getElementById('ws-curl').innerText;
 

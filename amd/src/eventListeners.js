@@ -13,6 +13,13 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * This module defines the event listeners to be loaded on the index page.
+ *
+ * @module     tool_wsformat/eventListeners
+ * @copyright  2023 Djarran Cotleanu, Zach Pregl
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 import { copyRequestClickHandler, exportSelectChangeHandler, webserviceItemClickHandler } from './eventHandlers';
 
 export const init = () => {
@@ -27,8 +34,3 @@ const exportSelectElement = document.getElementById('export-type');
 requestCopyButton.addEventListener('click', copyRequestClickHandler);
 selectedWebservicesListElements.forEach(webserviceItemClickHandler);
 exportSelectElement.addEventListener('change', exportSelectChangeHandler);
-
-
-
-
-
