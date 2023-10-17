@@ -13,7 +13,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-namespace tool_wsformat;
+namespace tool_wsformat\test;
 use tool_wsformat\form\autocomplete_form;
 defined('MOODLE_INTERNAL') || die();
 
