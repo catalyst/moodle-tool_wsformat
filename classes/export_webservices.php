@@ -69,10 +69,11 @@ class export_webservices {
      * @param array  $selectedwebserviceindices
      * @param int  $selectedserviceindex
      */
-    public function __construct(string $host, array $selectedwebserviceindices, int $selectedserviceindex = null) {
+    public function __construct(array $selectedwebserviceindices, int $selectedserviceindex = null) {
         global $DB;
+        global $CFG;
 
-        $this->host        = $host;
+        $this->host        = $CFG->wwwroot;
         $this->webservices = $this->get_selected_webservice_objects($selectedwebserviceindices);
 
         // Check if selectedserviceindex exists
@@ -337,7 +338,6 @@ class export_webservices {
                     'value' => $token,
                     'type'  => 'string',
                 ],
-
             ],
             'auth'     => [
                 'type'   => 'apikey',

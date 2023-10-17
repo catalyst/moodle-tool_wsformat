@@ -71,17 +71,22 @@ class index_page implements \renderable, \templatable {
      * @return \stdClass
      */
     public function export_for_template(\renderer_base $output): object {
+        global $CFG;
+
         // Return empty object if no selected webservices.
         if (empty($this->selectedwebserviceindices)) {
             return (object) [];
         }
 
-        $exportwebservices = new \tool_wsformat\export_webservices('http', $this->selectedwebserviceindices);
+        $hostaddress = $CFG->wwwroot;
+        echo $hostaddress;
+
+        $exportwebservices = new \tool_wsformat\export_webservices($this->selectedwebserviceindices);
 
         $webservicesexport = [];
         foreach ($exportwebservices->webservices as $webservice) {
             $paramsarray = $exportwebservices->get_formatted_param_array($webservice);
-            $curlstring  = 'curl '.$exportwebservices->create_request_string($webservice, $paramsarray);
+            $curlstring  = 'curl ' . $exportwebservices->create_request_string($webservice, $paramsarray);
 
             $webservicesexport[] = (object) [
                 'name'        => $webservice->name,
