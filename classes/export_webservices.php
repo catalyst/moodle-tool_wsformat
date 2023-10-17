@@ -75,13 +75,16 @@ class export_webservices {
         $this->host        = $host;
         $this->webservices = $this->get_selected_webservice_objects($selectedwebserviceindices);
 
+        // Check if selectedserviceindex exists
         if (is_numeric($selectedserviceindex) && $selectedserviceindex !== null) {
             $externalservices = array_values($DB->get_records('external_services', [], ''));
             $externalserviceid = $externalservices[$selectedserviceindex]->id;
 
             $webservicemanager = new \webservice();
 
+            // Check if external service has the correct permissions to run webservice/function.
             foreach ($this->webservices as $webservice) {
+                // If it doesn't have the correct permissions, add function to the service
                 if (!$webservicemanager->service_function_exists(
                     $webservice->name,
                     $externalserviceid
@@ -92,6 +95,7 @@ class export_webservices {
                     );
                 }
             }
+
             $token = $this->get_service_token($externalserviceid);
             $this->servicetoken = $token->token;
         }
@@ -134,7 +138,7 @@ class export_webservices {
         }
 
         foreach ($curlstrings as $curlstring) {
-            echo $curlstring . "\n" . "\n";
+            echo $curlstring . PHP_EOL . PHP_EOL;
         }
     }
 
