@@ -29,7 +29,7 @@ require('../../../config.php');
 
 require_login();
 require_capability('moodle/site:config', context_system::instance());
-
+global $DB;
 
 $PAGE->set_context(context_system::instance());
 $PAGE->set_url('/admin/tool/wsformat/index.php');
@@ -45,23 +45,27 @@ echo $output->render($plugindescriptiontemplate);
 
 use tool_wsformat\form\autocomplete_form;
 
+require_once($CFG->dirroot . '/webservice/lib.php');
+
 $mform = new autocomplete_form();
 $mform->display();
 
+$userid = $USER->id;
 $formarray = [];
-
+$selectedservice = null;
 if ($data = $mform->get_data()) {
     // Populate formarray with selected form web services.
-    foreach ($data->webservice_form as $key => $value) {
+    foreach ($data->selected_webservices as $key => $value) {
         $formarray[] = (string) $value;
     }
+    $selectedservice = $data->selected_external_service;
+    echo $selectedservice;
 }
 
-$selectedsectiontemplate = new \tool_wsformat\output\index_page($formarray);
+$selectedsectiontemplate = new \tool_wsformat\output\index_page($formarray, $selectedservice, $userid);
 $PAGE->requires->js_call_amd('tool_wsformat/eventListeners', 'init');
 
 echo $output->render($selectedsectiontemplate);
-
 
 /**
  * Function prints webservice function info including parameters and response objects. Used to aid development only.
@@ -77,9 +81,7 @@ function print_webservices() {
     }
 
     return $functiondescs;
-
 }
-
 
 print_webservices();
 

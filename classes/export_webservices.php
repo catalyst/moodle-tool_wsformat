@@ -25,10 +25,15 @@
 
 namespace tool_wsformat;
 
+defined('MOODLE_INTERNAL') || die();
+
 use core_external\external_api;
+
+require_once($CFG->dirroot . '/webservice/lib.php');
 
 use core_external\external_multiple_structure;
 use core_external\external_single_structure;
+use dml_exception;
 
 /**
  * Class for processing and exporting web service data.
@@ -49,16 +54,68 @@ class export_webservices {
      */
     public $webservices = [];
 
+    /**
+     * The service token of the selected external service.
+     * Is null upon class instantiation.
+     *
+     * @var string
+     */
+    private $servicetoken = null;
 
     /**
      * Constructor function - assign instance variables.
      *
      * @param string $host
      * @param array  $selectedwebserviceindices
+     * @param int  $selectedserviceindex
      */
-    public function __construct(string $host, array $selectedwebserviceindices) {
+    public function __construct(string $host, array $selectedwebserviceindices, int $selectedserviceindex = null) {
+        global $DB;
+
         $this->host        = $host;
         $this->webservices = $this->get_selected_webservice_objects($selectedwebserviceindices);
+
+        if (is_numeric($selectedserviceindex) && $selectedserviceindex !== null) {
+            $externalservices = array_values($DB->get_records('external_services', [], ''));
+            $externalserviceid = $externalservices[$selectedserviceindex]->id;
+
+            $webservicemanager = new \webservice();
+
+            foreach ($this->webservices as $webservice) {
+                if (!$webservicemanager->service_function_exists(
+                    $webservice->name,
+                    $externalserviceid
+                )) {
+                    $webservicemanager->add_external_function_to_service(
+                        $webservice->name,
+                        $externalserviceid
+                    );
+                }
+            }
+            $token = $this->get_service_token($externalserviceid);
+            $this->servicetoken = $token->token;
+        }
+    }
+
+    /**
+     * Retrieves the service token for a given external service
+     *
+     * @param  string $externalserviceid The id of the external service to get a token for.
+     * @return object An array of webservice objects.
+     */
+    private function get_service_token(string $externalserviceid): object {
+        global $DB;
+
+        $sql = "SELECT
+                    t.token, s.name
+                FROM
+                    {external_tokens} t, {external_services} s
+                WHERE
+                    s.id=? AND s.id = t.externalserviceid";
+
+        // Only handling the use case where only one token exists for the service.
+        $token = $DB->get_record_sql($sql, array($externalserviceid), MUST_EXIST);
+        return $token;
     }
 
     /**
@@ -81,7 +138,6 @@ class export_webservices {
         }
     }
 
-
     /**
      * Exports data as Postman Collection in a json file.
      * Sets header to initiate download with filename and extension.
@@ -102,7 +158,6 @@ class export_webservices {
         echo $beautifiedjson;
     }
 
-
     /**
      * Retrieves an array of webservice objects based on provided indices.
      *
@@ -117,9 +172,7 @@ class export_webservices {
             $webservice    = $webservicesrecords[$index];
             $webservices[] = external_api::external_function_info($webservice);
         }
-
         return $webservices;
-
     }
 
 
@@ -136,7 +189,6 @@ class export_webservices {
         $webservicesrecords = array_values($DB->get_records('external_functions', [], ''));
 
         return $webservicesrecords;
-
     }
 
 
@@ -169,7 +221,6 @@ class export_webservices {
                     $paramstring
                 );
             }
-
             return $singlestructuredesc;
         } else {
             // Description object is a primary type (string, integer).
@@ -201,11 +252,9 @@ class export_webservices {
                 default:
                     $type = '{{STRING}}';
             }
-
-            return $paramstring.$type.$brakeline;
+            return $paramstring . $type . $brakeline;
         }
     }
-
 
     /**
      * Generates an array of formatted parameters for a given webservice.
@@ -230,11 +279,8 @@ class export_webservices {
                 array_push($formattedparamsarray, $formatted[$i]);
             }
         }
-
         return $formattedparamsarray;
-
     }
-
 
     /**
      * Create a request string for cURL.
@@ -245,21 +291,20 @@ class export_webservices {
      */
     public function create_request_string(object $webservice, array $paramsarray): string {
         $baseurl = '{{BASE_URL}}';
-        $wstoken = '{{WS_TOKEN}}';
+
+        $token = $this->servicetoken !== null ? $this->servicetoken : '{{WS_TOKEN}}';
 
         $functionname = $webservice->name;
 
-        $curlstring = $baseurl . '/webservice/rest/server.php?wstoken=' . $wstoken . '&wsfunction='
+        $curlstring = $this->host . '/webservice/rest/server.php?wstoken=' . $token . '&wsfunction='
             . $functionname . '&moodlewsrestformat=json';
 
         // Add params into curlString.
         foreach ($paramsarray as $params) {
             $curlstring = $curlstring . '&' . $params;
         }
-
         return $curlstring;
     }
-
 
     /**
      * Creates a Postman collection object for given Postman items.
@@ -268,6 +313,8 @@ class export_webservices {
      * @return object The created Postman collection object.
      */
     private function create_postman_collection(array $postmanitems): object {
+        $token = $this->servicetoken !== null ? $this->servicetoken : '{{WS_TOKEN}}';
+
         $collection = (object) [
             'info'     => [
                 'name'        => 'My Collection',
@@ -278,12 +325,12 @@ class export_webservices {
             'variable' => [
                 [
                     'key'   => 'BASE_URL',
-                    'value' => 'http://moodle.localhost',
+                    'value' => $this->host,
                     'type'  => 'string',
                 ],
                 [
                     'key'   => 'WSTOKEN',
-                    'value' => '{{WSTOKEN}}',
+                    'value' => $token,
                     'type'  => 'string',
                 ],
 
@@ -294,7 +341,7 @@ class export_webservices {
 
                     [
                         'key'   => 'value',
-                        'value' => '{{WSTOKEN}}',
+                        'value' => $token,
                         'type'  => 'string',
                     ],
                     [
@@ -307,16 +354,11 @@ class export_webservices {
                         'value' => 'query',
                         'type'  => 'string',
                     ],
-
                 ],
             ],
-
         ];
-
         return $collection;
-
     }
-
 
     /**
      * Creates a Postman request item object for a given webservice and parameter array.
@@ -344,7 +386,6 @@ class export_webservices {
                     'key'   => $paramparts[0],
                     'value' => $paramparts[1],
                 ];
-
                 $keyvalpairs[] = $keyvalpair;
             }
         }
@@ -356,7 +397,7 @@ class export_webservices {
                 'header'      => [],
                 'url'         => [
                     'raw'   => $this->create_request_string($webservice, $paramsarray),
-                    'host'  => ['{{BASE_URL}}'],
+                    'host'  => [$this->host],
                     'path'  => [
                         'webservice',
                         'rest',
@@ -369,7 +410,7 @@ class export_webservices {
                         ],
                         [
                             'key'   => 'wsfunction',
-                            'value' => 'core_webservice_get_site_info',
+                            'value' => $webservice->name,
                         ],
                         ...$keyvalpairs,
                     ],
@@ -378,10 +419,6 @@ class export_webservices {
             ],
             'response' => [],
         ];
-
         return $object;
-
     }
-
-
 }

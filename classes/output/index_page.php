@@ -37,17 +37,32 @@ class index_page implements \renderable, \templatable {
      */
     protected $selectedwebserviceindices = [];
 
+    /**
+     * Stores the index of the selected external service.
+     *
+     * @var array
+     */
+    protected $serviceindex = null;
+
+    /**
+     * Stores the user id of the logged in user.
+     *
+     * @var array
+     */
+    protected $userid = null;
 
     /**
      * Constructor function - assign instance variable.
      *
-     * @param array $indicies
+     * @param array $webserviceindicies Indicies of the selected web services to export.
+     * @param int $serviceindex Index of the selected external service.
+     * @param int $userid ID of the logged in user.
      */
-    public function __construct(array $indicies) {
-        $this->selectedwebserviceindices = $indicies;
-
+    public function __construct(array $webserviceindicies, int $serviceindex = null, int $userid) {
+        $this->selectedwebserviceindices = $webserviceindicies;
+        $this->serviceindex = $serviceindex;
+        $this->userid = $userid;
     }
-
 
     /**
      * Exports the data for the index_page.mustache template
@@ -77,13 +92,11 @@ class index_page implements \renderable, \templatable {
 
         $data = (object) [
             'formdata'        => $webservicesexport,
+            'serviceindex'    => $this->serviceindex,
             'items_selected'  => true,
             'selectedindexes' => json_encode($this->selectedwebserviceindices),
         ];
 
         return $data;
-
     }
-
-
 }

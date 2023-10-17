@@ -32,7 +32,6 @@ use plugin_renderer_base;
  */
 class renderer extends plugin_renderer_base {
 
-
     /**
      * Renders index_page mustache template.
      *
@@ -45,7 +44,6 @@ class renderer extends plugin_renderer_base {
 
     }
 
-
     /**
      * Renders the plugin_description mustache template.
      *
@@ -56,6 +54,4 @@ class renderer extends plugin_renderer_base {
         return parent::render_from_template('tool_wsformat/plugin_description', new \stdClass);
 
     }
-
-
 }

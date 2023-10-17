@@ -30,14 +30,12 @@ namespace tool_wsformat\output;
  */
 class plugin_description implements \renderable, \templatable {
 
-
     /**
      * Constructor function.
      */
     public function __construct() {
 
     }
-
 
     /**
      * Exports the data for the index_page.mustache template
@@ -48,6 +46,4 @@ class plugin_description implements \renderable, \templatable {
     public function export_for_template(\renderer_base $output) {
 
     }
-
-
 }
