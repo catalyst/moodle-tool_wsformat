@@ -39,6 +39,7 @@ $PAGE->set_heading($SITE->fullname);
 echo $OUTPUT->header();
 
 $output = $PAGE->get_renderer('tool_wsformat');
+$PAGE->requires->js_call_amd('tool_wsformat/eventListeners', 'init');
 
 $plugindescriptiontemplate = new \tool_wsformat\output\plugin_description();
 echo $output->render($plugindescriptiontemplate);
@@ -59,11 +60,9 @@ if ($data = $mform->get_data()) {
         $formarray[] = (string) $value;
     }
     $selectedservice = $data->selected_external_service;
-    echo $selectedservice;
 }
 
 $selectedsectiontemplate = new \tool_wsformat\output\index_page($formarray, $selectedservice, $userid);
-$PAGE->requires->js_call_amd('tool_wsformat/eventListeners', 'init');
 
 echo $output->render($selectedsectiontemplate);
 

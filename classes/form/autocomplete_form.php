@@ -48,36 +48,33 @@ class autocomplete_form extends moodleform {
 
         $mform = $this->_form;
 
-        $options = [
+        $autocompleteoptions = [
             'minchars'          => 2,
             'noselectionstring' => get_string('nowebservicesselected', 'tool_wsformat'),
             'multiple'          => true,
             'placeholder'       => get_string('searchwebservices', 'tool_wsformat'),
         ];
 
-        $options2 = [
-            'minchars'          => 2,
-            'noselectionstring' => get_string('nowebservicesselected', 'tool_wsformat'),
-            'placeholder'       => get_string('searchwebservices', 'tool_wsformat'),
-        ];
 
         // Documentation: https://docs.moodle.org/dev/lib/formslib.php_Form_Definition#autocomplete.
-        $mform->addElement('autocomplete', 'selected_webservices', get_string('webservices', 'tool_wsformat'), $webservicenames,
-         $options);
-        $mform->addElement('select', 'selected_external_service', 'Choose service token', $servicenames,
-         $options2);
+        $mform->addElement(
+            'autocomplete',
+            'selected_webservices',
+            get_string('webservices', 'tool_wsformat'),
+            $webservicenames,
+            $autocompleteoptions
+        );
 
-        $buttonarray   = [];
-        $buttonarray[] = $mform->createElement('submit', 'submit', get_string('updateselection', 'tool_wsformat'));
+        $mform->addElement(
+            'select',
+            'selected_external_service',
+            'Choose service token',
+            $servicenames,
+        );
 
-        $clearbutton   = '<button type="button" class="btn btn-secondary" '
-        .'onclick="window.location.href=\'index.php\'">'
-        .get_string('clearbtn', 'tool_wsformat')
-        .'</button>';
-
-        $buttonarray[] = $mform->createElement('html', $clearbutton);
-
-        $mform->addGroup($buttonarray, 'buttonarr', '', null, false);
+        $submitbutton = $mform->createElement('submit', 'submit', get_string('updateselection', 'tool_wsformat'));
+        $clearbutton = $mform->createElement('button', 'ws_clear_button', get_string('clearbtn', 'tool_wsformat'));
+        $mform->addGroup([$submitbutton, $clearbutton], 'buttongroup', '', null, false);
     }
 
     /**
@@ -85,7 +82,7 @@ class autocomplete_form extends moodleform {
      */
     public function get_webservice_name_array(): array {
         global $DB;
-        $webservicesobject = $DB->get_records('external_functions', [], '');
+        $webservicesobject = $DB->get_records('external_functions');
 
         $webservicenames = [];
 
@@ -100,14 +97,39 @@ class autocomplete_form extends moodleform {
      */
     public function get_external_services(): array {
         global $DB;
-        $serviceobject = $DB->get_records('external_services', [], '');
+        $serviceobject = $DB->get_records('external_services');
 
+        $wsformatexists = false;
         $servicenames = [];
-
         foreach ($serviceobject as $key => $service) {
-            $servicenames[] = $service->shortname;
+            if ($service->shortname === 'wsformat_plugin') {
+                $wsformatexists = true;
+            }
+            $servicenames[] = $service->name;
+        }
+        
+        if ($wsformatexists === false) {
+            $this->create_external_service();
         }
 
         return $servicenames;
+    }
+
+    private function create_external_service() {
+        $webservicemanager = new \webservice();
+
+        $newserviceobject = (object) [
+            'name' => 'Webservice test service',
+            'shortname' => 'wsformat_plugin',
+            'enabled' => 1,
+            'restrictedusers' => 0,
+            'downloadfiles' => 0,
+            'uploadfiles' => 0,
+            'requiredcapability' => '',
+            'id' => 0,
+            'submitbutton' => 'Add service'
+        ];
+
+        $webservicemanager->add_external_service($newserviceobject);
     }
 }

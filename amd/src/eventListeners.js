@@ -20,7 +20,10 @@
  * @copyright  2023 Djarran Cotleanu, Zach Pregl
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-import { copyRequestClickHandler, exportSelectChangeHandler, webserviceItemClickHandler } from './eventHandlers';
+import {
+    clearButtonClickHandler, copyRequestClickHandler, exportSelectChangeHandler,
+    webserviceItemClickHandler
+} from './eventHandlers';
 
 export const init = () => {
 };
@@ -29,8 +32,10 @@ export const init = () => {
 const selectedWebservicesListElements = document.querySelectorAll('li[data-name]');
 const requestCopyButton = document.querySelector('#curl-copy-button');
 const exportSelectElement = document.getElementById('export-type');
+const clearButton = document.getElementById('id_ws_clear_button');
 
 // Add event listeners
 requestCopyButton.addEventListener('click', copyRequestClickHandler);
 selectedWebservicesListElements.forEach(webserviceItemClickHandler);
 exportSelectElement.addEventListener('change', exportSelectChangeHandler);
+clearButton.addEventListener('click', clearButtonClickHandler);

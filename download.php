@@ -26,7 +26,6 @@
 use tool_wsformat\export_webservices;
 
 require('../../../config.php');
-$hostaddress = $CFG->wwwroot;
 
 require_login();
 
@@ -39,7 +38,7 @@ $exporttype      = required_param('export-type', PARAM_TEXT);
 
 $selectedwebserviceindices = json_decode($selected);
 
-$export = new export_webservices($hostaddress, $selectedwebserviceindices, $selectedservice);
+$export = new export_webservices($selectedwebserviceindices, $selectedservice);
 
 switch ($exporttype) {
     case EXPORT_CURL:

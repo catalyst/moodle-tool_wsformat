@@ -37,16 +37,10 @@ Example context (json):
 }
 }}
 
-{{! Section for displaying message when no items are selected }}
-{{^items_selected}}
-<!-- <h2>{{#str}} pleaseselectwebservice, tool_wsformat {{/str}}</h2> -->
-{{/items_selected}}
-
 {{! Section for displaying selected web services }}
 {{#items_selected}}
 <div class="page-container" role="group" aria-label="{{#str}} pagecontainer, tool_wsformat {{/str}}">
     <div class="columns-container">
-
         <div class="selected-webservices-column">
             <h3>{{#str}} select, tool_wsformat {{/str}}</h3>
             <ul class="selected-webservices-list">
@@ -56,7 +50,6 @@ Example context (json):
                 </li>
                 {{/formdata}}
             </ul>
-
             <div class="export-container" role="group" aria-label="{{#str}} exportgroup, tool_wsformat {{/str}}">
                 <a id="export-button-id" href="download.php?export-type=curl&externalservice={{serviceindex}}&selected={{selectedindexes}}" data-selected="{{selectedindexes}}" class="btn btn-primary" style="width:fit-content">{{#str}} exportall, tool_wsformat {{/str}}</a>
                 <select id="export-type" name="export-type-select" class="form-control custom-select" {{#readonly}}disabled{{/readonly}}>
@@ -68,18 +61,13 @@ Example context (json):
                 </div>
             </div>
         </div>
-
         <div id="web-service-selection-panel" class="details-column">
             <h3 id="placeholder-text">
                 {{#str}} selectwebservicedetails, tool_wsformat {{/str}}
             </h3>
             <div class="details-content" id="ws-panel">
-                <div class="details-title" id="ws-title">
-                    {{! Replace the name -- done}}
-                </div>
-                <h3 id="ws-description">
-                    {{! Replace the descriptions }}  
-                </h3>
+                <div class="details-title" id="ws-title"></div>
+                <h3 id="ws-description"></h3>
                 <div class="details-request-container" id="ws-details">
                     <h4>{{#str}} requestt, tool_wsformat {{/str}}</h4>
                     <button class="details-curl-button" id="details-curl-button">
@@ -97,7 +85,6 @@ Example context (json):
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 {{/items_selected}}

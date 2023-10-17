@@ -33,7 +33,7 @@ const exportButtonElement = document.getElementById('export-button-id');
 /**
  * The select change handler. Changed the type parameter of the export button's href.
  * Valid export type relates to the different formats that can be exported to.
- * 
+ *
  * @param {HTMLSelectEvent} event Properties and methods for select element event
  */
 export const exportSelectChangeHandler = (event) => {
@@ -57,8 +57,8 @@ export const exportSelectChangeHandler = (event) => {
  *
  * Assign values to placeholder title, description, and curl string elements
  * to the respective webservice selected.
- * 
- * @param {Element} webservice 
+ *
+ * @param {Element} webservice
  */
 export const webserviceItemClickHandler = (webservice) => {
     webservice.addEventListener('click', (e) => {
@@ -93,7 +93,7 @@ export const webserviceItemClickHandler = (webservice) => {
 
 /**
  * Copies the cURL string of the selected webservice to the user's clipboard.
- * 
+ *
  * Adds toast element upon successful copy.
  */
 export const copyRequestClickHandler = () => {
@@ -113,4 +113,12 @@ export const copyRequestClickHandler = () => {
                 type: 'danger'
             });
         });
+};
+
+/**
+ * Reloads the page, clearing the selection of webservices.
+ */
+export const clearButtonClickHandler = () => {
+    const currentUrl = window.location.href;
+    window.location.href = currentUrl;
 };

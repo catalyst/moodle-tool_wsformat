@@ -26,6 +26,6 @@
 defined('MOODLE_INTERNAL') || die();
 
 if ($hassiteconfig) {
-    $url = $CFG->wwwroot.'/'.$CFG->admin.'/tool/wsformat/index.php';
+    $url = new \moodle_url('/admin/tool/wsformat/index.php');
     $ADMIN->add('development', new admin_externalpage('toolwsformat', 'Format Webservices', $url));
 }
