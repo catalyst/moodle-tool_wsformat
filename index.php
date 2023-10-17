@@ -60,7 +60,6 @@ if ($data = $mform->get_data()) {
         $formarray[] = (string) $value;
     }
     $selectedservice = $data->selected_external_service;
-    echo $selectedservice;
 }
 
 $selectedsectiontemplate = new \tool_wsformat\output\index_page($formarray, $selectedservice, $userid);

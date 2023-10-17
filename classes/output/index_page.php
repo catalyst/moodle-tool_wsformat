@@ -71,15 +71,11 @@ class index_page implements \renderable, \templatable {
      * @return \stdClass
      */
     public function export_for_template(\renderer_base $output): object {
-        global $CFG;
 
         // Return empty object if no selected webservices.
         if (empty($this->selectedwebserviceindices)) {
             return (object) [];
         }
-
-        $hostaddress = $CFG->wwwroot;
-        echo $hostaddress;
 
         $exportwebservices = new \tool_wsformat\export_webservices($this->selectedwebserviceindices);
 
