@@ -65,22 +65,47 @@ class export_webservices {
     /**
      * Constructor function - assign instance variables.
      *
-     * @param string $host
      * @param array  $selectedwebserviceindices
      * @param int  $selectedserviceindex
      */
     public function __construct(array $selectedwebserviceindices, int $selectedserviceindex = null) {
-        global $DB;
         global $CFG;
 
         $this->host        = $CFG->wwwroot;
         $this->webservices = $this->get_selected_webservice_objects($selectedwebserviceindices);
+        $this->handle_external_service($selectedserviceindex);
+    }
 
-        // Check if selectedserviceindex exists
-        if (is_numeric($selectedserviceindex) && $selectedserviceindex !== null) {
-            $externalservices = array_values($DB->get_records('external_services', [], ''));
-            $externalserviceid = $externalservices[$selectedserviceindex]->id;
+    private function handle_external_service(int | null $selectedserviceindex) {
+        global $DB;
+        global $USER;
 
+        if ($selectedserviceindex === null) {
+            return;
+        }
+
+        $externalservicesarray = array_values($DB->get_records('external_services', [], ''));
+        $externalserviceid = $externalservicesarray[$selectedserviceindex]->id;
+
+        $token = $this->get_service_token($externalserviceid);
+
+        // If no token exists, create one
+        if ($token === false) {
+            $token = \core_external\util::generate_token(
+                EXTERNAL_TOKEN_PERMANENT,
+                $externalservicesarray[$selectedserviceindex],
+                $USER->id,
+                \context_system::instance(),
+                0,
+                0
+            );
+            $this->servicetoken = $token;
+        } else {
+            $this->servicetoken = $token->token;
+        }
+
+        // Add functions to service if service belongs to wsformat plugin
+        if ($externalservicesarray[$selectedserviceindex]->shortname === 'wsformat_plugin') {
             $webservicemanager = new \webservice();
 
             // Check if external service has the correct permissions to run webservice/function.
@@ -96,10 +121,9 @@ class export_webservices {
                     );
                 }
             }
-
-            $token = $this->get_service_token($externalserviceid);
-            $this->servicetoken = $token->token;
         }
+        
+        return;
     }
 
     /**
@@ -108,7 +132,7 @@ class export_webservices {
      * @param  string $externalserviceid The id of the external service to get a token for.
      * @return object An array of webservice objects.
      */
-    private function get_service_token(string $externalserviceid): object {
+    private function get_service_token(string $externalserviceid): object | bool {
         global $DB;
 
         $sql = "SELECT
@@ -119,8 +143,9 @@ class export_webservices {
                     s.id=? AND s.id = t.externalserviceid";
 
         // Only handling the use case where only one token exists for the service.
-        $token = $DB->get_record_sql($sql, array($externalserviceid), MUST_EXIST);
-        return $token;
+        $token = $DB->get_records_sql($sql, array($externalserviceid));
+
+        return reset($token);
     }
 
     /**

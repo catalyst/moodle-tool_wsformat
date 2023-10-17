@@ -99,12 +99,37 @@ class autocomplete_form extends moodleform {
         global $DB;
         $serviceobject = $DB->get_records('external_services');
 
+        $wsformatexists = false;
         $servicenames = [];
-
         foreach ($serviceobject as $key => $service) {
-            $servicenames[] = $service->shortname;
+            if ($service->shortname === 'wsformat_plugin') {
+                $wsformatexists = true;
+            }
+            $servicenames[] = $service->name;
+        }
+        
+        if ($wsformatexists === false) {
+            $this->create_external_service();
         }
 
         return $servicenames;
+    }
+
+    private function create_external_service() {
+        $webservicemanager = new \webservice();
+
+        $newserviceobject = (object) [
+            'name' => 'Webservice test service',
+            'shortname' => 'wsformat_plugin',
+            'enabled' => 1,
+            'restrictedusers' => 0,
+            'downloadfiles' => 0,
+            'uploadfiles' => 0,
+            'requiredcapability' => '',
+            'id' => 0,
+            'submitbutton' => 'Add service'
+        ];
+
+        $webservicemanager->add_external_service($newserviceobject);
     }
 }
