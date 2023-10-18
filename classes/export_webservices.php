@@ -26,14 +26,12 @@
 namespace tool_wsformat;
 
 defined('MOODLE_INTERNAL') || die();
-
-use core_external\external_api;
-
 require_once($CFG->dirroot . '/webservice/lib.php');
 
+use core_external\external_api;
+use context_system;
 use core_external\external_multiple_structure;
 use core_external\external_single_structure;
-use dml_exception;
 
 /**
  * Class for processing and exporting web service data.
@@ -76,54 +74,70 @@ class export_webservices {
         $this->handle_external_service($selectedserviceindex);
     }
 
+    /**
+     * Handles the acquiring of the token for a given external service, or creation of a token
+     * if it doesn't yet exist. 
+     * 
+     * Adds webservices to an external service as functions.
+     */
     private function handle_external_service(int | null $selectedserviceindex) {
         global $DB;
-        global $USER;
 
         if ($selectedserviceindex === null) {
             return;
         }
 
-        $externalservicesarray = array_values($DB->get_records('external_services', [], ''));
+        $externalservicesarray = array_values($DB->get_records('external_services'));
         $externalserviceid = $externalservicesarray[$selectedserviceindex]->id;
 
         $token = $this->get_service_token($externalserviceid);
 
         // If no token exists, create one
         if ($token === false) {
-            $token = \core_external\util::generate_token(
-                EXTERNAL_TOKEN_PERMANENT,
-                $externalservicesarray[$selectedserviceindex],
-                $USER->id,
-                \context_system::instance(),
-                0,
-                0
-            );
-            $this->servicetoken = $token;
+            $this->servicetoken = $this->create_token($externalservicesarray[$selectedserviceindex]);
         } else {
             $this->servicetoken = $token->token;
         }
 
         // Add functions to service if service belongs to wsformat plugin
         if ($externalservicesarray[$selectedserviceindex]->shortname === 'wsformat_plugin') {
-            $webservicemanager = new \webservice();
-
-            // Check if external service has the correct permissions to run webservice/function.
             foreach ($this->webservices as $webservice) {
-                // If it doesn't have the correct permissions, add function to the service
-                if (!$webservicemanager->service_function_exists(
-                    $webservice->name,
-                    $externalserviceid
-                )) {
-                    $webservicemanager->add_external_function_to_service(
-                        $webservice->name,
-                        $externalserviceid
-                    );
-                }
+                $this->add_function_to_service($webservice->name, $externalserviceid);
             }
         }
-        
+
         return;
+    }
+
+    private function create_token(object $externalserviceobejct) {
+        global $USER;
+
+        $token = \core_external\util::generate_token(
+            EXTERNAL_TOKEN_PERMANENT,
+            $externalserviceobejct,
+            $USER->id,
+            context_system::instance(),
+            0,
+            0
+        );
+
+        return $token;
+    }
+
+    private function add_function_to_service(string $webservicename, int $externalserviceid) {
+        $webservicemanager = new \webservice();
+
+        // Check if external service has the correct permissions to run webservice/function.
+        // If it doesn't have the correct permissions, add function to the service
+        if (!$webservicemanager->service_function_exists(
+            $webservicename,
+            $externalserviceid
+        )) {
+            $webservicemanager->add_external_function_to_service(
+                $webservicename,
+                $externalserviceid
+            );
+        }
     }
 
     /**

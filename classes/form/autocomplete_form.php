@@ -26,6 +26,7 @@
 namespace tool_wsformat\form;
 
 use moodleform;
+use webservice;
 
 /**
  * Form for selecting web services to format.
@@ -41,7 +42,6 @@ class autocomplete_form extends moodleform {
      * Define an autocomplete element for browsing webservices and a submit button.
      */
     public function definition() {
-        global $DB;
 
         $webservicenames = $this->get_webservice_name_array();
         $servicenames = $this->get_external_services();
@@ -93,43 +93,57 @@ class autocomplete_form extends moodleform {
     }
 
     /**
-     * Get external service names from database.
+     * Get external service names from database and create the wsformat's external
+     * service that is used for testing purposes.
      */
     public function get_external_services(): array {
         global $DB;
         $serviceobject = $DB->get_records('external_services');
+        $lastkey = end($serviceobject);
+        // echo print_r($lastKey);
+        // echo print_r($serviceobject);
 
         $wsformatexists = false;
         $servicenames = [];
         foreach ($serviceobject as $key => $service) {
+            $servicenames[] = $service->name; // Add service name to array.
+
             if ($service->shortname === 'wsformat_plugin') {
                 $wsformatexists = true;
             }
-            $servicenames[] = $service->name;
-        }
-        
-        if ($wsformatexists === false) {
-            $this->create_external_service();
+
+            // Create external service if it doesn't exist.
+            if ($service->shortname === $lastkey->shortname) {
+                if ($wsformatexists === false) {
+                    $servicenames[] = $this->create_external_service();
+                }
+            }
         }
 
         return $servicenames;
     }
 
-    private function create_external_service() {
-        $webservicemanager = new \webservice();
+    /**
+     * Create plugin external service that is used for testing purposes.
+     */
+    private function create_external_service(): string {
+        $webservicemanager = new webservice();
 
-        $newserviceobject = (object) [
-            'name' => 'Webservice test service',
+        $wsformatservicename = 'Webservice test service';
+        $serviceobject = (object) [
+            'name' => $wsformatservicename,
             'shortname' => 'wsformat_plugin',
             'enabled' => 1,
             'restrictedusers' => 0,
             'downloadfiles' => 0,
             'uploadfiles' => 0,
             'requiredcapability' => '',
-            'id' => 0,
+            'id' => 0, // Default value used when creating a new service.
             'submitbutton' => 'Add service'
         ];
 
-        $webservicemanager->add_external_service($newserviceobject);
+        $webservicemanager->add_external_service($serviceobject);
+        
+        return $wsformatservicename;
     }
 }
