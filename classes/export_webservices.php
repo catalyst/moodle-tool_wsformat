@@ -79,6 +79,8 @@ class export_webservices {
      * if it doesn't yet exist. 
      * 
      * Adds webservices to an external service as functions.
+     *
+     * @param  string $selectedserviceindex The index of the selected external service.
      */
     private function handle_external_service(int | null $selectedserviceindex) {
         global $DB;
@@ -109,7 +111,13 @@ class export_webservices {
         return;
     }
 
-    private function create_token(object $externalserviceobejct) {
+    /**
+     * Creates a token for an external service
+     *
+     * @param  object $externalserviceobject The external service object returned from the database
+     * @return string created token
+     */
+    private function create_token(object $externalserviceobejct): string {
         global $USER;
 
         $token = \core_external\util::generate_token(
@@ -127,8 +135,7 @@ class export_webservices {
     private function add_function_to_service(string $webservicename, int $externalserviceid) {
         $webservicemanager = new \webservice();
 
-        // Check if external service has the correct permissions to run webservice/function.
-        // If it doesn't have the correct permissions, add function to the service
+        // Add webservice to external service if not already added.
         if (!$webservicemanager->service_function_exists(
             $webservicename,
             $externalserviceid
