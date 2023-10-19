@@ -28,14 +28,15 @@ How to Use
 
 Credit
 ------------------------------
+<img alt="QUT" src="https://cms.qut.edu.au/__data/assets/image/0007/871027/QUT_REALWORLD_LOGO_ANCHOR_LEFT_paths2.png" width="400">
 This plugin was originally created by students from Queensland University of Technology as part of their final year Capstone project.
 * [Djarran Cotleanu](https://github.com/djarran)
 * [Zach Pregl](https://github.com/ZachPregl)
 * [Jacqueline ...](https://github.com/FoxxyFace)
 * [Henry Mai](https://github.com/mmh140502)
-<img alt="QUT" src="https://cms.qut.edu.au/__data/assets/image/0007/871027/QUT_REALWORLD_LOGO_ANCHOR_LEFT_paths2.png" width="400">
 
 Plugin development supported by [Catalyst IT Australia](https://www.catalyst-au.net/)
+
 <img alt="Catalyst IT" src="https://cdn.rawgit.com/catalyst/moodle-auth_saml2/master/pix/catalyst-logo.svg" width="400">
 
 
