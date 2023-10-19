@@ -128,7 +128,7 @@ class autocomplete_form extends moodleform {
     /**
      * Create plugin external service that is used for testing purposes.
      */
-    private function create_external_service(): string {
+    public function create_external_service(): string {
         $webservicemanager = new \webservice();
 
         $wsformatservicename = 'Webservice test service';

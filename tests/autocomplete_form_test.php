@@ -13,6 +13,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
 namespace tool_wsformat\form;
 use tool_wsformat\form\autocomplete_form;
 defined('MOODLE_INTERNAL') || die();
@@ -29,10 +30,9 @@ global $CFG;
 class autocomplete_form_test extends \advanced_testcase {
 
     /**
-     * Test that the length is correct.
+     * Test that the array returned is not empty.
      */
     public function test_not_empty() {
-        global $DB;
         $this->resetAfterTest(true);
         $autocompleteform = new autocomplete_form();
         $webservicearray  = $autocompleteform->get_webservice_name_array();
@@ -44,7 +44,6 @@ class autocomplete_form_test extends \advanced_testcase {
      * Test that an array is returned from the function.
      */
     public function test_array_returned() {
-        global $DB;
         $this->resetAfterTest(true);
         $autocompleteform = new autocomplete_form();
         $webservicearray  = $autocompleteform->get_webservice_name_array();
@@ -55,7 +54,6 @@ class autocomplete_form_test extends \advanced_testcase {
      * Test is array is in the correct order.
      */
     public function test_correct_order() {
-        global $DB;
         $this->resetAfterTest(true);
         $autocompleteform = new autocomplete_form();
         $webservicearray  = $autocompleteform->get_webservice_name_array();
@@ -67,7 +65,6 @@ class autocomplete_form_test extends \advanced_testcase {
      * Test whether array values are strings as expected by consumer.
      */
     public function test_array_strings() {
-        global $DB;
         $this->resetAfterTest(true);
         $autocompleteform = new autocomplete_form();
         $webservicearray  = $autocompleteform->get_webservice_name_array();
@@ -75,4 +72,36 @@ class autocomplete_form_test extends \advanced_testcase {
             $this->assertIsString($webservice);
         }
     }
+    
+    /**
+     * Test if external service is created successfully.
+     */
+    public function test_create_external_service() {
+        $this->resetAfterTest(true);
+        $autocompleteform = new autocomplete_form();
+        $this->resetAllData();
+        $servicename  = $autocompleteform->create_external_service();
+        $this->assertEquals('Webservice test service', $servicename);
+    }
+    
+    /**
+     * Test if external service is created and included in the select element list.
+     */
+    public function test_get_external_service_includes_new_service() {
+        $this->resetAfterTest(true);
+        $autocompleteform = new autocomplete_form();
+        $services  = $autocompleteform->get_external_services();
+        $this->assertContains('Webservice test service', $services);
+    }
+
+    /**
+     * Test that class does not attempt to insert plugin external service if already exists.
+     */
+    public function test_get_external_service_does_not_create_if_exists() {
+        $this->resetAfterTest(true);
+        $this->expectNotToPerformAssertions();
+        $autocompleteform = new autocomplete_form();
+        $autocompleteform->get_external_services();
+    }
+    
 }
