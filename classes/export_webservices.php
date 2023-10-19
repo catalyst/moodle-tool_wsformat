@@ -59,7 +59,7 @@ class export_webservices {
      *
      * @var string
      */
-    private $servicetoken = null;
+    public $servicetoken = null;
 
     /**
      * Constructor function - assign instance variables.
@@ -117,7 +117,7 @@ class export_webservices {
      * @param  object $externalserviceobject The external service object returned from the database
      * @return string created token
      */
-    private function create_token(object $externalserviceobejct): string {
+    public function create_token(object $externalserviceobejct): string {
         global $USER;
 
         $token = \core_external\util::generate_token(
@@ -138,7 +138,7 @@ class export_webservices {
      * @param  string $webservicename Webservice name
      * @param  int $externalserviceid External service id
      */
-    private function add_function_to_service(string $webservicename, int $externalserviceid) {
+    public function add_function_to_service(string $webservicename, int $externalserviceid) {
         $webservicemanager = new \webservice();
 
         // Add webservice to external service if not already added.
@@ -159,7 +159,7 @@ class export_webservices {
      * @param  string $externalserviceid The id of the external service to get a token for.
      * @return object|false External service object or false if no tokens exist.
      */
-    private function get_service_token(string $externalserviceid): object | false {
+    public function get_service_token(string $externalserviceid): object | false {
         global $DB;
 
         $sql = "SELECT
@@ -370,7 +370,7 @@ class export_webservices {
      * @param array $postmanitems An array of Postman request item objects.
      * @return object The created Postman collection object.
      */
-    private function create_postman_collection(array $postmanitems): object {
+    public function create_postman_collection(array $postmanitems): object {
         $token = $this->servicetoken !== null ? $this->servicetoken : '{{WS_TOKEN}}';
 
         $collection = (object) [
@@ -424,7 +424,7 @@ class export_webservices {
      * @param  array  $paramsarray An array of parameters for the request.
      * @return object The created Postman request item object.
      */
-    private function create_postman_request_item(object $webservice, array $paramsarray): object {
+    public function create_postman_request_item(object $webservice, array $paramsarray): object {
         $paramstring = implode(',', $paramsarray);
         $parampairs  = explode(',', $paramstring);
         $keyvalpairs = [];

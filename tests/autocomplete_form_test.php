@@ -20,7 +20,7 @@ defined('MOODLE_INTERNAL') || die();
 global $CFG;
 
 /**
- * Implement autocomplete moodle form.
+ * Tests for autocomplete_form class.
  *
  * @package   tool_wsformat
  * @copyright 2023 Djarran Cotleanu, Zach Pregl
