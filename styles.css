@@ -64,6 +64,7 @@
 .details-content {
     display: none;
     flex-direction: column;
+    gap: 0.5rem;
 }
 
 .details-title {
@@ -116,9 +117,4 @@
     top: 1rem;
     width: fit-content;
     margin: 0;
-    padding: 0.25rem 0.5rem 0.25rem 0.5rem;
-    border-radius: 0.5rem;
-    background-color: #106cbf;
-    color: white;
-    border: 1px solid #f2f3f5;
 }
