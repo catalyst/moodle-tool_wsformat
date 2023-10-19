@@ -40,7 +40,7 @@ class index_page implements \renderable, \templatable {
     /**
      * Stores the index of the selected external service.
      *
-     * @var array
+     * @var int
      */
     protected $serviceindex = null;
 
@@ -77,7 +77,7 @@ class index_page implements \renderable, \templatable {
             return (object) [];
         }
 
-        $exportwebservices = new \tool_wsformat\export_webservices($this->selectedwebserviceindices);
+        $exportwebservices = new \tool_wsformat\export_webservices($this->selectedwebserviceindices, $this->serviceindex);
 
         $webservicesexport = [];
         foreach ($exportwebservices->webservices as $webservice) {

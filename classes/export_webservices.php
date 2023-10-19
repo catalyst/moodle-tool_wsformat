@@ -26,14 +26,13 @@
 namespace tool_wsformat;
 
 defined('MOODLE_INTERNAL') || die();
+require_once($CFG->dirroot . '/webservice/lib.php');
+global $CFG;
 
 use core_external\external_api;
-
-require_once($CFG->dirroot . '/webservice/lib.php');
-
+use context_system;
 use core_external\external_multiple_structure;
 use core_external\external_single_structure;
-use dml_exception;
 
 /**
  * Class for processing and exporting web service data.
@@ -60,7 +59,7 @@ class export_webservices {
      *
      * @var string
      */
-    private $servicetoken = null;
+    public $servicetoken = null;
 
     /**
      * Constructor function - assign instance variables.
@@ -76,63 +75,91 @@ class export_webservices {
         $this->handle_external_service($selectedserviceindex);
     }
 
+    /**
+     * Handles the acquiring of the token for a given external service, or creation of a token
+     * if it doesn't yet exist.
+     *
+     * Adds webservices to the plugin's external service.
+     *
+     * @param  int|null $selectedserviceindex The index of the selected external service.
+     */
     private function handle_external_service(int | null $selectedserviceindex) {
         global $DB;
-        global $USER;
 
         if ($selectedserviceindex === null) {
             return;
         }
 
-        $externalservicesarray = array_values($DB->get_records('external_services', [], ''));
+        $externalservicesarray = array_values($DB->get_records('external_services'));
         $externalserviceid = $externalservicesarray[$selectedserviceindex]->id;
 
         $token = $this->get_service_token($externalserviceid);
 
-        // If no token exists, create one
+        // If no token exists, create one.
         if ($token === false) {
-            $token = \core_external\util::generate_token(
-                EXTERNAL_TOKEN_PERMANENT,
-                $externalservicesarray[$selectedserviceindex],
-                $USER->id,
-                \context_system::instance(),
-                0,
-                0
-            );
-            $this->servicetoken = $token;
+            $this->servicetoken = $this->create_token($externalservicesarray[$selectedserviceindex]);
         } else {
             $this->servicetoken = $token->token;
         }
 
-        // Add functions to service if service belongs to wsformat plugin
+        // Add functions to service if service belongs to wsformat plugin.
         if ($externalservicesarray[$selectedserviceindex]->shortname === 'wsformat_plugin') {
-            $webservicemanager = new \webservice();
-
-            // Check if external service has the correct permissions to run webservice/function.
             foreach ($this->webservices as $webservice) {
-                // If it doesn't have the correct permissions, add function to the service
-                if (!$webservicemanager->service_function_exists(
-                    $webservice->name,
-                    $externalserviceid
-                )) {
-                    $webservicemanager->add_external_function_to_service(
-                        $webservice->name,
-                        $externalserviceid
-                    );
-                }
+                $this->add_function_to_service($webservice->name, $externalserviceid);
             }
         }
-        
-        return;
+
     }
 
     /**
-     * Retrieves the service token for a given external service
+     * Creates a token for an external service
+     *
+     * @param  object $externalserviceobject The external service object returned from the database
+     * @return string created token
+     */
+    public function create_token(object $externalserviceobejct): string {
+        global $USER;
+
+        $token = \core_external\util::generate_token(
+            EXTERNAL_TOKEN_PERMANENT,
+            $externalserviceobejct,
+            $USER->id,
+            context_system::instance(),
+            0,
+            0
+        );
+
+        return $token;
+    }
+
+    /**
+     * Adds function (webservice) to the external service if not yet added.
+     *
+     * @param  string $webservicename Webservice name
+     * @param  int $externalserviceid External service id
+     */
+    public function add_function_to_service(string $webservicename, int $externalserviceid) {
+        $webservicemanager = new \webservice();
+
+        // Add webservice to external service if not already added.
+        if (!$webservicemanager->service_function_exists(
+            $webservicename,
+            $externalserviceid
+        )) {
+            $webservicemanager->add_external_function_to_service(
+                $webservicename,
+                $externalserviceid
+            );
+        }
+    }
+
+    /**
+     * Returns the first token for a given external service
      *
      * @param  string $externalserviceid The id of the external service to get a token for.
-     * @return object An array of webservice objects.
+     * @return object|false External service object or false if no tokens exist.
      */
-    private function get_service_token(string $externalserviceid): object | bool {
+    public function get_service_token(string $externalserviceid): object | false {
         global $DB;
 
         $sql = "SELECT
@@ -143,8 +170,9 @@ class export_webservices {
                     s.id=? AND s.id = t.externalserviceid";
 
         // Only handling the use case where only one token exists for the service.
-        $token = $DB->get_records_sql($sql, array($externalserviceid));
+        $token = $DB->get_records_sql($sql, [$externalserviceid]);
 
+        // Reset returns the first element of an array or false if array is empty.
         return reset($token);
     }
 
@@ -342,7 +370,7 @@ class export_webservices {
      * @param array $postmanitems An array of Postman request item objects.
      * @return object The created Postman collection object.
      */
-    private function create_postman_collection(array $postmanitems): object {
+    public function create_postman_collection(array $postmanitems): object {
         $token = $this->servicetoken !== null ? $this->servicetoken : '{{WS_TOKEN}}';
 
         $collection = (object) [
@@ -396,7 +424,7 @@ class export_webservices {
      * @param  array  $paramsarray An array of parameters for the request.
      * @return object The created Postman request item object.
      */
-    private function create_postman_request_item(object $webservice, array $paramsarray): object {
+    public function create_postman_request_item(object $webservice, array $paramsarray): object {
         $paramstring = implode(',', $paramsarray);
         $parampairs  = explode(',', $paramstring);
         $keyvalpairs = [];
