@@ -27,6 +27,7 @@ namespace tool_wsformat;
 
 defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot . '/webservice/lib.php');
+global $CFG;
 
 use core_external\external_api;
 use context_system;
