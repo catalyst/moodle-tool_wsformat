@@ -36,12 +36,6 @@ This plugin was originally created by students from Queensland University of Tec
 * [Jacqueline ...](https://github.com/FoxxyFace)
 * [Henry Mai](https://github.com/mmh140502)
 
-Plugin development supported by [Catalyst IT Australia](https://www.catalyst-au.net/)
-
 <img alt="Catalyst IT" src="https://cdn.rawgit.com/catalyst/moodle-auth_saml2/master/pix/catalyst-logo.svg" width="400">
 
-
-
-
-
-
+Plugin development supported by [Catalyst IT Australia](https://www.catalyst-au.net/)
