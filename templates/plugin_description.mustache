@@ -14,7 +14,6 @@
     You should have received a copy of the GNU General Public License
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
-
 {{!
  Description of tool for wsformat
  
@@ -24,22 +23,17 @@
  @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  
 }}
-
 {{!
-@template tool_wsformat/mytemplate
+@template tool_wsformat/plugin_description
 
-Admin search input for page header.
+Displays the plugin description.
 
 Example context (json):
 {
-"action": "http://moodle.local/admin/search.php",
-"query": "themedesigner"
 }
 }}
 
-{{! Plugin Header }}
 <section aria-label="{{#str}} header, tool_wsformat {{/str}}">
-    {{!Plugin name and description}}
     <h2>{{#str}} pluginname, tool_wsformat {{/str}}</h2>
     
     <p>{{#str}} plugindescription, tool_wsformat {{/str}}</p>
