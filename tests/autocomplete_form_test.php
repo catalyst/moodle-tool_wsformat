@@ -13,10 +13,9 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-namespace tool_wsformat\test;
+namespace tool_wsformat\form;
 use tool_wsformat\form\autocomplete_form;
 defined('MOODLE_INTERNAL') || die();
-
 global $CFG;
 
 /**
@@ -27,23 +26,26 @@ global $CFG;
  * @author    Djarran Cotleanu, Zach Pregl
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class autocomplete_form_test extends \basic_testcase {
+class autocomplete_form_test extends \advanced_testcase {
 
     /**
      * Test that the length is correct.
      */
-    public function test_length() {
+    public function test_not_empty() {
+        global $DB;
+        $this->resetAfterTest(true);
         $autocompleteform = new autocomplete_form();
         $webservicearray  = $autocompleteform->get_webservice_name_array();
         $length           = count($webservicearray);
         $this->assertNotEquals(0, $length);
-
     }
 
     /**
      * Test that an array is returned from the function.
      */
     public function test_array_returned() {
+        global $DB;
+        $this->resetAfterTest(true);
         $autocompleteform = new autocomplete_form();
         $webservicearray  = $autocompleteform->get_webservice_name_array();
         $this->assertIsArray($webservicearray);
@@ -53,6 +55,8 @@ class autocomplete_form_test extends \basic_testcase {
      * Test is array is in the correct order.
      */
     public function test_correct_order() {
+        global $DB;
+        $this->resetAfterTest(true);
         $autocompleteform = new autocomplete_form();
         $webservicearray  = $autocompleteform->get_webservice_name_array();
         $this->assertEquals('core_auth_confirm_user', $webservicearray[0]);
@@ -63,6 +67,8 @@ class autocomplete_form_test extends \basic_testcase {
      * Test whether array values are strings as expected by consumer.
      */
     public function test_array_strings() {
+        global $DB;
+        $this->resetAfterTest(true);
         $autocompleteform = new autocomplete_form();
         $webservicearray  = $autocompleteform->get_webservice_name_array();
         foreach ($webservicearray as $webservice) {

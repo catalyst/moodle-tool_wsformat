@@ -25,8 +25,10 @@
 
 namespace tool_wsformat\form;
 
+defined('MOODLE_INTERNAL') || die();
+require_once("$CFG->dirroot/webservice/lib.php");
+global $CFG;
 use moodleform;
-use webservice;
 
 /**
  * Form for selecting web services to format.
@@ -127,7 +129,7 @@ class autocomplete_form extends moodleform {
      * Create plugin external service that is used for testing purposes.
      */
     private function create_external_service(): string {
-        $webservicemanager = new webservice();
+        $webservicemanager = new \webservice();
 
         $wsformatservicename = 'Webservice test service';
         $serviceobject = (object) [
