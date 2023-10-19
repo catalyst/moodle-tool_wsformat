@@ -14,8 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace tool_wsformat\form;
-use tool_wsformat\form\autocomplete_form;
+namespace tool_wsformat;
 defined('MOODLE_INTERNAL') || die();
 global $CFG;
 
@@ -26,6 +25,7 @@ global $CFG;
  * @copyright 2023 Djarran Cotleanu, Zach Pregl
  * @author    Djarran Cotleanu, Zach Pregl
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @covers \tool_wsformat\form\autocomplete_form
  */
 class autocomplete_form_test extends \advanced_testcase {
 
@@ -34,7 +34,7 @@ class autocomplete_form_test extends \advanced_testcase {
      */
     public function test_not_empty() {
         $this->resetAfterTest(true);
-        $autocompleteform = new autocomplete_form();
+        $autocompleteform = new \tool_wsformat\form\autocomplete_form();
         $webservicearray  = $autocompleteform->get_webservice_name_array();
         $length           = count($webservicearray);
         $this->assertNotEquals(0, $length);
@@ -45,7 +45,7 @@ class autocomplete_form_test extends \advanced_testcase {
      */
     public function test_array_returned() {
         $this->resetAfterTest(true);
-        $autocompleteform = new autocomplete_form();
+        $autocompleteform = new \tool_wsformat\form\autocomplete_form();
         $webservicearray  = $autocompleteform->get_webservice_name_array();
         $this->assertIsArray($webservicearray);
     }
@@ -55,7 +55,7 @@ class autocomplete_form_test extends \advanced_testcase {
      */
     public function test_correct_order() {
         $this->resetAfterTest(true);
-        $autocompleteform = new autocomplete_form();
+        $autocompleteform = new \tool_wsformat\form\autocomplete_form();
         $webservicearray  = $autocompleteform->get_webservice_name_array();
         $this->assertEquals('core_auth_confirm_user', $webservicearray[0]);
         $this->assertEquals('tiny_equation_filter', $webservicearray[694]);
@@ -66,30 +66,30 @@ class autocomplete_form_test extends \advanced_testcase {
      */
     public function test_array_strings() {
         $this->resetAfterTest(true);
-        $autocompleteform = new autocomplete_form();
+        $autocompleteform = new \tool_wsformat\form\autocomplete_form();
         $webservicearray  = $autocompleteform->get_webservice_name_array();
         foreach ($webservicearray as $webservice) {
             $this->assertIsString($webservice);
         }
     }
-    
+
     /**
      * Test if external service is created successfully.
      */
     public function test_create_external_service() {
         $this->resetAfterTest(true);
-        $autocompleteform = new autocomplete_form();
+        $autocompleteform = new \tool_wsformat\form\autocomplete_form();
         $this->resetAllData();
         $servicename  = $autocompleteform->create_external_service();
         $this->assertEquals('Webservice test service', $servicename);
     }
-    
+
     /**
      * Test if external service is created and included in the select element list.
      */
     public function test_get_external_service_includes_new_service() {
         $this->resetAfterTest(true);
-        $autocompleteform = new autocomplete_form();
+        $autocompleteform = new \tool_wsformat\form\autocomplete_form();
         $services  = $autocompleteform->get_external_services();
         $this->assertContains('Webservice test service', $services);
     }
@@ -100,8 +100,7 @@ class autocomplete_form_test extends \advanced_testcase {
     public function test_get_external_service_does_not_create_if_exists() {
         $this->resetAfterTest(true);
         $this->expectNotToPerformAssertions();
-        $autocompleteform = new autocomplete_form();
+        $autocompleteform = new \tool_wsformat\form\autocomplete_form();
         $autocompleteform->get_external_services();
     }
-    
 }

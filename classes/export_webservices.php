@@ -77,8 +77,8 @@ class export_webservices {
 
     /**
      * Handles the acquiring of the token for a given external service, or creation of a token
-     * if it doesn't yet exist. 
-     * 
+     * if it doesn't yet exist.
+     *
      * Adds webservices to the plugin's external service.
      *
      * @param  int|null $selectedserviceindex The index of the selected external service.
@@ -95,14 +95,14 @@ class export_webservices {
 
         $token = $this->get_service_token($externalserviceid);
 
-        // If no token exists, create one
+        // If no token exists, create one.
         if ($token === false) {
             $this->servicetoken = $this->create_token($externalservicesarray[$selectedserviceindex]);
         } else {
             $this->servicetoken = $token->token;
         }
 
-        // Add functions to service if service belongs to wsformat plugin
+        // Add functions to service if service belongs to wsformat plugin.
         if ($externalservicesarray[$selectedserviceindex]->shortname === 'wsformat_plugin') {
             foreach ($this->webservices as $webservice) {
                 $this->add_function_to_service($webservice->name, $externalserviceid);
@@ -170,7 +170,7 @@ class export_webservices {
                     s.id=? AND s.id = t.externalserviceid";
 
         // Only handling the use case where only one token exists for the service.
-        $token = $DB->get_records_sql($sql, array($externalserviceid));
+        $token = $DB->get_records_sql($sql, [$externalserviceid]);
 
         // Reset returns the first element of an array or false if array is empty.
         return reset($token);

@@ -30,6 +30,7 @@ global $CFG;
  * @copyright 2023 Djarran Cotleanu, Zach Pregl
  * @author    Djarran Cotleanu, Zach Pregl
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @covers \tool_wsformat\export_webservices
  */
 class export_webservices_test extends \advanced_testcase {
 
@@ -44,7 +45,7 @@ class export_webservices_test extends \advanced_testcase {
         $webservice = external_api::external_function_info($webservicefromdb);
 
         new autocomplete_form();
-        $exportwebservices = new export_webservices([0, 1, 2, 3, 4]); // Pass arbitrary array
+        $exportwebservices = new export_webservices([0, 1, 2, 3, 4]); // Pass arbitrary array.
         $params = $exportwebservices->get_formatted_param_array($webservice);
 
         $this->assertEquals('username={{STRING}}', $params[0]);
@@ -63,7 +64,7 @@ class export_webservices_test extends \advanced_testcase {
         $webservice = external_api::external_function_info($webservicefromdb);
 
         new autocomplete_form();
-        $exportwebservices = new export_webservices([0, 1, 2, 3, 4], 0); // Pass arbitrary array
+        $exportwebservices = new export_webservices([0, 1, 2, 3, 4], 0); // Pass arbitrary array.
         $params = $exportwebservices->get_formatted_param_array($webservice);
 
         $requeststring = $exportwebservices->create_request_string($webservice, $params);
@@ -86,7 +87,7 @@ class export_webservices_test extends \advanced_testcase {
         global $CFG;
         $this->resetAfterTest(true);
 
-        $exportwebservices = new export_webservices([0, 1, 2]); // Pass arbitrary array
+        $exportwebservices = new export_webservices([0, 1, 2]); // Pass arbitrary array.
 
         // Initialise form (to create plugin's external service).
         $form = new autocomplete_form();
@@ -114,7 +115,10 @@ class export_webservices_test extends \advanced_testcase {
         global $DB;
         $this->resetAfterTest(true);
 
-        $webservicestoadd = ['core_auth_is_minor', 'core_auth_resend_confirmation_email', 'core_backup_get_async_backup_links_backup'];
+        $webservicestoadd = [
+            'core_auth_is_minor', 'core_auth_resend_confirmation_email',
+            'core_backup_get_async_backup_links_backup',
+        ];
 
         // Initialise form (to create plugin's external service).
         new autocomplete_form();
@@ -128,7 +132,7 @@ class export_webservices_test extends \advanced_testcase {
                 'external_services_functions',
                 [
                     'externalserviceid' => $externalservice->id,
-                    'functionname' => $function
+                    'functionname' => $function,
                 ]
             );
             $this->assertFalse($exists);
@@ -144,7 +148,7 @@ class export_webservices_test extends \advanced_testcase {
                 'external_services_functions',
                 [
                     'externalserviceid' => $externalservice->id,
-                    'functionname' => $function
+                    'functionname' => $function,
                 ]
             );
             $this->assertNotFalse($exists);
@@ -158,9 +162,9 @@ class export_webservices_test extends \advanced_testcase {
         $this->resetAfterTest(true);
 
         new autocomplete_form();
-        $exportwebservices = new export_webservices([0, 1, 2, 3, 4], 1); // Pass arbitrary array
-        
-        
+        $exportwebservices = new export_webservices([0, 1, 2, 3, 4], 1); // Pass arbitrary array.
+
+        // Create Postman Collection.
         $postmanitems = [];
         foreach ($exportwebservices->webservices as $webservice) {
             $paramsarray = $exportwebservices->get_formatted_param_array($webservice);
@@ -169,16 +173,17 @@ class export_webservices_test extends \advanced_testcase {
         }
 
         $postmancollection = $exportwebservices->create_postman_collection($postmanitems);
-        
-        // Assert that object contains required keys
+
+        // Assert that object contains required keys.
         $this->assertObjectHasAttribute('info', $postmancollection);
         $this->assertObjectHasAttribute('item', $postmancollection);
         $this->assertObjectHasAttribute('variable', $postmancollection);
         $this->assertObjectHasAttribute('auth', $postmancollection);
-        
+
         // Assert that collection contains the amount of webservices passed into export_webservices.
         $this->assertEquals(5, count($postmancollection->item));
 
+        // Assert that token is inserted in collection.
         $this->assertEquals($exportwebservices->servicetoken, $postmancollection->auth['apikey'][0]['value']);
     }
 }

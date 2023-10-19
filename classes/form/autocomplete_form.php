@@ -57,7 +57,6 @@ class autocomplete_form extends moodleform {
             'placeholder'       => get_string('searchwebservices', 'tool_wsformat'),
         ];
 
-
         // Documentation: https://docs.moodle.org/dev/lib/formslib.php_Form_Definition#autocomplete.
         $mform->addElement(
             'autocomplete',
@@ -102,8 +101,6 @@ class autocomplete_form extends moodleform {
         global $DB;
         $serviceobject = $DB->get_records('external_services');
         $lastkey = end($serviceobject);
-        // echo print_r($lastKey);
-        // echo print_r($serviceobject);
 
         $wsformatexists = false;
         $servicenames = [];
@@ -141,11 +138,10 @@ class autocomplete_form extends moodleform {
             'uploadfiles' => 0,
             'requiredcapability' => '',
             'id' => 0, // Default value used when creating a new service.
-            'submitbutton' => 'Add service'
+            'submitbutton' => 'Add service',
         ];
 
         $webservicemanager->add_external_service($serviceobject);
-        
         return $wsformatservicename;
     }
 }
