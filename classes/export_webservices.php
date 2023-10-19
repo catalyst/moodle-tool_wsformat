@@ -290,23 +290,11 @@ class export_webservices {
                 case PARAM_INT:
                     $type = '{{INT}}';
                     break;
-
                 case PARAM_BOOL:
                     $type = '{{BOOL}}';
                     break;
-
-                case PARAM_TEXT:
-                    $type = '{{TEXT}}';
-                    break;
-
-                case PARAM_ALPHA:
-                    $type = '{{ALPHA}}';
-                    break;
-
-                case PARAM_FLOAT;
+                case PARAM_FLOAT:
                     $type = '{{DOUBLE}}';
-                    break;
-
                 default:
                     $type = '{{STRING}}';
             }
