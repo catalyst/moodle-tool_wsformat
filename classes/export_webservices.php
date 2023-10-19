@@ -78,9 +78,9 @@ class export_webservices {
      * Handles the acquiring of the token for a given external service, or creation of a token
      * if it doesn't yet exist. 
      * 
-     * Adds webservices to an external service as functions.
+     * Adds webservices to the plugin's external service.
      *
-     * @param  string $selectedserviceindex The index of the selected external service.
+     * @param  int|null $selectedserviceindex The index of the selected external service.
      */
     private function handle_external_service(int | null $selectedserviceindex) {
         global $DB;
@@ -108,7 +108,6 @@ class export_webservices {
             }
         }
 
-        return;
     }
 
     /**
@@ -132,6 +131,12 @@ class export_webservices {
         return $token;
     }
 
+    /**
+     * Adds function (webservice) to the external service if not yet added.
+     *
+     * @param  string $webservicename Webservice name
+     * @param  int $externalserviceid External service id
+     */
     private function add_function_to_service(string $webservicename, int $externalserviceid) {
         $webservicemanager = new \webservice();
 
@@ -148,12 +153,12 @@ class export_webservices {
     }
 
     /**
-     * Retrieves the service token for a given external service
+     * Returns the first token for a given external service
      *
      * @param  string $externalserviceid The id of the external service to get a token for.
-     * @return object An array of webservice objects.
+     * @return object|false External service object or false if no tokens exist.
      */
-    private function get_service_token(string $externalserviceid): object | bool {
+    private function get_service_token(string $externalserviceid): object | false {
         global $DB;
 
         $sql = "SELECT
@@ -166,6 +171,7 @@ class export_webservices {
         // Only handling the use case where only one token exists for the service.
         $token = $DB->get_records_sql($sql, array($externalserviceid));
 
+        // Reset returns the first element of an array or false if array is empty.
         return reset($token);
     }
 
