@@ -33,7 +33,7 @@ Credit
 This plugin was originally created by students from Queensland University of Technology as part of their final year Capstone project.
 * [Djarran Cotleanu](https://github.com/djarran)
 * [Zach Pregl](https://github.com/ZachPregl)
-* [Jacqueline ...](https://github.com/FoxxyFace)
+* [Jacqueline Mail](https://github.com/FoxxyFace)
 * [Henry Mai](https://github.com/mmh140502)
 
 <img alt="Catalyst IT" src="https://cdn.rawgit.com/catalyst/moodle-auth_saml2/master/pix/catalyst-logo.svg" width="400">
