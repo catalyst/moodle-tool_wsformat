@@ -81,7 +81,7 @@ class export_webservices {
      *
      * Adds webservices to the plugin's external service.
      *
-     * @param  ?int $selectedserviceindex The index of the selected external service.
+     * @param  int|null $selectedserviceindex The index of the selected external service.
      */
     private function handle_external_service(?int $selectedserviceindex) {
         global $DB;
