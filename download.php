@@ -36,7 +36,7 @@ $selected        = required_param('selected', PARAM_TEXT);
 $selectedservice = required_param('externalservice', PARAM_INT);
 $exporttype      = required_param('export-type', PARAM_TEXT);
 
-$selectedwebserviceindices = json_decode($selected);
+$selectedwebserviceindices = explode(',', $selected);
 
 $export = new export_webservices($selectedwebserviceindices, $selectedservice);
 
