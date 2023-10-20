@@ -98,11 +98,13 @@ class index_page implements \renderable, \templatable {
             ];
         }
 
+        $selectedwebservicecsv = implode(',', $this->selectedwebserviceindices);
+
         $data = (object) [
             'formdata'        => $webservicesexport,
             'serviceindex'    => $this->serviceindex,
             'items_selected'  => true,
-            'selectedindexes' => json_encode($this->selectedwebserviceindices),
+            'selectedindexes' => $selectedwebservicecsv,
             'serviceid' => $this->serviceid,
         ];
 
