@@ -70,7 +70,7 @@ class autocomplete_form_test extends \advanced_testcase {
         $autocompleteform = new \tool_wsformat\form\autocomplete_form();
         $this->resetAllData();
         $servicename  = $autocompleteform->create_external_service();
-        $this->assertEquals('Webservice test service', $servicename);
+        $this->assertEquals('Auto create test service', $servicename);
     }
 
     /**
