@@ -188,7 +188,7 @@ class export_webservices {
         foreach ($this->webservices as $webservice) {
             $paramsarray = $this->get_formatted_param_array($webservice);
 
-            $curlstrings[] = 'curl ' . $this->create_request_string($webservice, $paramsarray);
+            $curlstrings[] = 'curl ' . '"' . $this->create_request_string($webservice, $paramsarray) . '"';
         }
 
         foreach ($curlstrings as $curlstring) {

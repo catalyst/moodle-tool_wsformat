@@ -129,7 +129,7 @@ class autocomplete_form extends moodleform {
     public function create_external_service(): string {
         $webservicemanager = new \webservice();
 
-        $wsformatservicename = 'Webservice test service';
+        $wsformatservicename = 'Auto create test service';
         $serviceobject = (object) [
             'name' => $wsformatservicename,
             'shortname' => 'wsformat_plugin',
