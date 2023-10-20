@@ -81,9 +81,9 @@ class export_webservices {
      *
      * Adds webservices to the plugin's external service.
      *
-     * @param  int|null $selectedserviceindex The index of the selected external service.
+     * @param  ?int $selectedserviceindex The index of the selected external service.
      */
-    private function handle_external_service(int | null $selectedserviceindex) {
+    private function handle_external_service(?int $selectedserviceindex) {
         global $DB;
 
         if ($selectedserviceindex === null) {
@@ -117,12 +117,12 @@ class export_webservices {
      * @param  object $externalserviceobject The external service object returned from the database
      * @return string created token
      */
-    public function create_token(object $externalserviceobejct): string {
+    public function create_token(object $externalserviceobject): string {
         global $USER;
 
         $token = \core_external\util::generate_token(
             EXTERNAL_TOKEN_PERMANENT,
-            $externalserviceobejct,
+            $externalserviceobject,
             $USER->id,
             context_system::instance(),
             0,
