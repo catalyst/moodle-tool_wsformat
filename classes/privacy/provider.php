@@ -24,8 +24,6 @@
 
 namespace tool_wsformat\privacy;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Privacy Subsystem for tool_wsformat implementing null_provider.
  *

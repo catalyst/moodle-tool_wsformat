@@ -65,7 +65,6 @@ class autocomplete_form extends moodleform {
             $webservicenames,
             $autocompleteoptions
         );
-        
 
         $mform->addElement(
             'select',
