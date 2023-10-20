@@ -1,13 +1,40 @@
 {{!
-@template tool_wsformat/mytemplate
+    This file is part of Moodle - https://moodle.org/
 
-Admin search input for page header.
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+ Description of tool for wsformat
+ 
+ @package   tool_wsformat
+ @copyright 2023 Djarran Cotleanu, Zach Pregl
+ @author    Djarran Cotleanu, Zach Pregl
+ @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ 
+}}
+{{!
+@template tool_wsformat/plugin_description
+
+Displays the plugin description.
 
 Example context (json):
 {
-"action": "http://moodle.local/admin/search.php",
-"query": "themedesigner"
 }
 }}
-<h2>{{#str}} pluginname, tool_wsformat {{/str}}</h2>
-<p>{{#str}} plugindescription, tool_wsformat {{/str}}</p>
+
+<section aria-label="{{#str}} header, tool_wsformat {{/str}}">
+    <h2>{{#str}} pluginname, tool_wsformat {{/str}}</h2>
+    
+    <p>{{#str}} plugindescription, tool_wsformat {{/str}}</p>
+</section>

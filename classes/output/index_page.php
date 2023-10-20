@@ -17,15 +17,13 @@
 /**
  * Admin tool presets plugin to load some settings.
  *
- * @package          tool_wsformat
- * @copyright        2023 Djarran Cotleanu
- * @author           Djarran Cotleanu
- * @license          http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   tool_wsformat
+ * @copyright 2023 Djarran Cotleanu, Jacqueline Mail, Zach Pregl
+ * @author    Djarran Cotleanu, Jacqueline Mail, Zach Pregl
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace tool_wsformat\output;
-
-use stdClass;
 
 /**
  * Class for processing data for index_page template.
@@ -37,45 +35,67 @@ class index_page implements \renderable, \templatable {
      *
      * @var array
      */
-    protected $selectedwebserviceindices = array();
+    protected $selectedwebserviceindices = [];
+
+    /**
+     * Stores the index of the selected external service.
+     *
+     * @var int
+     */
+    protected $serviceindex = null;
+
+    /**
+     * Stores the user id of the logged in user.
+     *
+     * @var array
+     */
+    protected $userid = null;
 
     /**
      * Constructor function - assign instance variable.
-     * @param array $indicies
+     *
+     * @param array $webserviceindicies Indicies of the selected web services to export.
+     * @param int $serviceindex Index of the selected external service.
+     * @param int $userid ID of the logged in user.
      */
-    public function __construct(array $indicies) {
-        $this->selectedwebserviceindices = $indicies;
+    public function __construct(array $webserviceindicies, int $serviceindex = null, int $userid) {
+        $this->selectedwebserviceindices = $webserviceindicies;
+        $this->serviceindex = $serviceindex;
+        $this->userid = $userid;
     }
 
     /**
      * Exports the data for the index_page.mustache template
      *
-     * @param \renderer_base $output
+     * @param  \renderer_base $output
      * @return \stdClass
      */
-    public function export_for_template(\renderer_base $output): stdClass {
-        global $DB;
+    public function export_for_template(\renderer_base $output): object {
 
         // Return empty object if no selected webservices.
         if (empty($this->selectedwebserviceindices)) {
-            return new stdClass();
+            return (object) [];
         }
 
-        // Get_records returns an object array where key for each object is the name of the webservice.
-        // Use array_values to change key to the index of each object so that we can filter based on $selectedWebserviceIndices.
-        $webservicesrecords = array_values($DB->get_records('external_functions', array(), '', 'name'));
+        $exportwebservices = new \tool_wsformat\export_webservices($this->selectedwebserviceindices, $this->serviceindex);
 
-        $filteredrecords = [];
-        foreach ($this->selectedwebserviceindices as $index) {
-            $webservicename = $webservicesrecords[$index]->name;
-            $object = new stdClass();
-            $object->name = $webservicename;
-            $filteredrecords[] = $object;
+        $webservicesexport = [];
+        foreach ($exportwebservices->webservices as $webservice) {
+            $paramsarray = $exportwebservices->get_formatted_param_array($webservice);
+            $curlstring  = 'curl ' . $exportwebservices->create_request_string($webservice, $paramsarray);
+
+            $webservicesexport[] = (object) [
+                'name'        => $webservice->name,
+                'description' => $webservice->description,
+                'curl'        => $curlstring,
+            ];
         }
 
         $data = (object) [
-            'formdata' => $filteredrecords,
-            'items_selected' => true,
+            'formdata'        => $webservicesexport,
+            'serviceindex'    => $this->serviceindex,
+            'items_selected'  => true,
+            'selectedindexes' => json_encode($this->selectedwebserviceindices),
         ];
 
         return $data;

@@ -17,10 +17,10 @@
 /**
  * Setup inital plugin page
  *
- * @package          tool_wsformat
- * @copyright        2023 Djarran Cotleanu
- * @author           Djarran Cotleanu
- * @license          http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   tool_wsformat
+ * @copyright 2023 Djarran Cotleanu, Zach Pregl
+ * @author    Djarran Cotleanu, Zach Pregl
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 use core_external\external_api;
@@ -29,7 +29,7 @@ require('../../../config.php');
 
 require_login();
 require_capability('moodle/site:config', context_system::instance());
-
+global $DB;
 
 $PAGE->set_context(context_system::instance());
 $PAGE->set_url('/admin/tool/wsformat/index.php');
@@ -39,26 +39,30 @@ $PAGE->set_heading($SITE->fullname);
 echo $OUTPUT->header();
 
 $output = $PAGE->get_renderer('tool_wsformat');
+$PAGE->requires->js_call_amd('tool_wsformat/eventListeners', 'init');
 
 $plugindescriptiontemplate = new \tool_wsformat\output\plugin_description();
 echo $output->render($plugindescriptiontemplate);
 
 use tool_wsformat\form\autocomplete_form;
 
+require_once($CFG->dirroot . '/webservice/lib.php');
+
 $mform = new autocomplete_form();
 $mform->display();
 
+$userid = $USER->id;
 $formarray = [];
-
+$selectedservice = null;
 if ($data = $mform->get_data()) {
     // Populate formarray with selected form web services.
-    foreach ($data->webservice_form as $key => $value) {
+    foreach ($data->selected_webservices as $key => $value) {
         $formarray[] = (string) $value;
     }
+    $selectedservice = $data->selected_external_service;
 }
 
-$selectedsectiontemplate = new \tool_wsformat\output\index_page($formarray);
-$PAGE->requires->js_call_amd('tool_wsformat/test', 'init');
+$selectedsectiontemplate = new \tool_wsformat\output\index_page($formarray, $selectedservice, $userid);
 
 echo $output->render($selectedsectiontemplate);
 
@@ -66,13 +70,11 @@ echo $output->render($selectedsectiontemplate);
  * Function prints webservice function info including parameters and response objects. Used to aid development only.
  */
 function print_webservices() {
-
     global $DB;
-    $webservicesobject = $DB->get_records('external_functions', array(), 'name');
+    $webservicesobject = $DB->get_records('external_functions', [], 'name');
 
-    $functiondescs = array();
+    $functiondescs = [];
     foreach ($webservicesobject as $key => $webservice) {
-
         // Documentation: sites/moodle/lib/external/classes/external_api.php.
         $functiondescs[] = external_api::external_function_info($webservice);
     }

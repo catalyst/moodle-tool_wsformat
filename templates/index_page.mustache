@@ -1,121 +1,111 @@
 {{!
-@template tool_wsformat/mytemplate
+    This file is part of Moodle - https://moodle.org/
 
-Admin search input for page header.
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+ Index page of wsformat tool
+ 
+ @package   tool_wsformat
+ @copyright 2023 Djarran Cotleanu, Zach Pregl
+ @author    Djarran Cotleanu, Zach Pregl
+ @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ 
+}}
+{{!
+@template tool_wsformat/index_page
+
+Moodle template to display index page for tool_wsformat.
+
+Classes required for JS:
+* none
+
+Data attributes required for JS:
+* data-name
+* data-desc
+* data-curl
+
+Context variables required for this template:
+* formdata - An array of objects containing a webservices' name, description, curl string
+* serviceindex - The index of the selected external service as an integer
+* items_selected - Boolean value true if webservices have been selected
+* selectedindexes - The indices of selected webservices
 
 Example context (json):
 {
-"action": "http://moodle.local/admin/search.php",
-"query": "themedesigner"
+  "formdata": [
+    {
+      "name": "core_auth_confirm_user",
+      "description": "Confirm a user account.",
+      "curl": "curl https://moodle.localhost/webservice/rest/server.php?wstoken=941bede484abdf8474cc1392ae0e2eb4&amp;wsfunction=core_auth_confirm_user&amp;moodlewsrestformat=json&amp;username=STRING&amp;secret=STRING"
+    },
+    {
+      "name": "core_auth_request_password_reset",
+      "description": "Requests a password reset.",
+      "curl": "curl https://moodle.localhost/webservice/rest/server.php?wstoken=941bede484abdf8474cc1392ae0e2eb4&amp;wsfunction=core_auth_request_password_reset&amp;moodlewsrestformat=json&amp;username=STRING&amp;email={{STRING"
+    },
+    {
+      "name": "core_auth_is_minor",
+      "description": "Requests a check if a user is a digital minor.",
+      "curl": "curl https://moodle.localhost/webservice/rest/server.php?wstoken=941bede484abdf8474cc1392ae0e2eb4&amp;wsfunction=core_auth_is_minor&amp;moodlewsrestformat=json&amp;age=INT&amp;country=ALPHA"
+    }
+  ],
+  "serviceindex": 0,
+  "items_selected": 1,
+  "selectedindexes": ["0","1","2"]
 }
+
 }}
-{{! Get string from template }}
-{{^items_selected}}
-{{! <h2>Please select a webservice</h2> }}
-{{/items_selected}}
+
+{{! Section for displaying selected web services }}
 {{#items_selected}}
-<div
-    style="width: 100%; display: flex;flex-direction: column; margin-bottom: 15rem; margin-top: 2rem; padding-bottom: 2rem; border-top: 1px solid #f2f3f5;">
-    <div style="padding-top: 2rem; display: flex;flex-direction: row;">
-        <div style="
-        display: flex;
-        flex-direction: column;
-        border-right: 1px solid #e3e3e4;
-        overflow-y: hidden;
-        overflow-x: hidden;
-        height: 50vh;
-        width: 40%;
-    ">
-            <h3>
-                Selected Web Services
-            </h3>
-            <ul style="
-            display: flex;
-            flex-direction: column;
-            overflow-y: scroll;
-       
-            padding: 0;
-            list-style-type: none;
-        ">
+<div class="page-container" role="group" aria-label="{{#str}} pagecontainer, tool_wsformat {{/str}}">
+    <div class="columns-container">
+        <div class="selected-webservices-column">
+            <h3>{{#str}} select, tool_wsformat {{/str}}</h3>
+            <ul class="selected-webservices-list">
                 {{#formdata}}
-                <li data-name="{{name}}" id="" style="
-                    cursor: pointer; 
-                    font-weight: 700; 
-                    color: #0f6cbf; 
-                    display: flex; 
-                    flex-direction: row;
-                ">
-                    <!-- Access the 'name' key of the current element -->
+                <li class="selected-webservices-list-item" data-name="{{name}}" data-desc="{{description}}" data-curl="{{curl}}" title="{{description}}">
                     {{name}}
                 </li>
                 {{/formdata}}
             </ul>
-            {{! <button type="button" class="btn btn-primary" style="width:fit-content">Export All</button> }}
-            <a href="download.php?data-json={{test}}" class="btn btn-primary" style="width:fit-content">Export All</a>
+            <div class="export-container" role="group" aria-label="{{#str}} exportgroup, tool_wsformat {{/str}}">
+                <a id="export-button-id" href="download.php?export-type=curl&externalservice={{serviceindex}}&selected={{selectedindexes}}" class="btn btn-primary" style="width:fit-content">{{#str}} exportall, tool_wsformat {{/str}}</a>
+                <select id="export-type" name="export-type-select" class="form-control custom-select" {{#readonly}}disabled{{/readonly}}>
+                    <option value="curl" selected="">{{#str}} curl, tool_wsformat {{/str}}</option>
+                    <option value="postman">{{#str}} postman, tool_wsformat {{/str}}</option>
+                </select>
+                <div class="form-defaultinfo text-muted">
+                   {{#str}} curldefault, tool_wsformat {{/str}}
+                </div>
+            </div>
         </div>
-        <div id="selection-panel" style="
-        width: 60%;
-        padding-left: 2rem;
-        gap: 1rem;
-    ">
+        <div id="web-service-selection-panel" class="details-column">
             <h3 id="placeholder-text">
-                Select a web service to view details
+                {{#str}} selectwebservicedetails, tool_wsformat {{/str}}
             </h3>
-            <div id="ws-panel" style="display: none; flex-direction: column;">
-                <div id="ws-title" style="color: #116dc0;">
-                    block_accessreview_get_module_data
+            <div class="details-content" id="ws-panel">
+                <div class="details-title" id="ws-title"></div>
+                <h3 id="ws-description"></h3>
+                <div class="details-request-container" id="ws-details">
+                    <h4>{{#str}} requestt, tool_wsformat {{/str}}</h4>
                 </div>
-                <h3 id="ws-description">
-                    Gets error data for course modules.
-                </h3>
-                <div id="ws-details" style="
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-                gap: 1rem;
-            ">
-                    <h4>Request</h4>
-                    <button style="border: none;
-                        width:fit-content;
-                        margin: 0;
-                        padding: 0.25rem 0.5rem 0.25rem 0.5rem;
-                        border-radius: 0.5rem;
-                        background-color: transparent;
-                        border: 1px solid #f2f3f5">
-                        curl
-                    </button>
-                </div>
-                <div style="
-                background-color: #f7f7f7;
-                padding: 1rem;
-                border-radius: 0.5rem;
-                overflow-x: scroll;
-                width: 100%;
-                color: red;
-                position: relative;
-            ">
-                    <code id="curl" style="color: black;">
-                <pre style="font-size: 14px">
-                    curl 'https://moodle.example.com/webservice/rest/server.php' \ 
-                        -d 'wstoken=...' \ 
-                        -d 'wsfunction=block_accessreview_get_module_data' \ 
-                        -d 'moodlewsrestformat=json' \ 
-                        -d 'courseid=...'
-                </pre>
-                </code>
-                    <button style="
-                    position: absolute;
-                    right: 1rem;
-                    top: 1rem;
-                    border: none;
-                    width:fit-content;
-                    margin: 0;
-                    padding: 0.25rem 0.5rem 0.25rem 0.5rem;
-                    border-radius: 0.5rem;
-                    background-color: #106cbf;
-                    color: white;
-                    border: 1px solid #f2f3f5" onclick="copyFunction()">
-                        Copy
+                <div class="code-container">
+                    <code class="code-text" id="ws-curl"></code>
+                    <button class="copy-button btn btn-primary" id="curl-copy-button">
+                        {{#str}} copybtn, tool_wsformat {{/str}}
                     </button>
                 </div>
             </div>
