@@ -24,48 +24,47 @@
  
 }}
 {{!
-@template tool_wsformat/index_page
+    @template tool_wsformat/index_page
 
-Moodle template to display index page for tool_wsformat.
+    Moodle template to display index page for tool_wsformat.
 
-Classes required for JS:
-* none
+    Classes required for JS:
+    * none
 
-Data attributes required for JS:
-* data-name
-* data-desc
-* data-curl
+    Data attributes required for JS:
+    * data-name
+    * data-desc
+    * data-curl
 
-Context variables required for this template:
-* formdata - An array of objects containing a webservices' name, description, curl string
-* serviceindex - The index of the selected external service as an integer
-* items_selected - Boolean value true if webservices have been selected
-* selectedindexes - The indices of selected webservices
+    Context variables required for this template:
+    * formdata - An array of objects containing a webservices' name, description, curl string
+    * serviceindex - The index of the selected external service as an integer
+    * items_selected - Boolean value true if webservices have been selected
+    * selectedindexes - The indices of selected webservices
 
-Example context (json):
-{
-  "formdata": [
+    Example context (json):
     {
-      "name": "core_auth_confirm_user",
-      "description": "Confirm a user account.",
-      "curl": "curl https://moodle.localhost/webservice/rest/server.php?wstoken=941bede484abdf8474cc1392ae0e2eb4&amp;wsfunction=core_auth_confirm_user&amp;moodlewsrestformat=json&amp;username=STRING&amp;secret=STRING"
-    },
-    {
-      "name": "core_auth_request_password_reset",
-      "description": "Requests a password reset.",
-      "curl": "curl https://moodle.localhost/webservice/rest/server.php?wstoken=941bede484abdf8474cc1392ae0e2eb4&amp;wsfunction=core_auth_request_password_reset&amp;moodlewsrestformat=json&amp;username=STRING&amp;email={{STRING"
-    },
-    {
-      "name": "core_auth_is_minor",
-      "description": "Requests a check if a user is a digital minor.",
-      "curl": "curl https://moodle.localhost/webservice/rest/server.php?wstoken=941bede484abdf8474cc1392ae0e2eb4&amp;wsfunction=core_auth_is_minor&amp;moodlewsrestformat=json&amp;age=INT&amp;country=ALPHA"
+      "formdata": [
+        {
+          "name": "core_auth_confirm_user",
+          "description": "Confirm a user account.",
+          "curl": "curl https://moodle.localhost/webservice/rest/server.php?wstoken=941bede484abdf8474cc1392ae0e2eb4&amp;wsfunction=core_auth_confirm_user&amp;moodlewsrestformat=json&amp;username=STRING&amp;secret=STRING"
+        },
+        {
+          "name": "core_auth_request_password_reset",
+          "description": "Requests a password reset.",
+          "curl": "curl https://moodle.localhost/webservice/rest/server.php?wstoken=941bede484abdf8474cc1392ae0e2eb4&amp;wsfunction=core_auth_request_password_reset&amp;moodlewsrestformat=json&amp;username=STRING&amp;email={{STRING"
+        },
+        {
+          "name": "core_auth_is_minor",
+          "description": "Requests a check if a user is a digital minor.",
+          "curl": "curl https://moodle.localhost/webservice/rest/server.php?wstoken=941bede484abdf8474cc1392ae0e2eb4&amp;wsfunction=core_auth_is_minor&amp;moodlewsrestformat=json&amp;age=INT&amp;country=ALPHA"
+        }
+      ],
+      "serviceindex": 0,
+      "items_selected": 1,
+      "selectedindexes": ["0","1","2"]
     }
-  ],
-  "serviceindex": 0,
-  "items_selected": 1,
-  "selectedindexes": ["0","1","2"]
-}
-
 }}
 
 {{! Section for displaying selected web services }}
@@ -91,6 +90,7 @@ Example context (json):
                    {{#str}} curldefault, tool_wsformat {{/str}}
                 </div>
             </div>
+            <a href="{{globals.config.wwwroot}}/admin/webservice/service_functions.php?id={{serviceid}}" target="_blank" class="btn btn-secondary" style="width:fit-content; margin-top: 1rem;">Manual add functions</a>
         </div>
         <div id="web-service-selection-panel" class="details-column">
             <h3 id="placeholder-text">

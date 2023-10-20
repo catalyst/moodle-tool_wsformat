@@ -54,15 +54,19 @@ $mform->display();
 $userid = $USER->id;
 $formarray = [];
 $selectedservice = null;
+$serviceid = null;
 if ($data = $mform->get_data()) {
     // Populate formarray with selected form web services.
     foreach ($data->selected_webservices as $key => $value) {
         $formarray[] = (string) $value;
     }
     $selectedservice = $data->selected_external_service;
+
+    $externalservicesarray = array_values($DB->get_records('external_services'));
+    $serviceid = $externalservicesarray[$selectedservice]->id;
 }
 
-$selectedsectiontemplate = new \tool_wsformat\output\index_page($formarray, $selectedservice, $userid);
+$selectedsectiontemplate = new \tool_wsformat\output\index_page($formarray, $selectedservice, $userid, $serviceid);
 
 echo $output->render($selectedsectiontemplate);
 
