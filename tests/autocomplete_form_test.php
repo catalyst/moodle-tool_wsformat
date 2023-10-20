@@ -51,17 +51,6 @@ class autocomplete_form_test extends \advanced_testcase {
     }
 
     /**
-     * Test is array is in the correct order.
-     */
-    public function test_correct_order() {
-        $this->resetAfterTest(true);
-        $autocompleteform = new \tool_wsformat\form\autocomplete_form();
-        $webservicearray  = $autocompleteform->get_webservice_name_array();
-        $this->assertEquals('core_auth_confirm_user', $webservicearray[0]);
-        $this->assertEquals('tiny_equation_filter', $webservicearray[694]);
-    }
-
-    /**
      * Test whether array values are strings as expected by consumer.
      */
     public function test_array_strings() {

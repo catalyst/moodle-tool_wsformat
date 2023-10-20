@@ -27,6 +27,7 @@ namespace tool_wsformat\form;
 
 defined('MOODLE_INTERNAL') || die();
 require_once("$CFG->dirroot/webservice/lib.php");
+require_once($CFG->libdir . '/formslib.php');
 global $CFG;
 use moodleform;
 
