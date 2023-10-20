@@ -82,8 +82,7 @@ class index_page implements \renderable, \templatable {
         $webservicesexport = [];
         foreach ($exportwebservices->webservices as $webservice) {
             $paramsarray = $exportwebservices->get_formatted_param_array($webservice);
-            $curlstring  = 'curl ' . $exportwebservices->create_request_string($webservice, $paramsarray);
-
+            $curlstring  = 'curl ' . '"' . $exportwebservices->create_request_string($webservice, $paramsarray) . '"';
             $webservicesexport[] = (object) [
                 'name'        => $webservice->name,
                 'description' => $webservice->description,
