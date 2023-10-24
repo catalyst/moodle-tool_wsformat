@@ -124,7 +124,7 @@ class export_webservices_test extends \advanced_testcase {
         new autocomplete_form();
 
         // Get plugin's external service.
-        $externalservice = $DB->get_record('external_services', ['name' => 'Webservice test service']);
+        $externalservice = $DB->get_record('external_services', ['name' => 'Auto create test service']);
 
         // Check if external service contains the functions we intend to add.
         foreach ($webservicestoadd as $function) {

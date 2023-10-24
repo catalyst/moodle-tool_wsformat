@@ -52,16 +52,24 @@ class index_page implements \renderable, \templatable {
     protected $userid = null;
 
     /**
+     * Stores the id of the selected external service.
+     *
+     * @var int
+     */
+    protected $serviceid = null;
+    /**
      * Constructor function - assign instance variable.
      *
      * @param array $webserviceindicies Indicies of the selected web services to export.
      * @param int $serviceindex Index of the selected external service.
      * @param int $userid ID of the logged in user.
+     * @param int $serviceid ID of the selected service.
      */
-    public function __construct(array $webserviceindicies, int $serviceindex = null, int $userid) {
+    public function __construct(array $webserviceindicies, int $serviceindex = null, int $userid, int $serviceid = null) {
         $this->selectedwebserviceindices = $webserviceindicies;
         $this->serviceindex = $serviceindex;
         $this->userid = $userid;
+        $this->serviceid = $serviceid;
     }
 
     /**
@@ -82,8 +90,7 @@ class index_page implements \renderable, \templatable {
         $webservicesexport = [];
         foreach ($exportwebservices->webservices as $webservice) {
             $paramsarray = $exportwebservices->get_formatted_param_array($webservice);
-            $curlstring  = 'curl ' . $exportwebservices->create_request_string($webservice, $paramsarray);
-
+            $curlstring  = 'curl ' . '"' . $exportwebservices->create_request_string($webservice, $paramsarray) . '"';
             $webservicesexport[] = (object) [
                 'name'        => $webservice->name,
                 'description' => $webservice->description,
@@ -91,11 +98,14 @@ class index_page implements \renderable, \templatable {
             ];
         }
 
+        $selectedwebservicecsv = implode(',', $this->selectedwebserviceindices);
+
         $data = (object) [
             'formdata'        => $webservicesexport,
             'serviceindex'    => $this->serviceindex,
             'items_selected'  => true,
-            'selectedindexes' => json_encode($this->selectedwebserviceindices),
+            'selectedindexes' => $selectedwebservicecsv,
+            'serviceid' => $this->serviceid,
         ];
 
         return $data;
